@@ -1,0 +1,6 @@
+*.class
+*/target/*
+.metadata
+*.project
+*.cproject
+*/.settings/*
