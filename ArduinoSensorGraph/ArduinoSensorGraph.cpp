@@ -11,7 +11,7 @@
 extern HardwareSerial Serial;
 MeetAndroid meetAndroid;
 URMSerial urm;
-int sensor = 11;
+int backSensor = 11;
 //Baud rate (BT module is configured with this rate)
 long BAUD_RATE = 115200;
 
@@ -23,9 +23,17 @@ void setup() {
 	Serial.begin(BAUD_RATE);
 
 	// we initialize pin 11 as an input pin
-	pinMode(sensor, INPUT);
+	pinMode(backSensor, INPUT);
 
 	urm.begin(US_FRONT_RX, US_FRONT_TX, 9600);
+}
+
+void sendData(const String& prefix, int value) {
+	String toTrans = prefix + value;
+	int length = toTrans.length() + 1;
+	char charBuf[length];
+	toTrans.toCharArray(charBuf, length);
+	meetAndroid.send(charBuf);
 }
 
 void loop() {
@@ -34,11 +42,15 @@ void loop() {
 	// read input pin and send result to Android
 	//meetAndroid.send(digitalRead(sensor));
 	int value = getUSMeasurement();
+	String prefix = "FRONTPROX: ";
+	sendData(prefix, value);
 
-	meetAndroid.send(value);
+	value = digitalRead(backSensor);
+	prefix = "BACKPROX: ";
+	sendData(prefix, value);
 
 	// add a little delay otherwise the phone is pretty busy
-	delay(10000);
+	delay(1000);
 }
 
 int getUSMeasurement() {
