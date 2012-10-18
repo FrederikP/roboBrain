@@ -13,7 +13,7 @@
         android:theme="@style/AppTheme" >
          <activity
             android:name=".Starter"
-            android:label="@string/title_activity_starter" >
+            android:label="@string/title_activity_starter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,10 +23,7 @@
         
          <activity
             android:name=".Console"
-            android:label="@string/title_activity_console" >
-            <intent-filter>
-                <action android:name="eu.fpetersen.robobrain.switchstate.intent.action.CONSOLE" />
-            </intent-filter>
+            android:label="@string/title_activity_console">
         </activity>
         
          <service android:name="eu.fpetersen.robobrain.communication.RobotService" android:label="@string/title_service" android:enabled="true">             

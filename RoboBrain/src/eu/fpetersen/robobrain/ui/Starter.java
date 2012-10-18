@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ public class Starter extends Activity {
 
 	private TextView statusTV;
 	private ToggleButton toggleStatusB;
+	private boolean hasBeenStarted = false;;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -110,8 +112,16 @@ public class Starter extends Activity {
 		inflater.inflate(R.menu.activity_starter, menu);
 
 		MenuItem console = menu.findItem(R.id.console_menu_item);
-		Intent cIntent = new Intent(this, Console.class);
+		final Intent cIntent = new Intent(this, Console.class);
+		cIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 		console.setIntent(cIntent);
+		console.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+			public boolean onMenuItemClick(MenuItem item) {
+				Starter.this.startActivity(cIntent);
+				return true;
+			}
+		});
 		return super.onCreateOptionsMenu(menu);
 	}
 }

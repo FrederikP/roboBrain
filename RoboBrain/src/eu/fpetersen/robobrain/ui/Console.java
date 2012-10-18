@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.communication.ConsoleReceiver;
@@ -23,6 +24,8 @@ public class Console extends Activity {
 	private ScrollView consoleScroller;
 
 	private ConsoleReceiver cReceiver;
+
+	private boolean hasBeenStarted = false;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -39,7 +42,6 @@ public class Console extends Activity {
 		IntentFilter intentFilter = new IntentFilter(
 				RoboBrainIntent.ACTION_OUTPUT);
 		registerReceiver(cReceiver, intentFilter);
-
 	}
 
 	@Override
@@ -72,8 +74,21 @@ public class Console extends Activity {
 					+ getFormattedCurrentTimestamp() + text;
 			runOnUiThread(new Runnable() {
 				public void run() {
+					boolean scrollDownAfterAppend = true;
+					// Make sure that it's only scrolled automatically if user
+					// isn't scrolling around.
+					// ->Only Scrolls automatically if it was scrolled down
+					// completely before adding new line
+					int scrollY = consoleScroller.getScrollY()
+							+ consoleScroller.getHeight() + 20;
+					int cBottom = consoleTV.getBottom();
+					if (scrollY + 20 < cBottom)
+						scrollDownAfterAppend = false;
+
 					consoleTV.setText(consoleTextToAppend);
-					scrollToBottom();
+
+					if (scrollDownAfterAppend)
+						scrollToBottom();
 				}
 			});
 
@@ -83,11 +98,19 @@ public class Console extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.activity_starter, menu);
+		inflater.inflate(R.menu.activity_console, menu);
 
 		MenuItem starter = menu.findItem(R.id.starter_menu_item);
-		Intent cIntent = new Intent(this, Starter.class);
+		final Intent cIntent = new Intent(this, Starter.class);
+		cIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 		starter.setIntent(cIntent);
+		starter.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+			public boolean onMenuItemClick(MenuItem item) {
+				Console.this.startActivity(cIntent);
+				return true;
+			}
+		});
 		return super.onCreateOptionsMenu(menu);
 	}
 
