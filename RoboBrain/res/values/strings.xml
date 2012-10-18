@@ -3,6 +3,14 @@
     <string name="app_name">roboBrain</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_console">roboBrain - Console</string>
+    <string name="title_activity_starter">roboBrain - Starter</string>
+    <string name="title_service">roboBrain - Service</string>
     <string name="initial_console_output">Bluetooth Traffic History:</string>
+    <string name="status_label">Service Status:</string>
+    <string name="service_switch">Toggle Service</string>
+    <string name="menu_starter">Starter</string>
+    <string name="menu_console">Console</string>
+    <string name="console_menu_item">Console</string>
+    <string name="starter_menu_item">Starter</string>
 
 </resources>

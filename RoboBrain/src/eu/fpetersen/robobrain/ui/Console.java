@@ -4,24 +4,25 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import eu.fpetersen.robobrain.communication.CommandCenter;
-import eu.fpetersen.robobrain.ui.R;
-
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import eu.fpetersen.robobrain.communication.ConsoleReceiver;
+import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 
 public class Console extends Activity {
-
-	// change this to your Bluetooth device address
-	private static final String DEVICE_ADDRESS = "07:12:05:03:53:76";
 
 	private TextView consoleTV;
 
 	private ScrollView consoleScroller;
-	
-	CommandCenter commandCenter;
+
+	private ConsoleReceiver cReceiver;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -33,22 +34,20 @@ public class Console extends Activity {
 		// get handles to Views defined in our layout file
 		consoleTV = (TextView) findViewById(R.id.consoleTextView);
 		consoleScroller = (ScrollView) findViewById(R.id.consoleScroller);
-		
-		commandCenter = CommandCenter.getInstance(DEVICE_ADDRESS, this);
-	}
-	
-	@Override
-	public void onStart() {
-		super.onStart();
-		commandCenter.connect();
-	}
-	
-	@Override
-	public void onStop() {
-		super.onStop();
-		commandCenter.disconnect();
+
+		cReceiver = new ConsoleReceiver(this);
+		IntentFilter intentFilter = new IntentFilter(
+				RoboBrainIntent.ACTION_OUTPUT);
+		registerReceiver(cReceiver, intentFilter);
+
 	}
 
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (cReceiver != null)
+			unregisterReceiver(cReceiver);
+	}
 
 	public String getFormattedCurrentTimestamp() {
 		Calendar cal = Calendar.getInstance();
@@ -68,7 +67,6 @@ public class Console extends Activity {
 
 	public void appendText(String text) {
 		if (text != null) {
-
 			String consoleText = consoleTV.getText().toString();
 			final String consoleTextToAppend = consoleText + "\n"
 					+ getFormattedCurrentTimestamp() + text;
@@ -81,9 +79,16 @@ public class Console extends Activity {
 
 		}
 	}
-	
-	public TextView getConsoleTV() {
-		return consoleTV;
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.activity_starter, menu);
+
+		MenuItem starter = menu.findItem(R.id.starter_menu_item);
+		Intent cIntent = new Intent(this, Starter.class);
+		starter.setIntent(cIntent);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 }
