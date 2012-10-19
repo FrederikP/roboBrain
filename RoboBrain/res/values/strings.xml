@@ -12,5 +12,7 @@
     <string name="menu_console">Console</string>
     <string name="console_menu_item">Console</string>
     <string name="starter_menu_item">Starter</string>
+    <string name="robot_name">Robot Name:</string>
+    <string name="avail_behaviors">Available Behaviors:</string>
 
 </resources>

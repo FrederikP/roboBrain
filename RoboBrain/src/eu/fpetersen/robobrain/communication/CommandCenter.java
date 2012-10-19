@@ -1,10 +1,18 @@
 package eu.fpetersen.robobrain.communication;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import android.content.IntentFilter;
 import at.abraxas.amarino.Amarino;
 import at.abraxas.amarino.AmarinoIntent;
+import eu.fpetersen.robobrain.behavior.BackAndForthBehavior;
+import eu.fpetersen.robobrain.behavior.Behavior;
+import eu.fpetersen.robobrain.robot.Robot;
 
 public class CommandCenter {
 
@@ -12,9 +20,16 @@ public class CommandCenter {
 
 	private RobotReceiver rReceiver;
 	private String address;
+	private Robot robot;
+
+	private List<Behavior> behaviors = new ArrayList<Behavior>();
+	private static Map<UUID, Behavior> allBehaviors = new HashMap<UUID, Behavior>();
 
 	private CommandCenter(String address) {
-		rReceiver = new RobotReceiver();
+		// TODO do this somewhere else. factory or something...
+		robot = new Robot(address, "YARP");
+		behaviors.add(new BackAndForthBehavior(robot, "Back-and-Forth"));
+		rReceiver = new RobotReceiver(robot);
 		this.address = address;
 
 	}
@@ -62,6 +77,18 @@ public class CommandCenter {
 		for (CommandCenter cc : ccPerMac.values()) {
 			cc.disconnect();
 		}
+	}
+
+	public static Collection<CommandCenter> getAllCCs() {
+		return ccPerMac.values();
+	}
+
+	public Robot getRobot() {
+		return robot;
+	}
+
+	public List<Behavior> getBehaviors() {
+		return behaviors;
 	}
 
 }

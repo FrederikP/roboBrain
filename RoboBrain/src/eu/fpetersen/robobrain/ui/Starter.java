@@ -1,5 +1,6 @@
 package eu.fpetersen.robobrain.ui;
 
+import java.util.Collection;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,15 +14,21 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import eu.fpetersen.robobrain.behavior.Behavior;
+import eu.fpetersen.robobrain.communication.CommandCenter;
 import eu.fpetersen.robobrain.communication.RobotService;
 
 public class Starter extends Activity {
 
 	private TextView statusTV;
 	private ToggleButton toggleStatusB;
-	private boolean hasBeenStarted = false;;
+	private TableLayout robotBehaviorTable;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -33,6 +40,7 @@ public class Starter extends Activity {
 		// get handles to Views defined in our layout file
 		statusTV = (TextView) findViewById(R.id.status_textview);
 		toggleStatusB = (ToggleButton) findViewById(R.id.togglestatus_button);
+		robotBehaviorTable = (TableLayout) findViewById(R.id.robot_behavior_table);
 
 		toggleStatusB.setOnClickListener(new OnClickListener() {
 
@@ -90,6 +98,8 @@ public class Starter extends Activity {
 					statusTV.setText("Stopped!");
 					statusTV.setTextColor(Color.RED);
 					toggleStatusB.setChecked(false);
+					robotBehaviorTable.setVisibility(View.INVISIBLE);
+					cleanupRobotBehaviorTable();
 				}
 			});
 
@@ -100,10 +110,82 @@ public class Starter extends Activity {
 					statusTV.setText("Started!");
 					statusTV.setTextColor(Color.GREEN);
 					toggleStatusB.setChecked(true);
+					if (robotBehaviorTable.getVisibility() == View.INVISIBLE) {
+						robotBehaviorTable.setVisibility(View.VISIBLE);
+						setupRobotBehaviorTable();
+					}
 				}
 			});
 
 		}
+	}
+
+	protected void cleanupRobotBehaviorTable() {
+		for (int i = 1; i < robotBehaviorTable.getChildCount(); i++) {
+			robotBehaviorTable.removeViewAt(i);
+		}
+
+	}
+
+	protected void setupRobotBehaviorTable() {
+		Collection<CommandCenter> ccs = CommandCenter.getAllCCs();
+		for (CommandCenter cc : ccs) {
+			TableRow row = new TableRow(this);
+			TextView nameView = new TextView(this);
+			nameView.setText(cc.getRobot().getName());
+			LinearLayout behaviorLayout = new LinearLayout(this);
+			addBehaviorButtons(behaviorLayout, cc);
+			row.addView(nameView);
+			row.addView(behaviorLayout);
+
+			robotBehaviorTable.addView(row);
+		}
+	}
+
+	private void setBehaviorButtonClickListener(final Button button,
+			final Behavior b, final LinearLayout behaviorLayout,
+			final CommandCenter cc) {
+		button.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				Runnable behavior = new Runnable() {
+					public void run() {
+						b.startBehavior();
+					}
+				};
+				Thread thread = new Thread(behavior);
+				thread.start();
+				behaviorLayout.removeAllViews();
+				Button stopBehaviorButton = new Button(Starter.this);
+				stopBehaviorButton.setText("Stop Behavior");
+				setStopBehaviorClickListener(stopBehaviorButton, b,
+						behaviorLayout, cc);
+				behaviorLayout.addView(stopBehaviorButton);
+			}
+		});
+	}
+
+	protected void setStopBehaviorClickListener(
+			final Button stopBehaviorButton, final Behavior b,
+			final LinearLayout behaviorLayout, final CommandCenter cc) {
+		stopBehaviorButton.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				Runnable behaviorStopper = new Runnable() {
+
+					public void run() {
+						b.stopBehavior();
+					}
+				};
+				Thread thread = new Thread(behaviorStopper);
+				thread.start();
+				b.stopBehavior();
+				behaviorLayout.removeAllViews();
+				addBehaviorButtons(behaviorLayout, cc);
+
+			}
+		});
+
 	}
 
 	@Override
@@ -123,5 +205,15 @@ public class Starter extends Activity {
 			}
 		});
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	protected void addBehaviorButtons(final LinearLayout behaviorLayout,
+			final CommandCenter cc) {
+		for (Behavior b : cc.getBehaviors()) {
+			Button button = new Button(Starter.this);
+			button.setText(b.getName());
+			behaviorLayout.addView(button);
+			setBehaviorButtonClickListener(button, b, behaviorLayout, cc);
+		}
 	}
 }

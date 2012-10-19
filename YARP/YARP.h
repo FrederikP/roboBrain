@@ -24,6 +24,9 @@ void setup();
 
 //add your function definitions for the project YARP here
 
+//Communication functions
+void sendData(const String& prefix, int value);
+
 //Sensor functions
 int getUSMeasurement();
 int getIRMeasurement();
@@ -46,6 +49,7 @@ void backOffAtSpeed(byte flag, byte numOfValues);
 void stopWithDelay(byte flag, byte numOfValues);
 void turnLeftWithAngle(byte flag, byte numOfValues);
 void turnRightWithAngle(byte flag, byte numOfValues);
+
 
 //Do not add code below this line
 #endif /* YARP_H_ */

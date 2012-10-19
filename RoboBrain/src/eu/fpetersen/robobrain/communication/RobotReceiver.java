@@ -4,8 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import at.abraxas.amarino.AmarinoIntent;
+import eu.fpetersen.robobrain.robot.Robot;
 
 public class RobotReceiver extends BroadcastReceiver {
+
+	private Robot robot;
+
+	public RobotReceiver(Robot robot) {
+		this.robot = robot;
+	}
 
 	@Override
 	public void onReceive(Context context, final Intent intent) {
@@ -27,11 +34,26 @@ public class RobotReceiver extends BroadcastReceiver {
 		if (dataType == AmarinoIntent.STRING_EXTRA) {
 			data = intent.getStringExtra(AmarinoIntent.EXTRA_DATA);
 
-			Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
-			cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, data);
-			context.sendBroadcast(cIntent);
+			String frontPrefix = "FRONTPROX:";
+			String backPrefix = "BACKPROX:";
+			if (data.startsWith(frontPrefix)) {
+				String substring = data.substring(frontPrefix.length());
+				int proxValue = Integer.parseInt(substring);
+				robot.getFrontSensor().setValue(proxValue);
+			} else if (data.startsWith(backPrefix)) {
+				String substring = data.substring(backPrefix.length());
+				int proxValue = Integer.parseInt(substring);
+				robot.getBackSensor().setValue(proxValue);
+			}
+
+			/*
+			 * //Uncomment for debugging purposes: (Slow phone can be
+			 * overwhelmed by a high rate of data Intent cIntent = new
+			 * Intent(RoboBrainIntent.ACTION_OUTPUT);
+			 * cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, data);
+			 * context.sendBroadcast(cIntent);
+			 */
 		}
 
 	}
-
 }

@@ -18,11 +18,9 @@ int M2 = 7; //M1 Direction Control
 
 int IR_BACK = 11; //Infrared sensor back
 int SERVO_US = 10; //Servo for ultrasonic sensor movement
-int URPWM = 2; // US PWM Output 0-25000US,Every 50US represent 1cm
-int URCOMP = 3; // US PWM trigger pin
+int URPWM = 3; // US PWM Output 0-25000US,Every 50US represent 1cm
 
-int BAUD_RATE_US = 9600;
-int BAUD_RATE_BT = 115200;
+long BAUD_RATE_BT = 115200;
 
 int SERVO_MIDDLE = 95;
 int SERVO_RIGHT = 50;
@@ -31,7 +29,7 @@ int SERVO_LEFT = 140;
 int TURN_SPEED = 150; //constant because turn is given in angular value from android.
 
 //For timed events like stopping with delay and turning
-long millisTimer = 0;
+unsigned long millisTimer = 0;
 int eventTimerMode = NONE;
 
 //The setup function is called once at startup of the sketch
@@ -62,10 +60,25 @@ void setup() {
 
 // The loop function is called in an endless loop
 void loop() {
+	int startTime = millis();
 	//makes sure that data send from android to robot are received and according funtions are called
 	meetAndroid.receive();
 
-	//For motor events involving time like turning or stopping with delay
+	//Give sensor readings to Android Command Center:
+	String prefix;
+	int value = getUSMeasurement();
+	if (value) {
+		String prefix = "FRONTPROX:";
+		sendData(prefix, value);
+	}
+
+	value = getIRMeasurement();
+	if (value) {
+		prefix = "BACKPROX:";
+		sendData(prefix, value);
+	}
+
+	//For motor events involving time like stopping with delay
 	switch (eventTimerMode) {
 	case NONE:
 		break;
@@ -80,6 +93,13 @@ void loop() {
 		eventTimerMode = 0;
 		millisTimer = 0;
 		break;
+	}
+
+	//Constant rate of loop process
+	unsigned long timeConsumed = millis() - startTime;
+	unsigned long toDelay = 100 - timeConsumed;
+	if (toDelay > 0) {
+		delay(toDelay);
 	}
 }
 
@@ -171,7 +191,7 @@ void turnLeftWithAngle(byte flag, byte numOfValues) {
 	int delay = angle * 15;
 	if (delay > 0) {
 		if (eventTimerMode == 0) {
-			turn_L(TURN_SPEED,TURN_SPEED);
+			turn_L(TURN_SPEED, TURN_SPEED);
 			millisTimer = millis() + delay;
 			eventTimerMode = STOPDELAY;
 		} else {
@@ -184,11 +204,19 @@ void turnRightWithAngle(byte flag, byte numOfValues) {
 	int delay = angle * 15;
 	if (delay > 0) {
 		if (eventTimerMode == 0) {
-			turn_R(TURN_SPEED,TURN_SPEED);
+			turn_R(TURN_SPEED, TURN_SPEED);
 			millisTimer = millis() + delay;
 			eventTimerMode = STOPDELAY;
 		} else {
 			Serial.print("More than one timed event not possible.");
 		}
 	}
+}
+
+void sendData(const String& prefix, int value) {
+	String toTrans = prefix + value;
+	int length = toTrans.length() + 1;
+	char charBuf[length];
+	toTrans.toCharArray(charBuf, length);
+	meetAndroid.send(charBuf);
 }
