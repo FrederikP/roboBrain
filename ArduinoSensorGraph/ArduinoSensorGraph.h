@@ -25,6 +25,7 @@ void setup();
 //add your function definitions for the project ArduinoSensorGraph here
 
 int getUSMeasurement();
+void sendData();
 
 
 //Do not add code below this line

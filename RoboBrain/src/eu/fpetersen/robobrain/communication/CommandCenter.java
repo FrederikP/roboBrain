@@ -6,20 +6,19 @@ import android.content.IntentFilter;
 import at.abraxas.amarino.Amarino;
 import at.abraxas.amarino.AmarinoIntent;
 
-
 public class CommandCenter {
+
+	private static HashMap<String, CommandCenter> ccPerMac = new HashMap<String, CommandCenter>();
 
 	private RobotReceiver rReceiver;
 	private String address;
-
-	private static HashMap<String, CommandCenter> ccPerMac = new HashMap<String, CommandCenter>();
 
 	private CommandCenter(String address) {
 		rReceiver = new RobotReceiver();
 		this.address = address;
 
 	}
-	
+
 	public void connect() {
 		RobotService rService = RobotService.getInstance();
 		// in order to receive broadcasted intents we need to register our
@@ -31,9 +30,9 @@ public class CommandCenter {
 		// within your own code
 		Amarino.connect(rService, address);
 	}
-	
+
 	public void disconnect() {
-		
+
 		RobotService rService = RobotService.getInstance();
 
 		// if you connect in onStart() you must not forget to disconnect when
@@ -58,7 +57,7 @@ public class CommandCenter {
 			cc.connect();
 		}
 	}
-	
+
 	public static void disconnectAll() {
 		for (CommandCenter cc : ccPerMac.values()) {
 			cc.disconnect();
