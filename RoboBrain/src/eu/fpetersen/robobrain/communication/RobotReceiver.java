@@ -8,12 +8,6 @@ import eu.fpetersen.robobrain.robot.Robot;
 
 public class RobotReceiver extends BroadcastReceiver {
 
-	private Robot robot;
-
-	public RobotReceiver(Robot robot) {
-		this.robot = robot;
-	}
-
 	@Override
 	public void onReceive(Context context, final Intent intent) {
 
@@ -33,7 +27,10 @@ public class RobotReceiver extends BroadcastReceiver {
 		// Arduino, like it is shown below
 		if (dataType == AmarinoIntent.STRING_EXTRA) {
 			data = intent.getStringExtra(AmarinoIntent.EXTRA_DATA);
-
+			String address = intent
+					.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+			CommandCenter cc = CommandCenter.getCCForAddress(address);
+			Robot robot = cc.getRobot();
 			String frontPrefix = "FRONTPROX:";
 			String backPrefix = "BACKPROX:";
 			if (data.startsWith(frontPrefix)) {

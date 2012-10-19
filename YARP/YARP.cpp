@@ -65,18 +65,13 @@ void loop() {
 	meetAndroid.receive();
 
 	//Give sensor readings to Android Command Center:
-	String prefix;
 	int value = getUSMeasurement();
-	if (value) {
-		String prefix = "FRONTPROX:";
-		sendData(prefix, value);
-	}
+	String prefix = "FRONTPROX:";
+	sendData(prefix, value);
 
 	value = getIRMeasurement();
-	if (value) {
-		prefix = "BACKPROX:";
-		sendData(prefix, value);
-	}
+	prefix = "BACKPROX:";
+	sendData(prefix, value);
 
 	//For motor events involving time like stopping with delay
 	switch (eventTimerMode) {

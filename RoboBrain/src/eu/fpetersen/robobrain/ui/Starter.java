@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.CommandCenter;
+import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 import eu.fpetersen.robobrain.communication.RobotService;
 
 public class Starter extends Activity {
@@ -63,7 +65,17 @@ public class Starter extends Activity {
 		} else {
 			toggleStatusB.post(new Runnable() {
 				public void run() {
-					stopService(new Intent(Starter.this, RobotService.class));
+					Intent intent = new Intent(
+							RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
+					Starter.this.sendBroadcast(intent);
+					Handler handler = new Handler();
+					handler.postDelayed(new Runnable() {
+						public void run() {
+							stopService(new Intent(Starter.this,
+									RobotService.class));
+						}
+					}, 500);
+
 				}
 			});
 		}
@@ -150,17 +162,26 @@ public class Starter extends Activity {
 			public void onClick(View v) {
 				Runnable behavior = new Runnable() {
 					public void run() {
-						b.startBehavior();
+						Intent intent = new Intent(
+								RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
+						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORSTATE,
+								true);
+						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORUUID,
+								b.getId());
+						Starter.this.sendBroadcast(intent);
 					}
 				};
 				Thread thread = new Thread(behavior);
 				thread.start();
 				behaviorLayout.removeAllViews();
-				Button stopBehaviorButton = new Button(Starter.this);
-				stopBehaviorButton.setText("Stop Behavior");
-				setStopBehaviorClickListener(stopBehaviorButton, b,
-						behaviorLayout, cc);
-				behaviorLayout.addView(stopBehaviorButton);
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+
+					@Override
+					public void run() {
+						addBehaviorButtons(behaviorLayout, cc);
+					}
+				}, 500);
 			}
 		});
 	}
@@ -172,16 +193,27 @@ public class Starter extends Activity {
 
 			public void onClick(View v) {
 				Runnable behaviorStopper = new Runnable() {
-
 					public void run() {
-						b.stopBehavior();
+						Intent intent = new Intent(
+								RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
+						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORSTATE,
+								false);
+						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORUUID,
+								b.getId());
+						Starter.this.sendBroadcast(intent);
 					}
 				};
 				Thread thread = new Thread(behaviorStopper);
 				thread.start();
-				b.stopBehavior();
 				behaviorLayout.removeAllViews();
-				addBehaviorButtons(behaviorLayout, cc);
+				Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+
+					@Override
+					public void run() {
+						addBehaviorButtons(behaviorLayout, cc);
+					}
+				}, 500);
 
 			}
 		});
@@ -209,11 +241,45 @@ public class Starter extends Activity {
 
 	protected void addBehaviorButtons(final LinearLayout behaviorLayout,
 			final CommandCenter cc) {
+		boolean behaviorRunning = false;
+		Behavior rb = null;
 		for (Behavior b : cc.getBehaviors()) {
-			Button button = new Button(Starter.this);
-			button.setText(b.getName());
-			behaviorLayout.addView(button);
-			setBehaviorButtonClickListener(button, b, behaviorLayout, cc);
+			if (b.isTurnedOn()) {
+				behaviorRunning = true;
+				rb = b;
+				break;
+			}
 		}
+		final Behavior runningBehavior = rb;
+		if (!behaviorRunning) {
+			for (final Behavior b : cc.getBehaviors()) {
+
+				runOnUiThread(new Runnable() {
+
+					public void run() {
+						Button button = new Button(Starter.this);
+						button.setText(b.getName());
+						behaviorLayout.addView(button);
+						setBehaviorButtonClickListener(button, b,
+								behaviorLayout, cc);
+					}
+				});
+
+			}
+
+		} else {
+			runOnUiThread(new Runnable() {
+
+				public void run() {
+					Button stopBehaviorButton = new Button(Starter.this);
+					stopBehaviorButton.setText("Stop Behavior");
+					setStopBehaviorClickListener(stopBehaviorButton,
+							runningBehavior, behaviorLayout, cc);
+					behaviorLayout.addView(stopBehaviorButton);
+				}
+			});
+
+		}
+
 	}
 }

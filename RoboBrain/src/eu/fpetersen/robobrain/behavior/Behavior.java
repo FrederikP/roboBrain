@@ -22,13 +22,16 @@ public abstract class Behavior {
 	}
 
 	public void startBehavior() {
-		turnedOn = true;
+		if (turnedOn == false) {
 
-		while (turnedOn) {
-			behaviorLoop();
+			turnedOn = true;
+
+			while (turnedOn) {
+				behaviorLoop();
+			}
+
+			robot.stop();
 		}
-
-		robot.stop();
 	}
 
 	public void stopBehavior() {
@@ -43,6 +46,10 @@ public abstract class Behavior {
 
 	public UUID getId() {
 		return id;
+	}
+
+	public boolean isTurnedOn() {
+		return turnedOn;
 	}
 
 }

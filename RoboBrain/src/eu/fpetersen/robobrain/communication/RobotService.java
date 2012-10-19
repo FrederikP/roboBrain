@@ -2,7 +2,9 @@ package eu.fpetersen.robobrain.communication;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
+import at.abraxas.amarino.AmarinoIntent;
 
 public class RobotService extends Service {
 
@@ -12,6 +14,10 @@ public class RobotService extends Service {
 	private static RobotService instance;
 
 	private boolean running = false;
+
+	private BehaviorReceiver bReceiver;
+
+	private RobotReceiver rReceiver;
 
 	public boolean isRunning() {
 		return running;
@@ -25,6 +31,8 @@ public class RobotService extends Service {
 	public void onCreate() {
 		instance = this;
 		CommandCenter.getInstance(DEVICE_ADDRESS);
+		bReceiver = new BehaviorReceiver();
+		rReceiver = new RobotReceiver();
 		super.onCreate();
 	}
 
@@ -36,6 +44,17 @@ public class RobotService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		CommandCenter.connectAll();
+		IntentFilter behaviorReceiverFilter = new IntentFilter();
+		behaviorReceiverFilter
+				.addAction(RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
+		behaviorReceiverFilter
+				.addAction(RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
+		registerReceiver(bReceiver, behaviorReceiverFilter);
+
+		// in order to receive broadcasted intents we need to register our
+		// receiver
+		registerReceiver(rReceiver, new IntentFilter(
+				AmarinoIntent.ACTION_RECEIVED));
 		running = true;
 		return START_STICKY;
 	}
@@ -43,6 +62,8 @@ public class RobotService extends Service {
 	@Override
 	public boolean stopService(Intent name) {
 		running = false;
+		unregisterReceiver(bReceiver);
+		unregisterReceiver(rReceiver);
 		CommandCenter.disconnectAll();
 		return super.stopService(name);
 	}
@@ -50,6 +71,8 @@ public class RobotService extends Service {
 	@Override
 	public void onDestroy() {
 		running = false;
+		unregisterReceiver(rReceiver);
+		unregisterReceiver(bReceiver);
 		CommandCenter.disconnectAll();
 		super.onDestroy();
 	}
