@@ -4,9 +4,12 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
 
 public class RobotService extends Service {
+
+	private static final String TAG = "RoboBrain-Service";
 
 	// change this to your Bluetooth device address
 	private static final String DEVICE_ADDRESS = "07:12:05:03:53:76";
@@ -29,6 +32,7 @@ public class RobotService extends Service {
 
 	@Override
 	public void onCreate() {
+		Log.v(TAG, "Creating RoboBrain service");
 		instance = this;
 		CommandCenter.getInstance(DEVICE_ADDRESS);
 		bReceiver = new BehaviorReceiver();
@@ -43,6 +47,7 @@ public class RobotService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.v(TAG, "Starting RoboBrain service");
 		CommandCenter.connectAll();
 		IntentFilter behaviorReceiverFilter = new IntentFilter();
 		behaviorReceiverFilter
@@ -61,6 +66,7 @@ public class RobotService extends Service {
 
 	@Override
 	public boolean stopService(Intent name) {
+		Log.v(TAG, "Stopping RoboBrain service");
 		running = false;
 		unregisterReceiver(bReceiver);
 		unregisterReceiver(rReceiver);
@@ -70,6 +76,7 @@ public class RobotService extends Service {
 
 	@Override
 	public void onDestroy() {
+		Log.v(TAG, "Destroying RoboBrain service");
 		running = false;
 		unregisterReceiver(rReceiver);
 		unregisterReceiver(bReceiver);

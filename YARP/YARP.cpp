@@ -60,7 +60,7 @@ void setup() {
 
 // The loop function is called in an endless loop
 void loop() {
-	int startTime = millis();
+	long startTime = millis();
 	//makes sure that data send from android to robot are received and according funtions are called
 	meetAndroid.receive();
 
@@ -90,11 +90,18 @@ void loop() {
 		break;
 	}
 
+
+
+	//Making sure that new line is started for every loop run
+	Serial.println();
+
 	//Constant rate of loop process
-	unsigned long timeConsumed = millis() - startTime;
-	unsigned long toDelay = 100 - timeConsumed;
-	if (toDelay > 0) {
+	long timeConsumed = millis() - startTime;
+	long toDelay = 100 - timeConsumed;
+	if (toDelay > 0 && toDelay < 100) {
 		delay(toDelay);
+	} else if (toDelay > 100){
+		delay(100);
 	}
 }
 
