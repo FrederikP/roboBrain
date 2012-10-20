@@ -1,6 +1,8 @@
 *.class
-*/target/*
+target/
 .metadata
 *.project
 *.cproject
-*/.settings/*
+.settings/
+Release/
+bin/
