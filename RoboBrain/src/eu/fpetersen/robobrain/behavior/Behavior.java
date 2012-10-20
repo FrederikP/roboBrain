@@ -2,6 +2,9 @@ package eu.fpetersen.robobrain.behavior;
 
 import java.util.UUID;
 
+import android.content.Intent;
+import eu.fpetersen.robobrain.communication.RoboBrainIntent;
+import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Robot;
 
 public abstract class Behavior {
@@ -50,6 +53,13 @@ public abstract class Behavior {
 
 	public boolean isTurnedOn() {
 		return turnedOn;
+	}
+
+	public void toConsole(String message) {
+		Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
+		cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, robot.getName() + "-"
+				+ name + ":" + message);
+		RobotService.getInstance().sendBroadcast(cIntent);
 	}
 
 }

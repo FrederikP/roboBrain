@@ -17,25 +17,32 @@ public class BackAndForthBehavior extends Behavior {
 		if (robot.getMotor().getState().equals(MotorState.STOPPED)) {
 			if (robot.getFrontSensor().getValue() < 20
 					&& robot.getBackSensor().getValue() == 1) {
-				robot.getMotor().backOff(200);
+				robot.getMotor().backOff(120);
+				toConsole("STOPPED -> BACKWARD");
 			} else if (robot.getFrontSensor().getValue() >= 20) {
-				robot.getMotor().advance(200);
+				robot.getMotor().advance(120);
+				toConsole("STOPPED -> FORWARD");
 			}
 		} else if (robot.getMotor().getState().equals(MotorState.FORWARD)) {
 			if (robot.getFrontSensor().getValue() < 20
 					&& robot.getBackSensor().getValue() == 1) {
-				robot.getMotor().backOff(200);
+				robot.getMotor().backOff(120);
+				toConsole("FORWARD -> BACKWARD");
+				toConsole("Frontsensor=" + robot.getFrontSensor().getValue());
 			} else if (robot.getFrontSensor().getValue() < 20
 					&& robot.getBackSensor().getValue() == 0) {
 				robot.getMotor().stop(0);
+				toConsole("FORWARD -> STOPPED");
 			}
 		} else if (robot.getMotor().getState().equals(MotorState.BACKWARD)) {
 			if (robot.getFrontSensor().getValue() >= 20
 					&& robot.getBackSensor().getValue() == 0) {
-				robot.getMotor().advance(200);
+				robot.getMotor().advance(120);
+				toConsole("BACKWARD-> FORWARD");
 			} else if (robot.getFrontSensor().getValue() < 20
 					&& robot.getBackSensor().getValue() == 0) {
 				robot.getMotor().stop(0);
+				toConsole("BACKWARD-> STOPPED");
 			}
 		}
 	}

@@ -5,8 +5,7 @@
 #define NONE 0
 #define STOPDELAY 1
 
-//Library references
-extern HardwareSerial Serial;
+
 MeetAndroid meetAndroid;
 Servo usservo;
 

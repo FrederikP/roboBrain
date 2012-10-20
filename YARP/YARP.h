@@ -12,6 +12,10 @@
 #include <MeetAndroid.h>
 #include <Servo.h>
 
+
+//Library references
+extern HardwareSerial Serial;
+
 //end of add your includes here
 #ifdef __cplusplus
 extern "C" {

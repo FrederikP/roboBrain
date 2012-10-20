@@ -3,6 +3,7 @@ package eu.fpetersen.robobrain.communication;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.robot.Robot;
 
@@ -38,7 +39,11 @@ public class RobotReceiver extends BroadcastReceiver {
 			if (data.startsWith(frontPrefix)) {
 				String substring = data.substring(frontPrefix.length());
 				int proxValue = Integer.parseInt(substring);
-				robot.getFrontSensor().setValue(proxValue);
+				if (proxValue == 0) {
+					Log.v("RobotReceiver", "Front Prox returned 0");
+				} else {
+					robot.getFrontSensor().setValue(proxValue);
+				}
 			} else if (data.startsWith(backPrefix)) {
 				String substring = data.substring(backPrefix.length());
 				int proxValue = Integer.parseInt(substring);
