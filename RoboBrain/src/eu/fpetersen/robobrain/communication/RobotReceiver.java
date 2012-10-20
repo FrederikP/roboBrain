@@ -27,6 +27,8 @@ public class RobotReceiver extends BroadcastReceiver {
 		// Arduino, like it is shown below
 		if (dataType == AmarinoIntent.STRING_EXTRA) {
 			data = intent.getStringExtra(AmarinoIntent.EXTRA_DATA);
+			data = data.replace("\r", "");
+			data = data.replace("\n", "");
 			String address = intent
 					.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
 			CommandCenter cc = CommandCenter.getCCForAddress(address);
