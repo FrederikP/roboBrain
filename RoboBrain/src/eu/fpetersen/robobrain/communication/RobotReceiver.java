@@ -36,6 +36,7 @@ public class RobotReceiver extends BroadcastReceiver {
 			Robot robot = cc.getRobot();
 			String frontPrefix = "FRONTPROX:";
 			String backPrefix = "BACKPROX:";
+			String stoppedAfterDelay = "STOPPEDAFTERDELAY";
 			if (data.startsWith(frontPrefix)) {
 				String substring = data.substring(frontPrefix.length());
 				int proxValue = Integer.parseInt(substring);
@@ -48,6 +49,8 @@ public class RobotReceiver extends BroadcastReceiver {
 				String substring = data.substring(backPrefix.length());
 				int proxValue = Integer.parseInt(substring);
 				robot.getBackSensor().setValue(proxValue);
+			} else if (data.contains(stoppedAfterDelay)) {
+				robot.getMotor().delayActionDone();
 			}
 
 			/*

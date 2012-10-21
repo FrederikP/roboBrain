@@ -10,6 +10,7 @@ import java.util.UUID;
 import at.abraxas.amarino.Amarino;
 import eu.fpetersen.robobrain.behavior.BackAndForthBehavior;
 import eu.fpetersen.robobrain.behavior.Behavior;
+import eu.fpetersen.robobrain.behavior.ObstAvoidanceBehavior;
 import eu.fpetersen.robobrain.robot.Robot;
 
 public class CommandCenter {
@@ -31,8 +32,12 @@ public class CommandCenter {
 		robot = new Robot(address, "YARP");
 		Behavior backAndForth = new BackAndForthBehavior(robot,
 				"Back-and-Forth");
+		Behavior obstAvoidance = new ObstAvoidanceBehavior(robot,
+				"Obstacle Avoidance");
 		behaviors.add(backAndForth);
+		behaviors.add(obstAvoidance);
 		allBehaviors.put(backAndForth.getId(), backAndForth);
+		allBehaviors.put(obstAvoidance.getId(), obstAvoidance);
 		this.address = address;
 
 	}

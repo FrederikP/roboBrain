@@ -62,4 +62,8 @@ public abstract class Behavior {
 		RobotService.getInstance().sendBroadcast(cIntent);
 	}
 
+	public Robot getRobot() {
+		return robot;
+	}
+
 }

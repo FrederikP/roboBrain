@@ -5,15 +5,13 @@ import eu.fpetersen.robobrain.robot.Robot;
 
 public class BackAndForthBehavior extends Behavior {
 
-	private Robot robot;
-
 	public BackAndForthBehavior(Robot robot, String name) {
 		super(robot, name);
-		this.robot = robot;
 	}
 
 	@Override
 	protected void behaviorLoop() {
+		Robot robot = getRobot();
 		if (robot.getMotor().getState().equals(MotorState.STOPPED)) {
 			if (robot.getFrontSensor().getValue() < 20
 					&& robot.getBackSensor().getValue() == 1) {

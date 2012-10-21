@@ -145,6 +145,7 @@ public class Starter extends Activity {
 			TableRow row = new TableRow(this);
 			TextView nameView = new TextView(this);
 			nameView.setText(cc.getRobot().getName());
+			nameView.setPadding(5, 5, 5, 5);
 			LinearLayout behaviorLayout = new LinearLayout(this);
 			addBehaviorButtons(behaviorLayout, cc);
 			row.addView(nameView);

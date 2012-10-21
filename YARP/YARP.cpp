@@ -5,7 +5,6 @@
 #define NONE 0
 #define STOPDELAY 1
 
-
 MeetAndroid meetAndroid;
 Servo usservo;
 
@@ -17,7 +16,7 @@ int M2 = 7; //M1 Direction Control
 
 int IR_BACK = 11; //Infrared sensor back
 int SERVO_US = 10; //Servo for ultrasonic sensor movement
-int URPWM = 3; // US PWM Output 0-25000US,Every 50US represent 1cm
+int URPWM = 3; // US PWM Output 0-25000US,Eqvery 50US represent 1cm
 
 long BAUD_RATE_BT = 115200;
 
@@ -25,7 +24,8 @@ int SERVO_MIDDLE = 95;
 int SERVO_RIGHT = 50;
 int SERVO_LEFT = 140;
 
-int TURN_SPEED = 150; //constant because turn is given in angular value from android.
+int TURN_SPEED = 120; //constant because turn is given in angular value from android.
+int TURN_MILLIS_PER_DEG = 15;
 
 //For timed events like stopping with delay and turning
 unsigned long millisTimer = 0;
@@ -55,6 +55,7 @@ void setup() {
 	meetAndroid.registerFunction(stopWithDelay, 'S');
 	meetAndroid.registerFunction(turnLeftWithAngle, 'L');
 	meetAndroid.registerFunction(turnRightWithAngle, 'R');
+	meetAndroid.registerFunction(setServo, 'C');
 }
 
 // The loop function is called in an endless loop
@@ -81,15 +82,15 @@ void loop() {
 			stop();
 			millisTimer = 0;
 			eventTimerMode = NONE;
+			String sendThis = "STOPPEDAFTERDELAY";
+			sendData(sendThis);
 		}
 		break;
 	default:
-		eventTimerMode = 0;
+		eventTimerMode = NONE;
 		millisTimer = 0;
 		break;
 	}
-
-
 
 	//Making sure that new line is started for every loop run
 	Serial.println();
@@ -99,7 +100,7 @@ void loop() {
 	long toDelay = 100 - timeConsumed;
 	if (toDelay > 0 && toDelay < 100) {
 		delay(toDelay);
-	} else if (toDelay > 100){
+	} else if (toDelay > 100) {
 		delay(100);
 	}
 }
@@ -158,11 +159,23 @@ void setServoRight() {
 void setServoLeft() {
 	usservo.write(SERVO_LEFT);
 }
+void setServoMiddle() {
+	usservo.write(SERVO_MIDDLE);
+}
 void setServoTo(int angle) {
 	usservo.write(angle);
 }
 
 //Functions registered for events sent from Android
+void setServo(byte flag, byte numOfValues) {
+	if (numOfValues == 0) {
+		setServoMiddle();
+	} else {
+		int angle = meetAndroid.getInt();
+		setServoTo(angle);
+	}
+}
+
 void advanceAtSpeed(byte flag, byte numOfValues) {
 	int speed = meetAndroid.getInt();
 	advance(speed, speed);
@@ -189,28 +202,26 @@ void stopWithDelay(byte flag, byte numOfValues) {
 
 void turnLeftWithAngle(byte flag, byte numOfValues) {
 	int angle = meetAndroid.getInt();
-	int delay = angle * 15;
+	int delay = angle * TURN_MILLIS_PER_DEG;
 	if (delay > 0) {
-		if (eventTimerMode == 0) {
-			turn_L(TURN_SPEED, TURN_SPEED);
-			millisTimer = millis() + delay;
-			eventTimerMode = STOPDELAY;
-		} else {
-			Serial.print("More than one timed event not possible.");
+		if (eventTimerMode != NONE) {
+			stop();
 		}
+		turn_L(TURN_SPEED, TURN_SPEED);
+		millisTimer = millis() + delay;
+		eventTimerMode = STOPDELAY;
 	}
 }
 void turnRightWithAngle(byte flag, byte numOfValues) {
 	int angle = meetAndroid.getInt();
-	int delay = angle * 15;
+	int delay = angle * TURN_MILLIS_PER_DEG;
 	if (delay > 0) {
-		if (eventTimerMode == 0) {
-			turn_R(TURN_SPEED, TURN_SPEED);
-			millisTimer = millis() + delay;
-			eventTimerMode = STOPDELAY;
-		} else {
-			Serial.print("More than one timed event not possible.");
+		if (eventTimerMode != NONE) {
+			stop();
 		}
+		turn_R(TURN_SPEED, TURN_SPEED);
+		millisTimer = millis() + delay;
+		eventTimerMode = STOPDELAY;
 	}
 }
 
@@ -219,5 +230,12 @@ void sendData(const String& prefix, int value) {
 	int length = toTrans.length() + 1;
 	char charBuf[length];
 	toTrans.toCharArray(charBuf, length);
+	meetAndroid.send(charBuf);
+}
+
+void sendData(const String& text) {
+	int length = text.length() + 1;
+	char charBuf[length];
+	text.toCharArray(charBuf, length);
 	meetAndroid.send(charBuf);
 }

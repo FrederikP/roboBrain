@@ -28,7 +28,23 @@ public class Motor {
 	public void stop(int delay) {
 		Amarino.sendDataToArduino(RobotService.getInstance(), address, 'S',
 				delay);
-		setState(MotorState.STOPPED);
+		if (delay <= 0) {
+			setState(MotorState.STOPPED);
+		} else {
+			setState(MotorState.STOPPINGWITHDELAY);
+		}
+	}
+
+	public void turnRight(int angle) {
+		Amarino.sendDataToArduino(RobotService.getInstance(), address, 'R',
+				angle);
+		setState(MotorState.TURNING_RIGHT);
+	}
+
+	public void turnLeft(int angle) {
+		Amarino.sendDataToArduino(RobotService.getInstance(), address, 'L',
+				angle);
+		setState(MotorState.TURNING_LEFT);
 	}
 
 	public MotorState getState() {
@@ -39,8 +55,12 @@ public class Motor {
 		this.state = state;
 	}
 
+	public void delayActionDone() {
+		setState(MotorState.STOPPED);
+	}
+
 	public enum MotorState {
-		STOPPED, FORWARD, BACKWARD
+		STOPPED, FORWARD, BACKWARD, TURNING_RIGHT, TURNING_LEFT, STOPPINGWITHDELAY
 	}
 
 }

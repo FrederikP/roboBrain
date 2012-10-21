@@ -30,6 +30,7 @@ void setup();
 
 //Communication functions
 void sendData(const String& prefix, int value);
+void sendData(const String& text);
 
 //Sensor functions
 int getUSMeasurement();
@@ -46,6 +47,7 @@ void turn_R(char a, char b);
 void setServoRight();
 void setServoLeft();
 void setServoTo(int angle);
+void setServoMiddle();
 
 //Functions registered for Android Events
 void advanceAtSpeed(byte flag, byte numOfValues);
@@ -53,6 +55,7 @@ void backOffAtSpeed(byte flag, byte numOfValues);
 void stopWithDelay(byte flag, byte numOfValues);
 void turnLeftWithAngle(byte flag, byte numOfValues);
 void turnRightWithAngle(byte flag, byte numOfValues);
+void setServo(byte flag, byte numOfValues);
 
 
 //Do not add code below this line
