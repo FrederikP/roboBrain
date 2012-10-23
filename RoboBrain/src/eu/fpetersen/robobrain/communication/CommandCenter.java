@@ -11,6 +11,7 @@ import at.abraxas.amarino.Amarino;
 import eu.fpetersen.robobrain.behavior.BackAndForthBehavior;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.behavior.ObstAvoidanceBehavior;
+import eu.fpetersen.robobrain.behavior.ReactToSpeechBehavior;
 import eu.fpetersen.robobrain.robot.Robot;
 
 public class CommandCenter {
@@ -34,12 +35,17 @@ public class CommandCenter {
 				"Back-and-Forth");
 		Behavior obstAvoidance = new ObstAvoidanceBehavior(robot,
 				"Obstacle Avoidance");
-		behaviors.add(backAndForth);
-		behaviors.add(obstAvoidance);
-		allBehaviors.put(backAndForth.getId(), backAndForth);
-		allBehaviors.put(obstAvoidance.getId(), obstAvoidance);
+		Behavior speechReact = new ReactToSpeechBehavior(robot, "Speech React");
+		addBehavior(backAndForth);
+		addBehavior(obstAvoidance);
+		addBehavior(speechReact);
 		this.address = address;
 
+	}
+
+	private void addBehavior(Behavior b) {
+		behaviors.add(b);
+		allBehaviors.put(b.getId(), b);
 	}
 
 	public void connect() {

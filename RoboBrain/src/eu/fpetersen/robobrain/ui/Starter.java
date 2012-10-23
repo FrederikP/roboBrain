@@ -32,11 +32,17 @@ public class Starter extends Activity {
 	private ToggleButton toggleStatusB;
 	private TableLayout robotBehaviorTable;
 
+	private static Starter instance;
+
+	public static Starter getInstance() {
+		return instance;
+	}
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		instance = this;
 		setContentView(R.layout.activity_starter);
 
 		// get handles to Views defined in our layout file
@@ -147,6 +153,7 @@ public class Starter extends Activity {
 			nameView.setText(cc.getRobot().getName());
 			nameView.setPadding(5, 5, 5, 5);
 			LinearLayout behaviorLayout = new LinearLayout(this);
+			behaviorLayout.setOrientation(LinearLayout.VERTICAL);
 			addBehaviorButtons(behaviorLayout, cc);
 			row.addView(nameView);
 			row.addView(behaviorLayout);

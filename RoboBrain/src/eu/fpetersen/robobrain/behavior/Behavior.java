@@ -41,8 +41,6 @@ public abstract class Behavior {
 		turnOff();
 	}
 
-	protected abstract void behaviorLoop();
-
 	public String getName() {
 		return name;
 	}
@@ -65,5 +63,7 @@ public abstract class Behavior {
 	public Robot getRobot() {
 		return robot;
 	}
+
+	protected abstract void behaviorLoop();
 
 }
