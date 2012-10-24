@@ -9,13 +9,14 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
 import eu.fpetersen.robobrain.communication.RobotService;
+import eu.fpetersen.robobrain.robot.RGBLED;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.ui.Starter;
 
 public class ReactToSpeechBehavior extends Behavior {
 
 	protected static final String TAG = "ReactToSpeech-Behavior";
-	SpeechRecognizer speechR;
+	private SpeechRecognizer speechR;
 
 	public ReactToSpeechBehavior(Robot robot, String name) {
 		super(robot, name);
@@ -56,6 +57,7 @@ public class ReactToSpeechBehavior extends Behavior {
 				ArrayList<String> data = results
 						.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 				for (int i = 0; i < data.size(); i++) {
+					data.set(i, data.get(i).toLowerCase());
 					Log.d(TAG, "result " + data.get(i));
 				}
 				interpretSpeechResults(data);
@@ -73,7 +75,16 @@ public class ReactToSpeechBehavior extends Behavior {
 	}
 
 	protected void interpretSpeechResults(ArrayList<String> data) {
-		// TODO Auto-generated method stub
+		RGBLED led = getRobot().getHeadLED();
+		for (String s : data) {
+			if (s.contains("green")) {
+				led.set(0, 1023, 0);
+			} else if (s.contains("red")) {
+				led.set(1023, 0, 0);
+			} else if (s.contains("blue")) {
+				led.set(0, 0, 1023);
+			}
+		}
 
 	}
 

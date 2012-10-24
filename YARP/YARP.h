@@ -30,6 +30,7 @@ void setup();
 
 //Communication functions
 void sendData(const String& prefix, int value);
+void sendMessage(const String& prefix, const String& message);
 void sendData(const String& text);
 
 //Sensor functions
@@ -56,6 +57,10 @@ void stopWithDelay(byte flag, byte numOfValues);
 void turnLeftWithAngle(byte flag, byte numOfValues);
 void turnRightWithAngle(byte flag, byte numOfValues);
 void setServo(byte flag, byte numOfValues);
+void setLED(byte flag, byte numOfValues);
+
+//LED functions
+void setLEDtoColor(int red = 0, int green = 0, int blue = 0);
 
 
 //Do not add code below this line

@@ -36,6 +36,7 @@ public class RobotReceiver extends BroadcastReceiver {
 			Robot robot = cc.getRobot();
 			String frontPrefix = "FRONTPROX:";
 			String backPrefix = "BACKPROX:";
+			String consolePrefix = "CONSOLE:";
 			String stoppedAfterDelay = "STOPPEDAFTERDELAY";
 			if (data.startsWith(frontPrefix)) {
 				String substring = data.substring(frontPrefix.length());
@@ -51,6 +52,11 @@ public class RobotReceiver extends BroadcastReceiver {
 				robot.getBackSensor().setValue(proxValue);
 			} else if (data.contains(stoppedAfterDelay)) {
 				robot.getMotor().delayActionDone();
+			} else if (data.startsWith(consolePrefix)) {
+				String substring = data.substring(consolePrefix.length());
+				Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
+				cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, substring);
+				context.sendBroadcast(cIntent);
 			}
 
 			/*

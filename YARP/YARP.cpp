@@ -5,6 +5,12 @@
 #define NONE 0
 #define STOPDELAY 1
 
+//RGB LED stuff
+#define RED A2
+#define GREEN A3
+#define BLUE1 A4
+#define BLUE2 A5
+
 MeetAndroid meetAndroid;
 Servo usservo;
 
@@ -24,7 +30,7 @@ int SERVO_MIDDLE = 95;
 int SERVO_RIGHT = 50;
 int SERVO_LEFT = 140;
 
-int TURN_SPEED = 120; //constant because turn is given in angular value from android.
+int TURN_SPEED = 240; //constant because turn is given in angular value from android.
 int TURN_MILLIS_PER_DEG = 15;
 
 //For timed events like stopping with delay and turning
@@ -56,6 +62,24 @@ void setup() {
 	meetAndroid.registerFunction(turnLeftWithAngle, 'L');
 	meetAndroid.registerFunction(turnRightWithAngle, 'R');
 	meetAndroid.registerFunction(setServo, 'C');
+	meetAndroid.registerFunction(setLED, 'D');
+
+	//Set RGB LED pins to output
+	pinMode(RED, OUTPUT);
+	pinMode(GREEN, OUTPUT);
+	pinMode(BLUE1, OUTPUT);
+	pinMode(BLUE2, OUTPUT);
+
+	//Set Color of LED to off
+	analogWrite(RED, 0);
+	analogWrite(GREEN, 0);
+	analogWrite(BLUE1, 0);
+	analogWrite(BLUE2, 0);
+
+	//Send to console
+	String toCons = "CONSOLE:Robot initialized";
+	sendData(toCons);
+
 }
 
 // The loop function is called in an endless loop
@@ -225,8 +249,37 @@ void turnRightWithAngle(byte flag, byte numOfValues) {
 	}
 }
 
+void setLED(byte flag, byte numOfValues) {
+	int num = numOfValues - 0;
+	if (num != 3) {
+		sendMessage("CONSOLE:", "LED TURNED OFF");
+		setLEDtoColor();
+	} else {
+		int colors[num];
+		meetAndroid.getIntValues(colors);
+		int red = colors[0];
+		int green = colors[1];
+		int blue = colors[2];
+		String starter = "LED TURNED TO ";
+		String comma = ",";
+		String dot = ".";
+		String message = starter + red + comma + green + comma + blue + dot;
+		sendMessage("CONSOLE:", message);
+		setLEDtoColor(colors[0], colors[1], colors[2]);
+	}
+
+}
+
 void sendData(const String& prefix, int value) {
 	String toTrans = prefix + value;
+	int length = toTrans.length() + 1;
+	char charBuf[length];
+	toTrans.toCharArray(charBuf, length);
+	meetAndroid.send(charBuf);
+}
+
+void sendMessage(const String& prefix, const String& message) {
+	String toTrans = prefix + message;
 	int length = toTrans.length() + 1;
 	char charBuf[length];
 	toTrans.toCharArray(charBuf, length);
@@ -238,4 +291,12 @@ void sendData(const String& text) {
 	char charBuf[length];
 	text.toCharArray(charBuf, length);
 	meetAndroid.send(charBuf);
+}
+
+void setLEDtoColor(int red, int green, int blue) {
+	//Set Color to white
+	analogWrite(RED, red);
+	analogWrite(GREEN, green);
+	analogWrite(BLUE1, blue);
+	analogWrite(BLUE2, blue);
 }

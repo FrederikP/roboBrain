@@ -8,7 +8,7 @@ public class ObstAvoidanceBehavior extends Behavior {
 
 	private static final String TAG = "ObstAvoidanceBehavior";
 
-	private final int speed = 120;
+	private final int speed = 240;
 
 	private long backWardTime = 0;
 

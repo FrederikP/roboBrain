@@ -4,6 +4,7 @@ public class Robot {
 	private String name;
 	private Motor motor;
 	private ProximitySensor frontSensor;
+	private RGBLED headLED;
 
 	public Motor getMotor() {
 		return motor;
@@ -30,6 +31,7 @@ public class Robot {
 		frontSensor = new ProximitySensor();
 		backSensor = new ProximitySensor();
 		frontSensorServo = new Servo(address);
+		headLED = new RGBLED(address);
 	}
 
 	public String getName() {
@@ -38,6 +40,10 @@ public class Robot {
 
 	public void stop() {
 		motor.stop(0);
+	}
+
+	public RGBLED getHeadLED() {
+		return headLED;
 	}
 
 }
