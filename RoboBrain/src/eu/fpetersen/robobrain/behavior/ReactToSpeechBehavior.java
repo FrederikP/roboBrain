@@ -1,6 +1,8 @@
 package eu.fpetersen.robobrain.behavior;
 
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,21 +10,29 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
+import eu.fpetersen.robobrain.color.RGBColor;
+import eu.fpetersen.robobrain.color.RGBColorTable;
+import eu.fpetersen.robobrain.color.RGBColorTableFactory;
 import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.RGBLED;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.ui.Starter;
+import eu.fpetersen.robobrain.util.RoboLog;
 
 public class ReactToSpeechBehavior extends Behavior {
 
 	protected static final String TAG = "ReactToSpeech-Behavior";
 	private SpeechRecognizer speechR;
+	private RGBColorTable colorTable;
 
 	public ReactToSpeechBehavior(Robot robot, String name) {
 		super(robot, name);
+		colorTable = RGBColorTableFactory.getInstance()
+				.getStandardColorTableFromTextFile();
 	}
 
 	protected void setupSpeechRecognition() {
+
 		speechR = SpeechRecognizer.createSpeechRecognizer(RobotService
 				.getInstance());
 		speechR.setRecognitionListener(new RecognitionListener() {
@@ -72,32 +82,63 @@ public class ReactToSpeechBehavior extends Behavior {
 				Log.d(TAG, "onEvent " + eventType);
 			}
 		});
+
 	}
 
 	protected void interpretSpeechResults(ArrayList<String> data) {
 		RGBLED led = getRobot().getHeadLED();
+		Set<String> colorNames = colorTable.getNames();
 		for (String s : data) {
-			if (s.contains("green")) {
-				led.set(0, 1023, 0);
-			} else if (s.contains("red")) {
-				led.set(1023, 0, 0);
-			} else if (s.contains("blue")) {
-				led.set(0, 0, 1023);
+			for (String colorName : colorNames) {
+				boolean match = false;
+				if (colorName.contains(" ")) {
+					match = checkMultipleWordColorName(s, colorName);
+				} else {
+					if (s.contains(colorName)) {
+						match = true;
+					}
+				}
+
+				if (match) {
+					RGBColor color = colorTable.getColorForName(colorName);
+					led.set(color.getRed(), color.getGreen(), color.getBlue());
+				}
 			}
 		}
 
 	}
 
+	private boolean checkMultipleWordColorName(String s, String colorName) {
+		boolean match = false;
+		StringTokenizer tokenizer = new StringTokenizer(colorName);
+		int matchCount = 0;
+		int wordCount = tokenizer.countTokens();
+		while (tokenizer.hasMoreTokens()) {
+			if (s.contains(tokenizer.nextToken())) {
+				matchCount++;
+			}
+		}
+		if (matchCount == wordCount) {
+			match = true;
+		}
+		return match;
+	}
+
 	@Override
 	public void startBehavior() {
-		Starter.getInstance().runOnUiThread(new Runnable() {
+		if (SpeechRecognizer.isRecognitionAvailable(RobotService.getInstance())) {
+			Starter.getInstance().runOnUiThread(new Runnable() {
 
-			public void run() {
-				setupSpeechRecognition();
-			}
-		});
-		startSpeechListening();
-		super.startBehavior();
+				public void run() {
+					setupSpeechRecognition();
+				}
+			});
+			startSpeechListening();
+			super.startBehavior();
+		} else {
+			RoboLog.log("Cannot connect to speech Recognition Service.");
+			stopBehavior();
+		}
 
 	}
 
@@ -126,14 +167,16 @@ public class ReactToSpeechBehavior extends Behavior {
 
 	@Override
 	public void stopBehavior() {
-		Starter.getInstance().runOnUiThread(new Runnable() {
+		if (speechR != null) {
+			Starter.getInstance().runOnUiThread(new Runnable() {
 
-			public void run() {
-				speechR.stopListening();
-				speechR.cancel();
-				speechR.destroy();
-			}
-		});
+				public void run() {
+					speechR.stopListening();
+					speechR.cancel();
+					speechR.destroy();
+				}
+			});
+		}
 		super.stopBehavior();
 	}
 

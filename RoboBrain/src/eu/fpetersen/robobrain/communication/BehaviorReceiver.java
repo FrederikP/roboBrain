@@ -18,12 +18,12 @@ public class BehaviorReceiver extends BroadcastReceiver {
 					.getSerializableExtra(RoboBrainIntent.EXTRA_BEHAVIORUUID);
 			final Behavior b = CommandCenter.getBehaviorForUUID(uuid);
 			if (startIt) {
-				Runnable behaviorStopper = new Runnable() {
+				Runnable behaviorStarter = new Runnable() {
 					public void run() {
 						b.startBehavior();
 					}
 				};
-				Thread thread = new Thread(behaviorStopper);
+				Thread thread = new Thread(behaviorStarter);
 				thread.start();
 			} else {
 				Runnable behaviorStopper = new Runnable() {

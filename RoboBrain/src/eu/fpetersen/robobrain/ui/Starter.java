@@ -58,6 +58,13 @@ public class Starter extends Activity {
 			}
 		});
 
+		// Update the status every 2 secs. For debugging ill state management
+		/*
+		 * Timer timer = new Timer(); timer.schedule(new TimerTask() {
+		 * 
+		 * @Override public void run() { updateStatus(); } }, 2000, 2000);
+		 */
+
 	}
 
 	protected void handleStatusToggle(boolean isChecked) {
@@ -130,8 +137,9 @@ public class Starter extends Activity {
 					toggleStatusB.setChecked(true);
 					if (robotBehaviorTable.getVisibility() == View.INVISIBLE) {
 						robotBehaviorTable.setVisibility(View.VISIBLE);
-						setupRobotBehaviorTable();
 					}
+					cleanupRobotBehaviorTable();
+					setupRobotBehaviorTable();
 				}
 			});
 

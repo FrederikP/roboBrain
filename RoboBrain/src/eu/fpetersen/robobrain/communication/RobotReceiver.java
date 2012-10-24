@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.util.RoboLog;
 
 public class RobotReceiver extends BroadcastReceiver {
 
@@ -54,9 +55,7 @@ public class RobotReceiver extends BroadcastReceiver {
 				robot.getMotor().delayActionDone();
 			} else if (data.startsWith(consolePrefix)) {
 				String substring = data.substring(consolePrefix.length());
-				Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
-				cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, substring);
-				context.sendBroadcast(cIntent);
+				RoboLog.log(substring);
 			}
 
 			/*

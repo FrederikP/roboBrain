@@ -22,7 +22,7 @@ public class RGBLED {
 			this.red = red;
 			this.green = green;
 			this.blue = blue;
-			int[] colors = { red, green, blue };
+			int[] colors = { red * 4, green * 4, blue * 4 };
 			Amarino.sendDataToArduino(RobotService.getInstance(), address, 'D',
 					colors);
 		}
