@@ -1,7 +1,7 @@
 package eu.fpetersen.robobrain.behavior;
 
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import android.content.Intent;
@@ -24,11 +24,13 @@ public class ReactToSpeechBehavior extends Behavior {
 	protected static final String TAG = "ReactToSpeech-Behavior";
 	private SpeechRecognizer speechR;
 	private RGBColorTable colorTable;
+	private List<String> colorNames;
 
 	public ReactToSpeechBehavior(Robot robot, String name) {
 		super(robot, name);
 		colorTable = RGBColorTableFactory.getInstance()
 				.getStandardColorTableFromTextFile();
+		colorNames = colorTable.getNames();
 	}
 
 	protected void setupSpeechRecognition() {
@@ -38,48 +40,57 @@ public class ReactToSpeechBehavior extends Behavior {
 		speechR.setRecognitionListener(new RecognitionListener() {
 
 			public void onReadyForSpeech(Bundle params) {
-				Log.d(TAG, "onReadyForSpeech");
+				// Log.d(TAG, "onReadyForSpeech");
 			}
 
 			public void onBeginningOfSpeech() {
-				Log.d(TAG, "onBeginningOfSpeech");
+				// Log.d(TAG, "onBeginningOfSpeech");
 			}
 
 			public void onRmsChanged(float rmsdB) {
-				Log.d(TAG, "onRmsChanged");
+				// Log.d(TAG, "onRmsChanged");
 			}
 
 			public void onBufferReceived(byte[] buffer) {
-				Log.d(TAG, "onBufferReceived");
+				// Log.d(TAG, "onBufferReceived");
 			}
 
 			public void onEndOfSpeech() {
-				Log.d(TAG, "onEndofSpeech");
+				// Log.d(TAG, "onEndofSpeech");
 			}
 
 			public void onError(int error) {
-				Log.e(TAG, "error " + error);
+				// Log.e(TAG, "error " + error);
+				// RoboLog.log("Error, Recognition Service is busy");
 				startSpeechListening();
 			}
 
 			public void onResults(Bundle results) {
 				Log.d(TAG, "onResults " + results);
-				ArrayList<String> data = results
+				final ArrayList<String> data = results
 						.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 				for (int i = 0; i < data.size(); i++) {
 					data.set(i, data.get(i).toLowerCase());
 					Log.d(TAG, "result " + data.get(i));
 				}
-				interpretSpeechResults(data);
+				Runnable interpretTask = new Runnable() {
+
+					public void run() {
+						interpretSpeechResults(data);
+					}
+				};
+				Thread thread = new Thread(interpretTask);
+				thread.start();
+
 				startSpeechListening();
 			}
 
 			public void onPartialResults(Bundle partialResults) {
-				Log.d(TAG, "onPartialResults");
+				// Log.d(TAG, "onPartialResults");
 			}
 
 			public void onEvent(int eventType, Bundle params) {
-				Log.d(TAG, "onEvent " + eventType);
+				// Log.d(TAG, "onEvent " + eventType);
 			}
 		});
 
@@ -87,22 +98,26 @@ public class ReactToSpeechBehavior extends Behavior {
 
 	protected void interpretSpeechResults(ArrayList<String> data) {
 		RGBLED led = getRobot().getHeadLED();
-		Set<String> colorNames = colorTable.getNames();
+		boolean colorMatch = false;
 		for (String s : data) {
 			for (String colorName : colorNames) {
-				boolean match = false;
 				if (colorName.contains(" ")) {
-					match = checkMultipleWordColorName(s, colorName);
+					colorMatch = checkMultipleWordColorName(s, colorName);
 				} else {
 					if (s.contains(colorName)) {
-						match = true;
+						colorMatch = true;
 					}
 				}
 
-				if (match) {
+				if (colorMatch) {
 					RGBColor color = colorTable.getColorForName(colorName);
+					RoboLog.log("Displaying color: " + colorName);
 					led.set(color.getRed(), color.getGreen(), color.getBlue());
+					break;
 				}
+			}
+			if (colorMatch) {
+				break;
 			}
 		}
 

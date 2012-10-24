@@ -58,7 +58,7 @@ public class RGBColorTableFactory {
 		int g = Integer.parseInt(tokenizer.nextToken());
 		int b = Integer.parseInt(tokenizer.nextToken());
 		String name = new String(tokenizer.nextToken());
-		if (tokenizer.hasMoreTokens()) {
+		while (tokenizer.hasMoreTokens()) {
 			name = name + " " + tokenizer.nextToken();
 		}
 		if (includeNumberNames

@@ -298,5 +298,6 @@ void setLEDtoColor(int red, int green, int blue) {
 	analogWrite(RED, red);
 	analogWrite(GREEN, green);
 	analogWrite(BLUE1, blue);
-	analogWrite(BLUE2, blue);
+	//Too much blue with the second LED
+	//analogWrite(BLUE2, blue);
 }
