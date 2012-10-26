@@ -1,19 +1,14 @@
 package eu.fpetersen.robobrain.robot;
 
-import at.abraxas.amarino.Amarino;
-import eu.fpetersen.robobrain.communication.RobotService;
 
-public class Servo {
+public class Servo extends RobotPart {
 
-	private String address;
-
-	public Servo(String address) {
-		this.address = address;
+	public Servo(Robot robot) {
+		super(robot);
 	}
 
 	public void setToAngle(int angle) {
-		Amarino.sendDataToArduino(RobotService.getInstance(), address, 'C',
-				angle);
+		getRobot().sendToArduino('C', angle);
 	}
 
 }

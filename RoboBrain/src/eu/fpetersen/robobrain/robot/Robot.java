@@ -1,10 +1,15 @@
 package eu.fpetersen.robobrain.robot;
 
+import at.abraxas.amarino.Amarino;
+import eu.fpetersen.robobrain.communication.RobotService;
+import eu.fpetersen.robobrain.util.RoboLog;
+
 public class Robot {
 	private String name;
 	private Motor motor;
 	private ProximitySensor frontSensor;
 	private RGBLED headLED;
+	private String address;
 
 	public Motor getMotor() {
 		return motor;
@@ -27,11 +32,12 @@ public class Robot {
 
 	public Robot(String address, String name) {
 		this.name = name;
-		motor = new Motor(address);
-		frontSensor = new ProximitySensor();
-		backSensor = new ProximitySensor();
-		frontSensorServo = new Servo(address);
-		headLED = new RGBLED(address);
+		this.address = address;
+		motor = new Motor(Robot.this);
+		frontSensor = new ProximitySensor(Robot.this);
+		backSensor = new ProximitySensor(Robot.this);
+		frontSensorServo = new Servo(Robot.this);
+		headLED = new RGBLED(Robot.this);
 	}
 
 	public String getName() {
@@ -44,6 +50,50 @@ public class Robot {
 
 	public RGBLED getHeadLED() {
 		return headLED;
+	}
+
+	public void sendToArduino(char flag, String data) {
+
+		RoboLog.log("Send data to Robot " + name + ": Flag: " + flag
+				+ " Data: " + data);
+		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
+				data);
+	}
+
+	public void sendToArduino(char flag, String[] data) {
+
+		String dataString = new String("");
+		for (int i = 0; i < data.length; i++) {
+			dataString = dataString + data[i];
+			if (i < data.length - 1) {
+				dataString = dataString + ",";
+			}
+		}
+		RoboLog.log("Send data to Robot " + name + ": Flag: " + flag
+				+ " Data: " + dataString);
+		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
+				data);
+	}
+
+	public void sendToArduino(char flag, int data) {
+		RoboLog.log("Send data to Robot " + name + ": Flag: " + flag
+				+ " Data: " + Integer.toString(data));
+		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
+				data);
+	}
+
+	public void sendToArduino(char flag, int[] data) {
+		String dataString = new String("");
+		for (int i = 0; i < data.length; i++) {
+			dataString = dataString + Integer.toString(data[i]);
+			if (i < data.length - 1) {
+				dataString = dataString + ",";
+			}
+		}
+		RoboLog.log("Send data to Robot " + name + ": Flag: " + flag
+				+ " Data: " + dataString);
+		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
+				data);
 	}
 
 }

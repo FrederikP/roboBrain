@@ -1,18 +1,14 @@
 package eu.fpetersen.robobrain.robot;
 
-import at.abraxas.amarino.Amarino;
-import eu.fpetersen.robobrain.communication.RobotService;
 
-public class RGBLED {
+public class RGBLED extends RobotPart {
 
 	private int green = 0;
 	private int red = 0;
 	private int blue = 0;
 
-	private String address;
-
-	public RGBLED(String address) {
-		this.address = address;
+	public RGBLED(Robot robot) {
+		super(robot);
 	}
 
 	public void set(int red, int green, int blue) {
@@ -23,8 +19,7 @@ public class RGBLED {
 			this.green = green;
 			this.blue = blue;
 			int[] colors = { red * 4, green * 4, blue * 4 };
-			Amarino.sendDataToArduino(RobotService.getInstance(), address, 'D',
-					colors);
+			getRobot().sendToArduino('D', colors);
 		}
 	}
 
