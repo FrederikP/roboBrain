@@ -9,4 +9,6 @@ public class RoboBrainIntent extends Intent {
 	public static final String EXTRA_BEHAVIORSTATE = "eu.fpetersen.robobrain.console.intent.extra.BEHAVIORSTATE";
 	public static final String EXTRA_BEHAVIORUUID = "eu.fpetersen.robobrain.console.intent.extra.BEHAVIORUUID";
 	public static final String ACTION_STOPALLBEHAVIORS = "eu.fpetersen.robobrain.console.intent.actions.STOPALLBEHAVIORS";
+	public static final String ACTION_SPEECH = "eu.fpetersen.robobrain.console.intent.actions.SPEECH";
+	public static final String EXTRA_SPEECH_RESULTS = "eu.fpetersen.robobrain.console.intent.extra.SPEECHRESULTS";
 }

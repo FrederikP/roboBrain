@@ -6,6 +6,8 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
+import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
+import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
 
 public class RobotService extends Service {
 
@@ -22,6 +24,8 @@ public class RobotService extends Service {
 
 	private RobotReceiver rReceiver;
 
+	private DistributingSpeechReceiver dSpeechReceiver;
+
 	public boolean isRunning() {
 		return running;
 	}
@@ -37,6 +41,8 @@ public class RobotService extends Service {
 		CommandCenter.getInstance(DEVICE_ADDRESS);
 		bReceiver = new BehaviorReceiver();
 		rReceiver = new RobotReceiver();
+		dSpeechReceiver = new DistributingSpeechReceiver();
+		createSpeechRecognizerService();
 		super.onCreate();
 	}
 
@@ -55,11 +61,20 @@ public class RobotService extends Service {
 		behaviorReceiverFilter
 				.addAction(RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
 		registerReceiver(bReceiver, behaviorReceiverFilter);
+		if (SpeechRecognizerService.getInstance() == null) {
+			createSpeechRecognizerService();
+		}
 
 		// in order to receive broadcasted intents we need to register our
 		// receiver
 		registerReceiver(rReceiver, new IntentFilter(
 				AmarinoIntent.ACTION_RECEIVED));
+
+		// Register distributing Speech Receiver to redistribute Speech input
+		// from Speech Recognition Service to all registered Speech Receivers
+		registerReceiver(dSpeechReceiver, new IntentFilter(
+				RoboBrainIntent.ACTION_SPEECH));
+
 		running = true;
 		return START_STICKY;
 	}
@@ -70,6 +85,7 @@ public class RobotService extends Service {
 		running = false;
 		unregisterReceiver(bReceiver);
 		unregisterReceiver(rReceiver);
+		unregisterReceiver(dSpeechReceiver);
 		CommandCenter.disconnectAll();
 		return super.stopService(name);
 	}
@@ -80,8 +96,23 @@ public class RobotService extends Service {
 		running = false;
 		unregisterReceiver(rReceiver);
 		unregisterReceiver(bReceiver);
+		unregisterReceiver(dSpeechReceiver);
 		CommandCenter.disconnectAll();
+		stopSpeechRecognizerService();
 		super.onDestroy();
+	}
+
+	private void createSpeechRecognizerService() {
+		startService(new Intent(RobotService.this,
+				SpeechRecognizerService.class));
+	}
+
+	private void stopSpeechRecognizerService() {
+		stopService(new Intent(RobotService.this, SpeechRecognizerService.class));
+	}
+
+	public DistributingSpeechReceiver getDistributingSpeechReceiver() {
+		return dSpeechReceiver;
 	}
 
 }
