@@ -7,6 +7,18 @@ import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Robot;
 
+//TODO: Requirement-Management for behaviors and robots.
+
+/**
+ * @author Frederik Petersen
+ * 
+ *         The Behavior class should be extended for implementing a specific new
+ *         Robot Behavior. For now the Robot is able to run one behavior at a
+ *         time. N behaviors can be created for each robot. It's important to
+ *         make sure, that the specific robot is compatible with the
+ *         requirements of the behavior.
+ * 
+ */
 public abstract class Behavior {
 
 	private boolean turnedOn = false;
