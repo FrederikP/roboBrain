@@ -25,22 +25,26 @@ public class ObstAvoidanceBehavior extends Behavior {
 	@Override
 	protected void behaviorLoop() {
 		Robot robot = getRobot();
-		if (!robot.getMotor().getState().equals(MotorState.STOPPINGWITHDELAY)
-				&& !robot.getMotor().getState().equals(MotorState.TURNING_LEFT)
-				&& !robot.getMotor().getState()
+		if (!robot.getMainMotor().getState()
+				.equals(MotorState.STOPPINGWITHDELAY)
+				&& !robot.getMainMotor().getState()
+						.equals(MotorState.TURNING_LEFT)
+				&& !robot.getMainMotor().getState()
 						.equals(MotorState.TURNING_RIGHT)) {
-			if (robot.getMotor().getState().equals(MotorState.FORWARD)) {
+			if (robot.getMainMotor().getState().equals(MotorState.FORWARD)) {
 				goingForward();
-			} else if (robot.getMotor().getState().equals(MotorState.BACKWARD)) {
+			} else if (robot.getMainMotor().getState()
+					.equals(MotorState.BACKWARD)) {
 				goingBackward();
-			} else if (robot.getMotor().getState().equals(MotorState.STOPPED)) {
+			} else if (robot.getMainMotor().getState()
+					.equals(MotorState.STOPPED)) {
 				startGoingForward();
 			}
 		}
 	}
 
 	private void startGoingForward() {
-		getRobot().getMotor().advance(speed);
+		getRobot().getMainMotor().advance(speed);
 	}
 
 	private void goingBackward() {
@@ -55,17 +59,17 @@ public class ObstAvoidanceBehavior extends Behavior {
 	private void checkForBestRouteAndTurn() {
 		Robot robot = getRobot();
 		try {
-			robot.getFrontSensorServo().setToAngle(50);
+			robot.getHeadServo().setToAngle(50);
 			Thread.sleep(300);
 			int rightMeasurement = robot.getFrontSensor().getValue();
-			robot.getFrontSensorServo().setToAngle(140);
+			robot.getHeadServo().setToAngle(140);
 			Thread.sleep(300);
 			int leftMeasurement = robot.getFrontSensor().getValue();
-			robot.getFrontSensorServo().setToAngle(95);
+			robot.getHeadServo().setToAngle(95);
 			if (rightMeasurement >= leftMeasurement) {
-				robot.getMotor().turnRight(45);
+				robot.getMainMotor().turnRight(45);
 			} else {
-				robot.getMotor().turnLeft(45);
+				robot.getMainMotor().turnLeft(45);
 			}
 		} catch (InterruptedException e) {
 			Log.e(TAG, "Interrupted while waiting for servo to turn", e);
@@ -75,7 +79,7 @@ public class ObstAvoidanceBehavior extends Behavior {
 	private void goingForward() {
 		Robot robot = getRobot();
 		if (robot.getFrontSensor().getValue() < 30) {
-			robot.getMotor().backOff(speed);
+			robot.getMainMotor().backOff(speed);
 			backWardTime = System.currentTimeMillis() + 1000;
 		}
 

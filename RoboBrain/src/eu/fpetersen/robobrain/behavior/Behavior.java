@@ -26,7 +26,7 @@ public abstract class Behavior {
 	private String name;
 	private UUID id;
 
-	public Behavior(Robot robot, String name) {
+	protected Behavior(Robot robot, String name) {
 		id = UUID.randomUUID();
 		this.robot = robot;
 		this.name = name;
@@ -77,5 +77,17 @@ public abstract class Behavior {
 	}
 
 	protected abstract void behaviorLoop();
+
+	public static Behavior createBehavior(String name, Robot robot) {
+		if (name.matches("BackAndForth")) {
+			return new BackAndForthBehavior(robot, name);
+		} else if (name.matches("ObstAvoidance")) {
+			return new ObstAvoidanceBehavior(robot, name);
+		} else if (name.matches("ReactToSpeech")) {
+			return new ReactToSpeechBehavior(robot, name);
+		}
+		// TODO Exception handling
+		return null;
+	}
 
 }

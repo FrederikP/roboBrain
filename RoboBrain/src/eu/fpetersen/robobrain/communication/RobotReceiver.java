@@ -52,7 +52,7 @@ public class RobotReceiver extends BroadcastReceiver {
 				int proxValue = Integer.parseInt(substring);
 				robot.getBackSensor().setValue(proxValue);
 			} else if (data.contains(stoppedAfterDelay)) {
-				robot.getMotor().delayActionDone();
+				robot.getMainMotor().delayActionDone();
 			} else if (data.startsWith(consolePrefix)) {
 				String substring = data.substring(consolePrefix.length());
 				RoboLog.log(substring);

@@ -1,20 +1,25 @@
 package eu.fpetersen.robobrain.communication;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
+import eu.fpetersen.robobrain.behavior.Behavior;
+import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
+import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
 import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
 
 public class RobotService extends Service {
 
 	private static final String TAG = "RoboBrain-Service";
-
-	// change this to your Bluetooth device address
-	private static final String DEVICE_ADDRESS = "07:12:05:03:53:76";
 
 	private static RobotService instance;
 
@@ -38,7 +43,23 @@ public class RobotService extends Service {
 	public void onCreate() {
 		Log.v(TAG, "Creating RoboBrain service");
 		instance = this;
-		CommandCenter.getInstance(DEVICE_ADDRESS);
+		RobotFactory robotFactory = RobotFactory.getInstance(this);
+		Map<String, Robot> robots = robotFactory.createRobots();
+		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
+				.getInstance();
+		Map<String, List<String>> behaviorMapping = behaviorFactory
+				.createMappings();
+		for (String robotName : robots.keySet()) {
+			// TODO Exception handling
+			Robot robot = robots.get(robotName);
+			List<String> behaviorNames = behaviorMapping.get(robotName);
+			List<Behavior> behaviors = new ArrayList<Behavior>();
+			for (String bName : behaviorNames) {
+				behaviors.add(Behavior.createBehavior(bName, robot));
+			}
+			CommandCenter.createInstance(robot, behaviors);
+		}
+
 		bReceiver = new BehaviorReceiver();
 		rReceiver = new RobotReceiver();
 		dSpeechReceiver = new DistributingSpeechReceiver();

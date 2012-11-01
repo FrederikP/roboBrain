@@ -31,7 +31,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	}
 
 	private void setLED(List<String> results) {
-		RGBLED led = getRobot().getHeadLED();
+		RGBLED led = getRobot().getHeadColorLED();
 		boolean colorMatch = false;
 		for (String s : results) {
 			for (String colorName : colorNames) {

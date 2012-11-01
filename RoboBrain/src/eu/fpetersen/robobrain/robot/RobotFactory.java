@@ -11,9 +11,9 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Service;
-import android.os.Environment;
 import android.util.Xml;
-import eu.fpetersen.robobrain.ui.R;
+import eu.fpetersen.robobrain.util.ExternalStorageManager;
+import eu.fpetersen.robobrain.util.XMLParserHelper;
 
 public class RobotFactory {
 
@@ -76,11 +76,10 @@ public class RobotFactory {
 				continue;
 			}
 			String name = parser.getName();
-			// Starts by looking for the entry tag
 			if (name.equals("parts")) {
 				addParts(parser, robot);
 			} else {
-				skip(parser);
+				XMLParserHelper.skip(parser);
 			}
 		}
 
@@ -95,7 +94,6 @@ public class RobotFactory {
 				continue;
 			}
 			String name = parser.getName();
-			// Starts by looking for the entry tag
 			if (name.equals("part")) {
 				String type = parser.getAttributeValue(ns, "type");
 				String id = parser.getAttributeValue(ns, "id");
@@ -110,21 +108,14 @@ public class RobotFactory {
 				}
 
 			} else {
-				skip(parser);
+				XMLParserHelper.skip(parser);
 			}
 		}
 	}
 
 	public Map<String, Robot> createRobots() {
 		Map<String, Robot> robots = new HashMap<String, Robot>();
-		File roboBrainRoot = new File(Environment.getExternalStorageDirectory()
-				.getAbsolutePath()
-				+ File.separator
-				+ R.string.sd_robobrain_root_dir);
-		createDirIfNotExistant(roboBrainRoot);
-		File robotsXmlDir = new File(roboBrainRoot.getAbsolutePath()
-				+ File.separator + R.string.sd_robobrain_robots_xml_dir);
-		createDirIfNotExistant(robotsXmlDir);
+		File robotsXmlDir = ExternalStorageManager.getRobotsXmlDir();
 		for (File robotXml : robotsXmlDir.listFiles()) {
 			if (robotXml.getAbsolutePath().endsWith(".xml")) {
 				Robot newRobot = createRobotFromXML(robotXml);
@@ -134,31 +125,4 @@ public class RobotFactory {
 		return robots;
 	}
 
-	private void createDirIfNotExistant(File dir) {
-		if (!dir.exists()) {
-			if (!dir.mkdir()) {
-				// TODO Exception handling
-				// throw new
-				// RoboBrainDirectoryNotCreatedException("No directory ");
-			}
-		}
-	}
-
-	private void skip(XmlPullParser parser) throws XmlPullParserException,
-			IOException {
-		if (parser.getEventType() != XmlPullParser.START_TAG) {
-			throw new IllegalStateException();
-		}
-		int depth = 1;
-		while (depth != 0) {
-			switch (parser.next()) {
-			case XmlPullParser.END_TAG:
-				depth--;
-				break;
-			case XmlPullParser.START_TAG:
-				depth++;
-				break;
-			}
-		}
-	}
 }

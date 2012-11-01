@@ -8,19 +8,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import at.abraxas.amarino.Amarino;
-import eu.fpetersen.robobrain.behavior.BackAndForthBehavior;
 import eu.fpetersen.robobrain.behavior.Behavior;
-import eu.fpetersen.robobrain.behavior.ObstAvoidanceBehavior;
-import eu.fpetersen.robobrain.behavior.ReactToSpeechBehavior;
 import eu.fpetersen.robobrain.robot.Robot;
 
 public class CommandCenter {
 
-	private static HashMap<String, CommandCenter> ccPerMac = new HashMap<String, CommandCenter>();
+	private static HashMap<Robot, CommandCenter> ccPerRobot = new HashMap<Robot, CommandCenter>();
 
-	private String address;
 	private Robot robot;
-
 	private List<Behavior> behaviors = new ArrayList<Behavior>();
 	private static Map<UUID, Behavior> allBehaviors = new HashMap<UUID, Behavior>();
 
@@ -28,19 +23,13 @@ public class CommandCenter {
 		return allBehaviors.get(uuid);
 	}
 
-	private CommandCenter(String address) {
+	private CommandCenter(Robot robot, List<Behavior> behaviors) {
 		// TODO do this somewhere else. factory or something...
-		robot = new Robot(address, "YARP");
-		Behavior backAndForth = new BackAndForthBehavior(robot,
-				"Back-and-Forth");
-		Behavior obstAvoidance = new ObstAvoidanceBehavior(robot,
-				"Obstacle Avoidance");
-		Behavior speechReact = new ReactToSpeechBehavior(robot, "Speech React");
-		addBehavior(backAndForth);
-		addBehavior(obstAvoidance);
-		addBehavior(speechReact);
-		this.address = address;
+		this.robot = robot;
 
+		for (Behavior b : behaviors) {
+			addBehavior(b);
+		}
 	}
 
 	private void addBehavior(Behavior b) {
@@ -53,7 +42,7 @@ public class CommandCenter {
 
 		// this is how you tell Amarino to connect to a specific BT device from
 		// within your own code
-		Amarino.connect(rService, address);
+		Amarino.connect(rService, robot.getAddress());
 	}
 
 	public void disconnect() {
@@ -62,32 +51,31 @@ public class CommandCenter {
 
 		// if you connect in onStart() you must not forget to disconnect when
 		// your app is closed
-		Amarino.disconnect(rService, address);
+		Amarino.disconnect(rService, robot.getAddress());
 	}
 
-	public static CommandCenter getInstance(String address) {
-		CommandCenter cc = ccPerMac.get(address);
+	public static void createInstance(Robot robot, List<Behavior> behaviors) {
+		CommandCenter cc = ccPerRobot.get(robot);
 		if (cc == null) {
-			cc = new CommandCenter(address);
-			ccPerMac.put(address, cc);
+			cc = new CommandCenter(robot, behaviors);
+			ccPerRobot.put(robot, cc);
 		}
-		return cc;
 	}
 
 	public static void connectAll() {
-		for (CommandCenter cc : ccPerMac.values()) {
+		for (CommandCenter cc : ccPerRobot.values()) {
 			cc.connect();
 		}
 	}
 
 	public static void disconnectAll() {
-		for (CommandCenter cc : ccPerMac.values()) {
+		for (CommandCenter cc : ccPerRobot.values()) {
 			cc.disconnect();
 		}
 	}
 
 	public static Collection<CommandCenter> getAllCCs() {
-		return ccPerMac.values();
+		return ccPerRobot.values();
 	}
 
 	public Robot getRobot() {
@@ -98,8 +86,18 @@ public class CommandCenter {
 		return behaviors;
 	}
 
+	public static CommandCenter getCCForAddress(Robot robot) {
+		return ccPerRobot.get(robot);
+	}
+
 	public static CommandCenter getCCForAddress(String address) {
-		return ccPerMac.get(address);
+		for (CommandCenter center : ccPerRobot.values()) {
+			if (center.getRobot().getAddress().matches(address)) {
+				return center;
+			}
+		}
+		// TODO Exception handling
+		return null;
 	}
 
 }
