@@ -1,0 +1,164 @@
+package eu.fpetersen.robobrain.robot;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import android.app.Service;
+import android.os.Environment;
+import android.util.Xml;
+import eu.fpetersen.robobrain.ui.R;
+
+public class RobotFactory {
+
+	private static RobotFactory instance;
+
+	private Service service;
+
+	private static final String ns = null;
+
+	private RobotFactory(Service service) {
+		this.service = service;
+	}
+
+	public static RobotFactory getInstance(Service service) {
+		if (instance == null) {
+			instance = new RobotFactory(service);
+		} else if (instance.getService() != service) {
+			instance.setService(service);
+		}
+		return instance;
+	}
+
+	private Service getService() {
+		return service;
+	}
+
+	private void setService(Service service) {
+		this.service = service;
+	}
+
+	private Robot createRobotFromXML(File robotXml) {
+		InputStream in = null;
+		try {
+			in = new FileInputStream(robotXml);
+			XmlPullParser parser = Xml.newPullParser();
+			parser.setInput(in, null);
+			parser.nextTag();
+			return readRobot(parser);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				in.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		// TODO Exception handling
+		return null;
+	}
+
+	private Robot readRobot(XmlPullParser parser)
+			throws XmlPullParserException, IOException {
+		parser.require(XmlPullParser.START_TAG, ns, "robot");
+		String address = parser.getAttributeValue(ns, "address");
+		String robotName = parser.getAttributeValue(ns, "name");
+		Robot robot = new Robot(address, robotName);
+		while (parser.next() != XmlPullParser.END_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG) {
+				continue;
+			}
+			String name = parser.getName();
+			// Starts by looking for the entry tag
+			if (name.equals("parts")) {
+				addParts(parser, robot);
+			} else {
+				skip(parser);
+			}
+		}
+
+		return robot;
+	}
+
+	private void addParts(XmlPullParser parser, Robot robot)
+			throws XmlPullParserException, IOException {
+		parser.require(XmlPullParser.START_TAG, ns, "parts");
+		while (parser.next() != XmlPullParser.END_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG) {
+				continue;
+			}
+			String name = parser.getName();
+			// Starts by looking for the entry tag
+			if (name.equals("part")) {
+				String type = parser.getAttributeValue(ns, "type");
+				String id = parser.getAttributeValue(ns, "id");
+				if (type.matches("motor")) {
+					robot.addPart(id, new Motor(robot));
+				} else if (type.matches("proxsensor")) {
+					robot.addPart(id, new ProximitySensor(robot));
+				} else if (type.matches("servo")) {
+					robot.addPart(id, new Servo(robot));
+				} else if (type.matches("rgbled")) {
+					robot.addPart(id, new RGBLED(robot));
+				}
+
+			} else {
+				skip(parser);
+			}
+		}
+	}
+
+	public Map<String, Robot> createRobots() {
+		Map<String, Robot> robots = new HashMap<String, Robot>();
+		File roboBrainRoot = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath()
+				+ File.separator
+				+ R.string.sd_robobrain_root_dir);
+		createDirIfNotExistant(roboBrainRoot);
+		File robotsXmlDir = new File(roboBrainRoot.getAbsolutePath()
+				+ File.separator + R.string.sd_robobrain_robots_xml_dir);
+		createDirIfNotExistant(robotsXmlDir);
+		for (File robotXml : robotsXmlDir.listFiles()) {
+			if (robotXml.getAbsolutePath().endsWith(".xml")) {
+				Robot newRobot = createRobotFromXML(robotXml);
+				robots.put(newRobot.getName(), newRobot);
+			}
+		}
+		return robots;
+	}
+
+	private void createDirIfNotExistant(File dir) {
+		if (!dir.exists()) {
+			if (!dir.mkdir()) {
+				// TODO Exception handling
+				// throw new
+				// RoboBrainDirectoryNotCreatedException("No directory ");
+			}
+		}
+	}
+
+	private void skip(XmlPullParser parser) throws XmlPullParserException,
+			IOException {
+		if (parser.getEventType() != XmlPullParser.START_TAG) {
+			throw new IllegalStateException();
+		}
+		int depth = 1;
+		while (depth != 0) {
+			switch (parser.next()) {
+			case XmlPullParser.END_TAG:
+				depth--;
+				break;
+			case XmlPullParser.START_TAG:
+				depth++;
+				break;
+			}
+		}
+	}
+}

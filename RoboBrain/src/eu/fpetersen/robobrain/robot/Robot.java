@@ -1,5 +1,8 @@
 package eu.fpetersen.robobrain.robot;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import at.abraxas.amarino.Amarino;
 import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.util.RoboLog;
@@ -10,6 +13,15 @@ public class Robot {
 	private ProximitySensor frontSensor;
 	private RGBLED headLED;
 	private String address;
+	private Map<String, RobotPart> parts;
+
+	public void addPart(String id, RobotPart part) {
+		parts.put(id, part);
+	}
+
+	public RobotPart getPart(String id) {
+		return parts.get(id);
+	}
 
 	public Motor getMotor() {
 		return motor;
@@ -33,6 +45,7 @@ public class Robot {
 	public Robot(String address, String name) {
 		this.name = name;
 		this.address = address;
+		parts = new HashMap<String, RobotPart>();
 		motor = new Motor(Robot.this);
 		frontSensor = new ProximitySensor(Robot.this);
 		backSensor = new ProximitySensor(Robot.this);

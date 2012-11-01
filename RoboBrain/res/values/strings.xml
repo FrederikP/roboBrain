@@ -14,5 +14,7 @@
     <string name="starter_menu_item">Starter</string>
     <string name="robot_name">Robot Name:</string>
     <string name="avail_behaviors">Available Behaviors:</string>
+    <string name="sd_robobrain_root_dir">robobrain</string>
+    <string name="sd_robobrain_robots_xml_dir">robots</string>
 
 </resources>

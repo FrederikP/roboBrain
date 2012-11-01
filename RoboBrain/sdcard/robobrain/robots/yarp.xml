@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="YARP" address="07:12:05:03:53:76">
+	<parts>
+		<part type="motor" id="main_motor" />
+		<part type="proxsensor" id="front_proxsensor" />
+		<part type="proxsensor" id="back_proxsensor" />
+		<part type="servo" id="head_servo" />
+		<part type="rgbled" id="headcolor_rgbled" />	
+	</parts>
+</robot>
