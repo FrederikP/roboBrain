@@ -1,6 +1,7 @@
 package eu.fpetersen.robobrain.speech;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -12,6 +13,10 @@ import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 public class DistributingSpeechReceiver extends BroadcastReceiver {
 
 	private Set<SpeechReceiver> receivers;
+
+	public DistributingSpeechReceiver() {
+		receivers = new HashSet<SpeechReceiver>();
+	}
 
 	@Override
 	public void onReceive(Context context, Intent intent) {

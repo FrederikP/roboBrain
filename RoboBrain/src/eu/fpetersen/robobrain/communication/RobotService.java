@@ -15,7 +15,6 @@ import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
-import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
 
 public class RobotService extends Service {
 
@@ -63,7 +62,6 @@ public class RobotService extends Service {
 		bReceiver = new BehaviorReceiver();
 		rReceiver = new RobotReceiver();
 		dSpeechReceiver = new DistributingSpeechReceiver();
-		createSpeechRecognizerService();
 		super.onCreate();
 	}
 
@@ -82,9 +80,6 @@ public class RobotService extends Service {
 		behaviorReceiverFilter
 				.addAction(RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
 		registerReceiver(bReceiver, behaviorReceiverFilter);
-		if (SpeechRecognizerService.getInstance() == null) {
-			createSpeechRecognizerService();
-		}
 
 		// in order to receive broadcasted intents we need to register our
 		// receiver
@@ -104,9 +99,6 @@ public class RobotService extends Service {
 	public boolean stopService(Intent name) {
 		Log.v(TAG, "Stopping RoboBrain service");
 		running = false;
-		unregisterReceiver(bReceiver);
-		unregisterReceiver(rReceiver);
-		unregisterReceiver(dSpeechReceiver);
 		CommandCenter.disconnectAll();
 		return super.stopService(name);
 	}
@@ -119,17 +111,8 @@ public class RobotService extends Service {
 		unregisterReceiver(bReceiver);
 		unregisterReceiver(dSpeechReceiver);
 		CommandCenter.disconnectAll();
-		stopSpeechRecognizerService();
+
 		super.onDestroy();
-	}
-
-	private void createSpeechRecognizerService() {
-		startService(new Intent(RobotService.this,
-				SpeechRecognizerService.class));
-	}
-
-	private void stopSpeechRecognizerService() {
-		stopService(new Intent(RobotService.this, SpeechRecognizerService.class));
 	}
 
 	public DistributingSpeechReceiver getDistributingSpeechReceiver() {

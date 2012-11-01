@@ -13,6 +13,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.app.Service;
 import android.util.Xml;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
+import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.XMLParserHelper;
 
 public class RobotFactory {
@@ -95,17 +96,7 @@ public class RobotFactory {
 			}
 			String name = parser.getName();
 			if (name.equals("part")) {
-				String type = parser.getAttributeValue(ns, "type");
-				String id = parser.getAttributeValue(ns, "id");
-				if (type.matches("motor")) {
-					robot.addPart(id, new Motor(robot));
-				} else if (type.matches("proxsensor")) {
-					robot.addPart(id, new ProximitySensor(robot));
-				} else if (type.matches("servo")) {
-					robot.addPart(id, new Servo(robot));
-				} else if (type.matches("rgbled")) {
-					robot.addPart(id, new RGBLED(robot));
-				}
+				readInPart(parser, robot);
 
 			} else {
 				XMLParserHelper.skip(parser);
@@ -113,14 +104,36 @@ public class RobotFactory {
 		}
 	}
 
+	private void readInPart(XmlPullParser parser, Robot robot)
+			throws XmlPullParserException, IOException {
+		parser.require(XmlPullParser.START_TAG, ns, "part");
+		String type = parser.getAttributeValue(ns, "type");
+		String id = parser.getAttributeValue(ns, "id");
+		if (type.matches("motor")) {
+			robot.addPart(id, new Motor(robot));
+		} else if (type.matches("proxsensor")) {
+			robot.addPart(id, new ProximitySensor(robot));
+		} else if (type.matches("servo")) {
+			robot.addPart(id, new Servo(robot));
+		} else if (type.matches("rgbled")) {
+			robot.addPart(id, new RGBLED(robot));
+		}
+		parser.nextTag();
+		parser.require(XmlPullParser.END_TAG, ns, "part");
+	}
+
 	public Map<String, Robot> createRobots() {
 		Map<String, Robot> robots = new HashMap<String, Robot>();
 		File robotsXmlDir = ExternalStorageManager.getRobotsXmlDir();
-		for (File robotXml : robotsXmlDir.listFiles()) {
-			if (robotXml.getAbsolutePath().endsWith(".xml")) {
-				Robot newRobot = createRobotFromXML(robotXml);
-				robots.put(newRobot.getName(), newRobot);
+		if (robotsXmlDir != null) {
+			for (File robotXml : robotsXmlDir.listFiles()) {
+				if (robotXml.getAbsolutePath().endsWith(".xml")) {
+					Robot newRobot = createRobotFromXML(robotXml);
+					robots.put(newRobot.getName(), newRobot);
+				}
 			}
+		} else {
+			RoboLog.log("Robots XML Dir could not be accessed on sd card!");
 		}
 		return robots;
 	}

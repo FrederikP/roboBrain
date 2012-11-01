@@ -25,6 +25,7 @@ import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.CommandCenter;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 import eu.fpetersen.robobrain.communication.RobotService;
+import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
 
 public class Starter extends Activity {
 
@@ -71,7 +72,10 @@ public class Starter extends Activity {
 		if (isChecked) {
 			toggleStatusB.post(new Runnable() {
 				public void run() {
-					startService(new Intent(Starter.this, RobotService.class));
+					startService(new Intent(getApplicationContext(),
+							SpeechRecognizerService.class));
+					startService(new Intent(getApplicationContext(),
+							RobotService.class));
 				}
 			});
 
@@ -84,8 +88,10 @@ public class Starter extends Activity {
 					Handler handler = new Handler();
 					handler.postDelayed(new Runnable() {
 						public void run() {
-							stopService(new Intent(Starter.this,
+							stopService(new Intent(getApplicationContext(),
 									RobotService.class));
+							stopService(new Intent(getApplicationContext(),
+									SpeechRecognizerService.class));
 						}
 					}, 500);
 

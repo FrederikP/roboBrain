@@ -30,6 +30,7 @@
         
          <service android:name="eu.fpetersen.robobrain.communication.RobotService" android:label="@string/title_service" android:enabled="true">             
          </service>
+         <service android:name="eu.fpetersen.robobrain.speech.SpeechRecognizerService" android:label="@string/title_serviceSpeech" android:enabled="true"></service>
          
     </application>
 </manifest>

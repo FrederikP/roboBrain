@@ -5,4 +5,4 @@
 		<behavior name="ObstAvoidance" />
 		<behavior name="BackAndForth" />
 	</robot>
-<behaviormapping>
+</behaviormapping>

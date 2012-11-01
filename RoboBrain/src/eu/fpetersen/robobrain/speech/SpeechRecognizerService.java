@@ -10,8 +10,8 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
-import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.ui.Starter;
+import eu.fpetersen.robobrain.util.RoboLog;
 
 public class SpeechRecognizerService extends Service {
 
@@ -67,8 +67,8 @@ public class SpeechRecognizerService extends Service {
 				Runnable interpretTask = new Runnable() {
 
 					public void run() {
-						// TODO save results somewhere, for robot service to
-						// access
+						SpeechResultManager.getInstance().allocateNewResults(
+								data);
 					}
 				};
 				Thread thread = new Thread(interpretTask);
@@ -90,7 +90,8 @@ public class SpeechRecognizerService extends Service {
 	@Override
 	public void onCreate() {
 		instance = SpeechRecognizerService.this;
-		if (SpeechRecognizer.isRecognitionAvailable(RobotService.getInstance())) {
+		if (SpeechRecognizer.isRecognitionAvailable(SpeechRecognizerService
+				.getInstance())) {
 			Starter.getInstance().runOnUiThread(new Runnable() {
 
 				public void run() {
@@ -98,6 +99,7 @@ public class SpeechRecognizerService extends Service {
 				}
 			});
 		} else {
+			RoboLog.log("No Speech Recognition available on this device.");
 			this.stopSelf();
 		}
 	}
