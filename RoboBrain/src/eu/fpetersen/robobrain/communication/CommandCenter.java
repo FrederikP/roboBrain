@@ -100,4 +100,8 @@ public class CommandCenter {
 		return null;
 	}
 
+	public static void removeAll() {
+		ccPerRobot.clear();
+	}
+
 }

@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -33,6 +34,9 @@ public class Starter extends Activity {
 	private ToggleButton toggleStatusB;
 	private TableLayout robotBehaviorTable;
 
+	// For displaying progress circle stuff
+	private ProgressDialog dialog;
+
 	private static Starter instance;
 
 	public static Starter getInstance() {
@@ -50,6 +54,7 @@ public class Starter extends Activity {
 		statusTV = (TextView) findViewById(R.id.status_textview);
 		toggleStatusB = (ToggleButton) findViewById(R.id.togglestatus_button);
 		robotBehaviorTable = (TableLayout) findViewById(R.id.robot_behavior_table);
+		dialog = new ProgressDialog(Starter.this);
 
 		toggleStatusB.setOnClickListener(new OnClickListener() {
 
@@ -70,6 +75,9 @@ public class Starter extends Activity {
 
 	protected void handleStatusToggle(boolean isChecked) {
 		if (isChecked) {
+			dialog.setMessage("Starting Robobrain Service");
+			dialog.setTitle("Service Starting");
+			dialog.show();
 			toggleStatusB.post(new Runnable() {
 				public void run() {
 					startService(new Intent(getApplicationContext(),
@@ -80,6 +88,9 @@ public class Starter extends Activity {
 			});
 
 		} else {
+			dialog.show();
+			dialog.setMessage("Stopping Robobrain Service");
+			dialog.setTitle("Service Stopping");
 			toggleStatusB.post(new Runnable() {
 				public void run() {
 					Intent intent = new Intent(
@@ -104,8 +115,9 @@ public class Starter extends Activity {
 			@Override
 			public void run() {
 				updateStatus();
+				dialog.dismiss();
 			}
-		}, 1000);
+		}, 3000);
 	}
 
 	@Override

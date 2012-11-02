@@ -111,6 +111,7 @@ public class RobotService extends Service {
 		unregisterReceiver(bReceiver);
 		unregisterReceiver(dSpeechReceiver);
 		CommandCenter.disconnectAll();
+		CommandCenter.removeAll();
 
 		super.onDestroy();
 	}

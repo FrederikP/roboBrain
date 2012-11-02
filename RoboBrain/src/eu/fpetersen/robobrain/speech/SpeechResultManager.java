@@ -28,7 +28,7 @@ public class SpeechResultManager {
 	private void broadcastResults() {
 		Intent intent = new Intent(RoboBrainIntent.ACTION_SPEECH);
 		intent.putExtra(RoboBrainIntent.EXTRA_SPEECH_RESULTS,
-				(String[]) latestResultList.toArray());
+				latestResultList.toArray(new String[latestResultList.size()]));
 		SpeechRecognizerService.getInstance().sendBroadcast(intent);
 	}
 }
