@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.behavior.Behavior;
+import eu.fpetersen.robobrain.behavior.BehaviorFactory;
 import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
@@ -48,13 +49,14 @@ public class RobotService extends Service {
 				.getInstance();
 		Map<String, List<String>> behaviorMapping = behaviorFactory
 				.createMappings();
+		BehaviorFactory bFac = BehaviorFactory.getInstance();
 		for (String robotName : robots.keySet()) {
 			// TODO Exception handling
 			Robot robot = robots.get(robotName);
 			List<String> behaviorNames = behaviorMapping.get(robotName);
 			List<Behavior> behaviors = new ArrayList<Behavior>();
 			for (String bName : behaviorNames) {
-				behaviors.add(Behavior.createBehavior(bName, robot));
+				behaviors.add(bFac.createBehavior(bName, robot));
 			}
 			CommandCenter.createInstance(robot, behaviors);
 		}

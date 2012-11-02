@@ -1,13 +1,8 @@
 package eu.fpetersen.robobrain.robot;
 
-
 public class Motor extends RobotPart {
 
 	private MotorState state = MotorState.STOPPED;
-
-	public Motor(Robot robot) {
-		super(robot);
-	}
 
 	public void backOff(int speed) {
 		getRobot().sendToArduino('B', speed);

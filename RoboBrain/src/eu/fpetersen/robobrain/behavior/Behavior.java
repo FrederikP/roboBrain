@@ -18,6 +18,11 @@ import eu.fpetersen.robobrain.robot.Robot;
  *         make sure, that the specific robot is compatible with the
  *         requirements of the behavior.
  * 
+ *         When implementing a Behavior class, please make sure to supply a
+ *         default constructor (i.e. don't specify any constructor). For now
+ *         there is no way to supply more parameters on initialization. This
+ *         will change soon.
+ * 
  */
 public abstract class Behavior {
 
@@ -26,10 +31,13 @@ public abstract class Behavior {
 	private String name;
 	private UUID id;
 
-	protected Behavior(Robot robot, String name) {
-		id = UUID.randomUUID();
+	public void initialize(Robot robot, String name) {
 		this.robot = robot;
 		this.name = name;
+	}
+
+	protected Behavior() {
+		id = UUID.randomUUID();
 	}
 
 	private void turnOff() {
@@ -77,17 +85,5 @@ public abstract class Behavior {
 	}
 
 	protected abstract void behaviorLoop();
-
-	public static Behavior createBehavior(String name, Robot robot) {
-		if (name.matches("BackAndForth")) {
-			return new BackAndForthBehavior(robot, name);
-		} else if (name.matches("ObstAvoidance")) {
-			return new ObstAvoidanceBehavior(robot, name);
-		} else if (name.matches("ReactToSpeech")) {
-			return new ReactToSpeechBehavior(robot, name);
-		}
-		// TODO Exception handling
-		return null;
-	}
 
 }

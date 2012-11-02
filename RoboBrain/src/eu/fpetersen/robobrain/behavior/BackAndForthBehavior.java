@@ -5,10 +5,6 @@ import eu.fpetersen.robobrain.robot.Robot;
 
 public class BackAndForthBehavior extends Behavior {
 
-	public BackAndForthBehavior(Robot robot, String name) {
-		super(robot, name);
-	}
-
 	@Override
 	protected void behaviorLoop() {
 		Robot robot = getRobot();

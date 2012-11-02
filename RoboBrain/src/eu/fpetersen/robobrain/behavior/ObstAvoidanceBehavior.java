@@ -12,10 +12,6 @@ public class ObstAvoidanceBehavior extends Behavior {
 
 	private long backWardTime = 0;
 
-	public ObstAvoidanceBehavior(Robot robot, String name) {
-		super(robot, name);
-	}
-
 	@Override
 	public void startBehavior() {
 		backWardTime = 0;

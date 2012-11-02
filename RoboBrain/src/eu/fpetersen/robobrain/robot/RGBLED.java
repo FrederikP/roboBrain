@@ -1,15 +1,10 @@
 package eu.fpetersen.robobrain.robot;
 
-
 public class RGBLED extends RobotPart {
 
 	private int green = 0;
 	private int red = 0;
 	private int blue = 0;
-
-	public RGBLED(Robot robot) {
-		super(robot);
-	}
 
 	public void set(int red, int green, int blue) {
 		if (this.red == red && this.green == green && this.blue == blue) {

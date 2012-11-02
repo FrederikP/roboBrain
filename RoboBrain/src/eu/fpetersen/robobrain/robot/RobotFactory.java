@@ -106,18 +106,11 @@ public class RobotFactory {
 
 	private void readInPart(XmlPullParser parser, Robot robot)
 			throws XmlPullParserException, IOException {
+		RobotPartFactory rbFac = RobotPartFactory.getInstance();
 		parser.require(XmlPullParser.START_TAG, ns, "part");
 		String type = parser.getAttributeValue(ns, "type");
 		String id = parser.getAttributeValue(ns, "id");
-		if (type.matches("motor")) {
-			robot.addPart(id, new Motor(robot));
-		} else if (type.matches("proxsensor")) {
-			robot.addPart(id, new ProximitySensor(robot));
-		} else if (type.matches("servo")) {
-			robot.addPart(id, new Servo(robot));
-		} else if (type.matches("rgbled")) {
-			robot.addPart(id, new RGBLED(robot));
-		}
+		robot.addPart(id, rbFac.createRobotPart(type, robot));
 		parser.nextTag();
 		parser.require(XmlPullParser.END_TAG, ns, "part");
 	}
@@ -125,15 +118,19 @@ public class RobotFactory {
 	public Map<String, Robot> createRobots() {
 		Map<String, Robot> robots = new HashMap<String, Robot>();
 		File robotsXmlDir = ExternalStorageManager.getRobotsXmlDir();
-		if (robotsXmlDir != null) {
-			for (File robotXml : robotsXmlDir.listFiles()) {
-				if (robotXml.getAbsolutePath().endsWith(".xml")) {
-					Robot newRobot = createRobotFromXML(robotXml);
-					robots.put(newRobot.getName(), newRobot);
+		try {
+			if (robotsXmlDir != null) {
+				for (File robotXml : robotsXmlDir.listFiles()) {
+					if (robotXml.getAbsolutePath().endsWith(".xml")) {
+						Robot newRobot = createRobotFromXML(robotXml);
+						robots.put(newRobot.getName(), newRobot);
+					}
 				}
+			} else {
+				RoboLog.log("Robots XML Dir could not be accessed on sd card!");
 			}
-		} else {
-			RoboLog.log("Robots XML Dir could not be accessed on sd card!");
+		} catch (NullPointerException e) {
+			RoboLog.log("SDCard could not be accessed. Please check if SDCard is mounted.");
 		}
 		return robots;
 	}
