@@ -196,6 +196,9 @@ public class Starter extends Activity {
 		button.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
+				dialog.setMessage("Sending Behavior start signal");
+				dialog.setTitle("Behavior Starting");
+				dialog.show();
 				Runnable behavior = new Runnable() {
 					public void run() {
 						Intent intent = new Intent(
@@ -216,6 +219,7 @@ public class Starter extends Activity {
 					@Override
 					public void run() {
 						addBehaviorButtons(behaviorLayout, cc);
+						dialog.dismiss();
 					}
 				}, 500);
 			}
@@ -228,6 +232,9 @@ public class Starter extends Activity {
 		stopBehaviorButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
+				dialog.setMessage("Sending Behavior stop signal");
+				dialog.setTitle("Behavior Stopping");
+				dialog.show();
 				Runnable behaviorStopper = new Runnable() {
 					public void run() {
 						Intent intent = new Intent(
@@ -248,6 +255,7 @@ public class Starter extends Activity {
 					@Override
 					public void run() {
 						addBehaviorButtons(behaviorLayout, cc);
+						dialog.dismiss();
 					}
 				}, 500);
 
