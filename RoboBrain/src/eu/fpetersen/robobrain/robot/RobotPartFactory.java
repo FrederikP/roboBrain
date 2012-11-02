@@ -31,7 +31,7 @@ public class RobotPartFactory {
 	 *         is amiss, check log.
 	 */
 	public RobotPart createRobotPart(String type, Robot robot) {
-		String partClassName = "eu.fpetersen.robobrain.behavior." + type;
+		String partClassName = "eu.fpetersen.robobrain.robot." + type;
 		RobotPart part = null;
 		try {
 			part = (RobotPart) Class.forName(partClassName).newInstance();
