@@ -88,17 +88,19 @@ public class Starter extends Activity {
 			});
 
 		} else {
-			dialog.show();
 			dialog.setMessage("Stopping Robobrain Service");
 			dialog.setTitle("Service Stopping");
+			dialog.show();
 			toggleStatusB.post(new Runnable() {
 				public void run() {
+					dialog.setMessage("Sending stop behavior signal");
 					Intent intent = new Intent(
 							RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
 					Starter.this.sendBroadcast(intent);
 					Handler handler = new Handler();
 					handler.postDelayed(new Runnable() {
 						public void run() {
+							dialog.setMessage("Sending service stop signals");
 							stopService(new Intent(getApplicationContext(),
 									RobotService.class));
 							stopService(new Intent(getApplicationContext(),
