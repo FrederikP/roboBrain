@@ -28,6 +28,16 @@ import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
 
+/**
+ * Gives the user the option to turn the RoboBrain services on and off. When
+ * Service is started shows the Robots and their behaviors and Stop buttons of
+ * Behavior is started.
+ * 
+ * Options menu allows to switch to Console activity
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class Starter extends Activity {
 
 	private TextView statusTV;
@@ -35,7 +45,7 @@ public class Starter extends Activity {
 	private TableLayout robotBehaviorTable;
 
 	// For displaying progress circle stuff
-	private ProgressDialog dialog;
+	private ProgressDialog progressDialog;
 
 	private static Starter instance;
 
@@ -54,7 +64,7 @@ public class Starter extends Activity {
 		statusTV = (TextView) findViewById(R.id.status_textview);
 		toggleStatusB = (ToggleButton) findViewById(R.id.togglestatus_button);
 		robotBehaviorTable = (TableLayout) findViewById(R.id.robot_behavior_table);
-		dialog = new ProgressDialog(Starter.this);
+		progressDialog = new ProgressDialog(Starter.this);
 
 		toggleStatusB.setOnClickListener(new OnClickListener() {
 
@@ -73,11 +83,18 @@ public class Starter extends Activity {
 
 	}
 
+	/**
+	 * Called to start or stop services. Also displays progress dialog.
+	 * 
+	 * @param isChecked
+	 *            True if service is supposed to be turned on, False if service
+	 *            is supposed to be turned off
+	 */
 	protected void handleStatusToggle(boolean isChecked) {
 		if (isChecked) {
-			dialog.setMessage("Starting Robobrain Service");
-			dialog.setTitle("Service Starting");
-			dialog.show();
+			progressDialog.setMessage("Starting Robobrain Service");
+			progressDialog.setTitle("Service Starting");
+			progressDialog.show();
 			toggleStatusB.post(new Runnable() {
 				public void run() {
 					startService(new Intent(getApplicationContext(),
@@ -88,19 +105,20 @@ public class Starter extends Activity {
 			});
 
 		} else {
-			dialog.setMessage("Stopping Robobrain Service");
-			dialog.setTitle("Service Stopping");
-			dialog.show();
+			progressDialog.setMessage("Stopping Robobrain Service");
+			progressDialog.setTitle("Service Stopping");
+			progressDialog.show();
 			toggleStatusB.post(new Runnable() {
 				public void run() {
-					dialog.setMessage("Sending stop behavior signal");
+					progressDialog.setMessage("Sending stop behavior signal");
 					Intent intent = new Intent(
 							RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
 					Starter.this.sendBroadcast(intent);
 					Handler handler = new Handler();
 					handler.postDelayed(new Runnable() {
 						public void run() {
-							dialog.setMessage("Sending service stop signals");
+							progressDialog
+									.setMessage("Sending service stop signals");
 							stopService(new Intent(getApplicationContext(),
 									RobotService.class));
 							stopService(new Intent(getApplicationContext(),
@@ -117,7 +135,7 @@ public class Starter extends Activity {
 			@Override
 			public void run() {
 				updateStatus();
-				dialog.dismiss();
+				progressDialog.dismiss();
 			}
 		}, 3000);
 	}
@@ -134,6 +152,10 @@ public class Starter extends Activity {
 		super.onResume();
 	}
 
+	/**
+	 * Updates UI to display correct service status and display correct
+	 * information about robots and their behaviors
+	 */
 	private void updateStatus() {
 		RobotService rService = RobotService.getInstance();
 		if (rService == null || !rService.isRunning()) {
@@ -166,6 +188,9 @@ public class Starter extends Activity {
 		}
 	}
 
+	/**
+	 * Removes all robots and behavior information from the UI.
+	 */
 	protected void cleanupRobotBehaviorTable() {
 		for (int i = 1; i < robotBehaviorTable.getChildCount(); i++) {
 			robotBehaviorTable.removeViewAt(i);
@@ -173,6 +198,9 @@ public class Starter extends Activity {
 
 	}
 
+	/**
+	 * Sets up Robot and Behavior information table
+	 */
 	protected void setupRobotBehaviorTable() {
 		Collection<CommandCenter> ccs = CommandCenter.getAllCCs();
 		for (CommandCenter cc : ccs) {
@@ -190,15 +218,27 @@ public class Starter extends Activity {
 		}
 	}
 
+	/**
+	 * Sets up the Click Listener for the Behavior Button
+	 * 
+	 * @param button
+	 *            Button the Listener is set for
+	 * @param b
+	 *            Behavior that the button represents
+	 * @param behaviorLayout
+	 *            Layout the button is placed in
+	 * @param cc
+	 *            CommandCenter of the robot
+	 */
 	private void setBehaviorButtonClickListener(final Button button,
 			final Behavior b, final LinearLayout behaviorLayout,
 			final CommandCenter cc) {
 		button.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				dialog.setMessage("Sending Behavior start signal");
-				dialog.setTitle("Behavior Starting");
-				dialog.show();
+				progressDialog.setMessage("Sending Behavior start signal");
+				progressDialog.setTitle("Behavior Starting");
+				progressDialog.show();
 				Runnable behavior = new Runnable() {
 					public void run() {
 						Intent intent = new Intent(
@@ -219,22 +259,34 @@ public class Starter extends Activity {
 					@Override
 					public void run() {
 						addBehaviorButtons(behaviorLayout, cc);
-						dialog.dismiss();
+						progressDialog.dismiss();
 					}
 				}, 500);
 			}
 		});
 	}
 
+	/**
+	 * Sets the Click Listener for the Behavior Stop Button.
+	 * 
+	 * @param stopBehaviorButton
+	 *            Button the Listener is set for
+	 * @param b
+	 *            Behavior that is to be stopped by click
+	 * @param behaviorLayout
+	 *            Layout in which the button resides
+	 * @param cc
+	 *            CommandCenter of the robot.
+	 */
 	protected void setStopBehaviorClickListener(
 			final Button stopBehaviorButton, final Behavior b,
 			final LinearLayout behaviorLayout, final CommandCenter cc) {
 		stopBehaviorButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				dialog.setMessage("Sending Behavior stop signal");
-				dialog.setTitle("Behavior Stopping");
-				dialog.show();
+				progressDialog.setMessage("Sending Behavior stop signal");
+				progressDialog.setTitle("Behavior Stopping");
+				progressDialog.show();
 				Runnable behaviorStopper = new Runnable() {
 					public void run() {
 						Intent intent = new Intent(
@@ -255,7 +307,7 @@ public class Starter extends Activity {
 					@Override
 					public void run() {
 						addBehaviorButtons(behaviorLayout, cc);
-						dialog.dismiss();
+						progressDialog.dismiss();
 					}
 				}, 500);
 
@@ -283,6 +335,14 @@ public class Starter extends Activity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
+	/**
+	 * Add robot's behaviors to the layout
+	 * 
+	 * @param behaviorLayout
+	 *            Layout the behaviors are added to
+	 * @param cc
+	 *            CommandCenter of the robot, containing all it's behaviors
+	 */
 	protected void addBehaviorButtons(final LinearLayout behaviorLayout,
 			final CommandCenter cc) {
 		boolean behaviorRunning = false;

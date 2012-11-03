@@ -10,8 +10,19 @@ import android.content.Context;
 import android.content.Intent;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 
+/**
+ * Distributes the results of speech recognition to all registered
+ * {@link SpeechReceiver}s
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class DistributingSpeechReceiver extends BroadcastReceiver {
 
+	/**
+	 * All registered SpeechReceivers that are being fed with Speech Recognition
+	 * Results
+	 */
 	private Set<SpeechReceiver> receivers;
 
 	public DistributingSpeechReceiver() {

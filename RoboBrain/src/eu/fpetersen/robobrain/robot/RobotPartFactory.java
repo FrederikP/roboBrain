@@ -2,6 +2,12 @@ package eu.fpetersen.robobrain.robot;
 
 import eu.fpetersen.robobrain.util.RoboLog;
 
+/**
+ * Singleton factory which creates RobotParts. Dynamically chooses subclass
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class RobotPartFactory {
 
 	private static RobotPartFactory instance;

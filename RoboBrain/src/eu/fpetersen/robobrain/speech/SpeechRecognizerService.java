@@ -10,15 +10,28 @@ import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.util.Log;
+import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.ui.Starter;
 import eu.fpetersen.robobrain.util.RoboLog;
 
+/**
+ * Is started and stopped by the {@link Starter} activity, just like the
+ * {@link RobotService}. It tries to receive speech input and saves them to the
+ * {@link SpeechResultManager} which then broadcasts them to be receives by a
+ * {@link DistributingSpeechReceiver}
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class SpeechRecognizerService extends Service {
 
 	protected static final String TAG = "RobotBrain - SpeechRecognizerService";
 	private SpeechRecognizer speechR;
 	private static SpeechRecognizerService instance;
 
+	/**
+	 * Setup the Speech Recognizer with the Android API
+	 */
 	protected void setupSpeechRecognition() {
 
 		speechR = SpeechRecognizer
@@ -27,6 +40,10 @@ public class SpeechRecognizerService extends Service {
 
 	}
 
+	/**
+	 * Set the SpeechRecognitionListener to handle results and events from the
+	 * {@link SpeechRecognizer}
+	 */
 	private void setSpeechRecognitionListener() {
 		speechR.setRecognitionListener(new RecognitionListener() {
 

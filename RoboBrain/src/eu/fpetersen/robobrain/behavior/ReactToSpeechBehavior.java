@@ -12,22 +12,41 @@ import eu.fpetersen.robobrain.speech.SpeechReceiver;
 import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
 import eu.fpetersen.robobrain.util.RoboLog;
 
+/**
+ * This Behavior reacts to speech commands. For now it changes the Robot's LED
+ * color to what the user says. There are different colornames imported from a
+ * long list of color names. When speech is detected, the longest possible color
+ * name is matched.
+ * 
+ * @author Frederik Petersen
+ * 
+ * 
+ */
 public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 	protected static final String TAG = "ReactToSpeech-Behavior";
 	private RGBColorTable colorTable;
 	private List<String> colorNames;
 
+	/**
+	 * Creates the colorTable upon instantiation
+	 */
 	public ReactToSpeechBehavior() {
 		colorTable = RGBColorTableFactory.getInstance()
 				.getStandardColorTableFromTextFile();
 		colorNames = colorTable.getNames();
 	}
 
-	protected void interpretSpeechResults(List<String> results) {
-		setLED(results);
-	}
-
+	/**
+	 * Evaluate speech results to look for colornames. Colornames are evaluated
+	 * from most words to one word, to set a priority on longer color names. If
+	 * color names are longer than one word,
+	 * {@link eu.fpetersen.robobrain.behavior.ReactToSpeechBehavior#checkMultipleWordColorName(String, String)
+	 * checkMultipleWordColorName()} is called.
+	 * 
+	 * @param results
+	 *            Result String list of Speech results.
+	 */
 	private void setLED(List<String> results) {
 		RGBLED led = getRobot().getHeadColorLED();
 		boolean colorMatch = false;
@@ -54,6 +73,17 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 		}
 	}
 
+	/**
+	 * Check if name can be matched with that colorName. All words must be found
+	 * in input string
+	 * 
+	 * @param s
+	 *            Input String for which the method checks if colorname is
+	 *            included
+	 * @param colorName
+	 *            Colorname for which the String s is checked.
+	 * @return True if colorName is in String s.
+	 */
 	private boolean checkMultipleWordColorName(String s, String colorName) {
 		boolean match = false;
 		StringTokenizer tokenizer = new StringTokenizer(colorName);
@@ -97,7 +127,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	}
 
 	public void onReceive(List<String> results) {
-		interpretSpeechResults(results);
+		setLED(results);
 	}
 
 }

@@ -7,6 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import eu.fpetersen.robobrain.behavior.Behavior;
 
+/**
+ * 
+ * Receives behavior trigger intents and starts/stops the behavior. This enables
+ * the RobotService to receive behavior triggers from other components i.e. the
+ * UI.
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class BehaviorReceiver extends BroadcastReceiver {
 
 	@Override

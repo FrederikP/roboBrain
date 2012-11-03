@@ -3,6 +3,14 @@ package eu.fpetersen.robobrain.behavior;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.util.RoboLog;
 
+/**
+ * 
+ * Singleton Factory that allows dynamic creation of Behaviors by their class
+ * names.
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class BehaviorFactory {
 
 	private static BehaviorFactory instance;
@@ -11,6 +19,10 @@ public class BehaviorFactory {
 
 	}
 
+	/**
+	 * 
+	 * @return Singleton instance of BehaviorFactory
+	 */
 	public static BehaviorFactory getInstance() {
 		if (instance == null) {
 			instance = new BehaviorFactory();

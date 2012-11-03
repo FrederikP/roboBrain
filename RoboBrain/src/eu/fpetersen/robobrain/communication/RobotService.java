@@ -16,7 +16,16 @@ import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
+import eu.fpetersen.robobrain.speech.SpeechReceiver;
+import eu.fpetersen.robobrain.ui.Starter;
 
+/**
+ * Main Service of this App. When started from {@link Starter} activity, it
+ * creates robots and behaviors as configured in xml files on sdcard.
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class RobotService extends Service {
 
 	private static final String TAG = "RoboBrain-Service";
@@ -31,6 +40,10 @@ public class RobotService extends Service {
 
 	private DistributingSpeechReceiver dSpeechReceiver;
 
+	/**
+	 * 
+	 * @return True if service is running, false if not.
+	 */
 	public boolean isRunning() {
 		return running;
 	}
@@ -118,6 +131,12 @@ public class RobotService extends Service {
 		super.onDestroy();
 	}
 
+	/**
+	 * 
+	 * @return The {@link DistributingSpeechReceiver} of the service which is
+	 *         supposed to distribute the speech input results to all registered
+	 *         {@link SpeechReceiver}s
+	 */
 	public DistributingSpeechReceiver getDistributingSpeechReceiver() {
 		return dSpeechReceiver;
 	}

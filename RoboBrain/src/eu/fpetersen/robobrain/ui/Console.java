@@ -17,6 +17,15 @@ import android.widget.TextView;
 import eu.fpetersen.robobrain.communication.ConsoleReceiver;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 
+/**
+ * For now it is more like a log then a console. It displays messages to the
+ * user to show details on communication and warnings/errors.
+ * 
+ * Options menu allows to switch to Starter activity
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class Console extends Activity {
 
 	private TextView consoleTV;
@@ -49,6 +58,11 @@ public class Console extends Activity {
 			unregisterReceiver(cReceiver);
 	}
 
+	/**
+	 * 
+	 * @return Formatted timestamp as a string in this format:
+	 *         "HH:mm:ss dd:MM:yyyy --> "
+	 */
 	public String getFormattedCurrentTimestamp() {
 		Calendar cal = Calendar.getInstance();
 		Date timestamp = cal.getTime();
@@ -57,6 +71,9 @@ public class Console extends Activity {
 		return format.format(timestamp);
 	}
 
+	/**
+	 * Scroll to the bottom of the console text view.
+	 */
 	private void scrollToBottom() {
 		consoleScroller.post(new Runnable() {
 			public void run() {
@@ -65,6 +82,12 @@ public class Console extends Activity {
 		});
 	}
 
+	/**
+	 * Append text to the console text view and scrolls down if applicable
+	 * 
+	 * @param text
+	 *            To be appended to the console text view.
+	 */
 	public void appendText(String text) {
 		if (text != null) {
 			String consoleText = consoleTV.getText().toString();

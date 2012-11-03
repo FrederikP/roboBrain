@@ -4,6 +4,13 @@ import android.util.Log;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
 
+/**
+ * Makes robot avoid obstacles by backing off and looking in both directions for
+ * where to go next.
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class ObstAvoidanceBehavior extends Behavior {
 
 	private static final String TAG = "ObstAvoidanceBehavior";
@@ -39,10 +46,17 @@ public class ObstAvoidanceBehavior extends Behavior {
 		}
 	}
 
+	/**
+	 * Makes robot go forward.
+	 */
 	private void startGoingForward() {
 		getRobot().getMainMotor().advance(speed);
 	}
 
+	/**
+	 * Called while going backward to check if time has expired or obstacle in
+	 * back
+	 */
 	private void goingBackward() {
 		Robot robot = getRobot();
 		if (backWardTime < System.currentTimeMillis()
@@ -52,6 +66,10 @@ public class ObstAvoidanceBehavior extends Behavior {
 		}
 	}
 
+	/**
+	 * Called after backing off from obstacle in front. Looks right, then left
+	 * to find out which direction the robot will best turn and continue.
+	 */
 	private void checkForBestRouteAndTurn() {
 		Robot robot = getRobot();
 		try {
@@ -72,6 +90,10 @@ public class ObstAvoidanceBehavior extends Behavior {
 		}
 	}
 
+	/**
+	 * checks for obstacles in front while going forward. If it finds obstacle,
+	 * goes backward.
+	 */
 	private void goingForward() {
 		Robot robot = getRobot();
 		if (robot.getFrontSensor().getValue() < 30) {

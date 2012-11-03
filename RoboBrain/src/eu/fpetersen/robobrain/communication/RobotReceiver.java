@@ -8,6 +8,13 @@ import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.util.RoboLog;
 
+/**
+ * Receives intents filled with data sent from Arduino Devices. Source can be
+ * identified by MAC address.
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class RobotReceiver extends BroadcastReceiver {
 
 	@Override
@@ -19,14 +26,6 @@ public class RobotReceiver extends BroadcastReceiver {
 		final int dataType = intent.getIntExtra(AmarinoIntent.EXTRA_DATA_TYPE,
 				-1);
 
-		// we only expect String data though, but it is better to
-		// check if
-		// really string was sent
-		// later Amarino will support differnt data types, so far
-		// data comes
-		// always as string and
-		// you have to parse the data to the type you have sent from
-		// Arduino, like it is shown below
 		if (dataType == AmarinoIntent.STRING_EXTRA) {
 			data = intent.getStringExtra(AmarinoIntent.EXTRA_DATA);
 			data = data.replace("\r", "");
@@ -60,8 +59,9 @@ public class RobotReceiver extends BroadcastReceiver {
 
 			/*
 			 * //Uncomment for debugging purposes: (Slow phone can be
-			 * overwhelmed by a high rate of data Intent cIntent = new
-			 * Intent(RoboBrainIntent.ACTION_OUTPUT);
+			 * overwhelmed by a high rate of data
+			 * 
+			 * Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
 			 * cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, data);
 			 * context.sendBroadcast(cIntent);
 			 */

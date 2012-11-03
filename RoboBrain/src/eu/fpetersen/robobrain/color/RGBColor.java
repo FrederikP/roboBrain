@@ -1,5 +1,11 @@
 package eu.fpetersen.robobrain.color;
 
+/**
+ * Classical representation of the RGB color model.
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class RGBColor {
 
 	private int red;

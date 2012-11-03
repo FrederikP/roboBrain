@@ -3,6 +3,14 @@ package eu.fpetersen.robobrain.behavior;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
 
+/**
+ * Makes the robot go back and forth. Very simple behavior. Checks front and
+ * back proximity sensors for distance to next obstacle so it knows when to
+ * switch direction. If there are obstacles in back and front, the robot stops
+ * moving, until one of the obstacles is gone.
+ * 
+ * @author Frederik Petersen
+ */
 public class BackAndForthBehavior extends Behavior {
 
 	@Override

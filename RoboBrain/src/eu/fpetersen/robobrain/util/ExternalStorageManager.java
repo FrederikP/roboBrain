@@ -7,8 +7,21 @@ import android.os.Environment;
 import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.ui.R;
 
+/**
+ * Helper class for accessing external storage files. Also creates directories
+ * and empty files if needed.
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class ExternalStorageManager {
 
+	/**
+	 * Creates new directory if it does not exist
+	 * 
+	 * @param dir
+	 *            Directory to create if it does not already exist
+	 */
 	private static void createDirIfNotExistant(File dir) {
 		if (!dir.exists()) {
 			if (!dir.mkdir()) {
@@ -18,6 +31,10 @@ public class ExternalStorageManager {
 		}
 	}
 
+	/**
+	 * 
+	 * @return File that represents robobrains root directory in sd card.
+	 */
 	public static File getRoboBrainRoot() {
 		File roboBrainRoot = new File(Environment.getExternalStorageDirectory()
 				.getAbsolutePath()
@@ -28,6 +45,10 @@ public class ExternalStorageManager {
 		return roboBrainRoot;
 	}
 
+	/**
+	 * 
+	 * @return File that represents robobrains behaviormapping.xml file
+	 */
 	public static File getBehaviorMappingFile() {
 		File roboBrainRoot = getRoboBrainRoot();
 		File behaviorMappingFile = new File(roboBrainRoot,
@@ -43,6 +64,11 @@ public class ExternalStorageManager {
 		return behaviorMappingFile;
 	}
 
+	/**
+	 * 
+	 * @return File that represents the directory which hold the robot
+	 *         configuration *.xml files.
+	 */
 	public static File getRobotsXmlDir() {
 		File robotsXmlDir = new File(getRoboBrainRoot().getAbsolutePath()
 				+ File.separator

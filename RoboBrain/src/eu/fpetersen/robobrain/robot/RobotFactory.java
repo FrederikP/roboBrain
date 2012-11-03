@@ -16,12 +16,21 @@ import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.XMLParserHelper;
 
+/**
+ * Singleton factory to create {@link Robot}s from xml configurations
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class RobotFactory {
 
 	private static RobotFactory instance;
 
 	private Service service;
 
+	/**
+	 * Namespace for xml parser. Is null if no namespace is used.
+	 */
 	private static final String ns = null;
 
 	private RobotFactory(Service service) {
@@ -45,6 +54,13 @@ public class RobotFactory {
 		this.service = service;
 	}
 
+	/**
+	 * Create robot from specified XML file
+	 * 
+	 * @param robotXml
+	 *            Robot configuration xml file
+	 * @return The freshly created robot
+	 */
 	private Robot createRobotFromXML(File robotXml) {
 		InputStream in = null;
 		try {
@@ -66,6 +82,15 @@ public class RobotFactory {
 		return null;
 	}
 
+	/**
+	 * Creates the robot with the given xml parser
+	 * 
+	 * @param parser
+	 *            Parser of the robot's configuration xml file
+	 * @return Freshly created robot
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private Robot readRobot(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, "robot");
@@ -87,6 +112,16 @@ public class RobotFactory {
 		return robot;
 	}
 
+	/**
+	 * Add parts to the robot, as configured in xml file being parsed
+	 * 
+	 * @param parser
+	 *            Parser of the robot's configuration xml file
+	 * @param robot
+	 *            The robot the Parts are added to
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void addParts(XmlPullParser parser, Robot robot)
 			throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, "parts");
@@ -104,6 +139,16 @@ public class RobotFactory {
 		}
 	}
 
+	/**
+	 * Adds one part to the robot
+	 * 
+	 * @param parser
+	 *            Parser of the robot's configuration xml file
+	 * @param robot
+	 *            The robot the part is added to
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void readInPart(XmlPullParser parser, Robot robot)
 			throws XmlPullParserException, IOException {
 		RobotPartFactory rbFac = RobotPartFactory.getInstance();
@@ -115,6 +160,11 @@ public class RobotFactory {
 		parser.require(XmlPullParser.END_TAG, ns, "part");
 	}
 
+	/**
+	 * Creates robots from all xml files in the /robobrain/robots folder
+	 * 
+	 * @return Map of Robots with names
+	 */
 	public Map<String, Robot> createRobots() {
 		Map<String, Robot> robots = new HashMap<String, Robot>();
 		File robotsXmlDir = ExternalStorageManager.getRobotsXmlDir();

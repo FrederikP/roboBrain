@@ -16,6 +16,13 @@ import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.XMLParserHelper;
 
+/**
+ * Singleton factory that allows creating a mapping of robots to behaviors from
+ * xml file on sd card.
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class BehaviorMappingFactory {
 
 	private static BehaviorMappingFactory instance;
@@ -25,6 +32,12 @@ public class BehaviorMappingFactory {
 
 	}
 
+	/**
+	 * Uses behavior.xml in [sdcard]/robobrain and parses robot and it's
+	 * behaviors from the file.
+	 * 
+	 * @return Mapping of robotname to behaviornames.
+	 */
 	public Map<String, List<String>> createMappings() {
 		InputStream in = null;
 		try {
@@ -51,6 +64,15 @@ public class BehaviorMappingFactory {
 		return null;
 	}
 
+	/**
+	 * Does the actual xml parsing
+	 * 
+	 * @param parser
+	 *            The parser for the behaviormapping.xml file
+	 * @return The mapping of robots and behaviors
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private Map<String, List<String>> readMappings(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
 		Map<String, List<String>> behaviorMapping = new HashMap<String, List<String>>();
@@ -71,6 +93,16 @@ public class BehaviorMappingFactory {
 
 	}
 
+	/**
+	 * Adds one Robot to the mapping
+	 * 
+	 * @param parser
+	 *            The parser for the behaviormapping.xml file
+	 * @param behaviorMapping
+	 *            The mapping of robots and behaviors
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void addRobotToMapping(XmlPullParser parser,
 			Map<String, List<String>> behaviorMapping)
 			throws XmlPullParserException, IOException {
@@ -94,6 +126,16 @@ public class BehaviorMappingFactory {
 
 	}
 
+	/**
+	 * Adds one behavior name to the mapping
+	 * 
+	 * @param behaviorNamesForRobot
+	 *            List of names that the new name is added to
+	 * @param parser
+	 *            The parser for the behaviormapping.xml file
+	 * @throws XmlPullParserException
+	 * @throws IOException
+	 */
 	private void addBehaviorName(List<String> behaviorNamesForRobot,
 			XmlPullParser parser) throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, ns, "behavior");
