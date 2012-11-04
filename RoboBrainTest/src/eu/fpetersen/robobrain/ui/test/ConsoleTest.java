@@ -15,12 +15,10 @@ import eu.fpetersen.robobrain.ui.Console;
  * @author Frederik Petersen
  * 
  */
-@SuppressWarnings("rawtypes")
-public class ConsoleTest extends ActivityInstrumentationTestCase2 {
+public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 
 	private Console consoleActivity;
 
-	@SuppressWarnings("unchecked")
 	public ConsoleTest() {
 		super(Console.class);
 	}
