@@ -1,8 +1,11 @@
 package eu.fpetersen.robobrain.communication;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import android.app.Service;
 import android.content.Intent;
@@ -30,9 +33,22 @@ public class RobotService extends Service {
 
 	private static final String TAG = "RoboBrain-Service";
 
+	/**
+	 * Static reference to a Map of all existing CommandCenters keyed by their
+	 * Robots.
+	 */
+	private Map<Robot, CommandCenter> ccPerRobot = new HashMap<Robot, CommandCenter>();
+
+	/**
+	 * Static reference to a Map of all existing Behaviors identified by their
+	 * UUIDs. By having this additional Map, Behaviors can easily be triggered
+	 * from other components like the UI
+	 */
+	private Map<UUID, Behavior> allBehaviors = new HashMap<UUID, Behavior>();
+
 	private static RobotService instance;
 
-	private boolean running = false;
+	protected boolean running = false;
 
 	private BehaviorReceiver bReceiver;
 
@@ -71,12 +87,13 @@ public class RobotService extends Service {
 			for (String bName : behaviorNames) {
 				behaviors.add(bFac.createBehavior(bName, robot));
 			}
-			CommandCenter.createInstance(robot, behaviors);
+			createCommandCenter(robot, behaviors);
 		}
 
-		bReceiver = new BehaviorReceiver();
-		rReceiver = new RobotReceiver();
+		bReceiver = new BehaviorReceiver(RobotService.this);
+		rReceiver = new RobotReceiver(RobotService.this);
 		dSpeechReceiver = new DistributingSpeechReceiver();
+		Starter.getInstance().setRobotService(RobotService.this);
 		super.onCreate();
 	}
 
@@ -88,7 +105,7 @@ public class RobotService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.v(TAG, "Starting RoboBrain service");
-		CommandCenter.connectAll();
+		connectAll();
 		IntentFilter behaviorReceiverFilter = new IntentFilter();
 		behaviorReceiverFilter
 				.addAction(RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
@@ -114,7 +131,7 @@ public class RobotService extends Service {
 	public boolean stopService(Intent name) {
 		Log.v(TAG, "Stopping RoboBrain service");
 		running = false;
-		CommandCenter.disconnectAll();
+		disconnectAll();
 		return super.stopService(name);
 	}
 
@@ -125,8 +142,10 @@ public class RobotService extends Service {
 		unregisterReceiver(rReceiver);
 		unregisterReceiver(bReceiver);
 		unregisterReceiver(dSpeechReceiver);
-		CommandCenter.disconnectAll();
-		CommandCenter.removeAll();
+		disconnectAll();
+		removeAll();
+
+		Starter.getInstance().setRobotService(null);
 
 		super.onDestroy();
 	}
@@ -139,6 +158,93 @@ public class RobotService extends Service {
 	 */
 	public DistributingSpeechReceiver getDistributingSpeechReceiver() {
 		return dSpeechReceiver;
+	}
+
+	/**
+	 * Creates a new CommandCenter for the given Robot and behaviors and adds it
+	 * the static map of all Command Centers.
+	 * 
+	 * @param robot
+	 *            The robot this CommandCenter is created for
+	 * @param behaviors
+	 *            The behaviors of the robot above.
+	 */
+	private void createCommandCenter(Robot robot, List<Behavior> behaviors) {
+		CommandCenter cc = ccPerRobot.get(robot);
+		if (cc == null) {
+			cc = new CommandCenter(robot, behaviors);
+			ccPerRobot.put(robot, cc);
+			for (Behavior b : behaviors) {
+				allBehaviors.put(b.getId(), b);
+			}
+		}
+	}
+
+	/**
+	 * Connect to all Arduino Devices
+	 */
+	private void connectAll() {
+		for (CommandCenter cc : ccPerRobot.values()) {
+			cc.connect();
+		}
+	}
+
+	/**
+	 * Disconnect from all Arduino Devices
+	 */
+	private void disconnectAll() {
+		for (CommandCenter cc : ccPerRobot.values()) {
+			cc.disconnect();
+		}
+	}
+
+	/**
+	 * Get all existing CommandCenters
+	 * 
+	 * @return All existing CommandCenters
+	 */
+	public Collection<CommandCenter> getAllCCs() {
+		return ccPerRobot.values();
+	}
+
+	/**
+	 * Get the CommandCenter for the specified MACAddress
+	 * 
+	 * @param address
+	 *            MAC address of the Arduino Device
+	 * @return CommandCenter for the specified MACAddress
+	 */
+	public CommandCenter getCCForAddress(String address) {
+		for (CommandCenter center : ccPerRobot.values()) {
+			if (center.getRobot().getAddress().matches(address)) {
+				return center;
+			}
+		}
+		// TODO Exception handling
+		return null;
+	}
+
+	/**
+	 * Remove all CommandCenters and behavior references
+	 */
+	public void removeAll() {
+		ccPerRobot.clear();
+		allBehaviors.clear();
+	}
+
+	/**
+	 * Return behavior for UUID. If it does not exist null is returned.
+	 * 
+	 * @param uuid
+	 *            Identifies the Behavior
+	 * @return The behavior identified by the UUID
+	 */
+	public Behavior getBehaviorForUUID(UUID uuid) {
+		if (allBehaviors.containsKey(uuid)) {
+			return allBehaviors.get(uuid);
+		} else {
+			return null;
+		}
 	}
 
 }

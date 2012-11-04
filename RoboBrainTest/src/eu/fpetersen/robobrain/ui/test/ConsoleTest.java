@@ -26,7 +26,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		consoleActivity = (Console) getActivity();
+		consoleActivity = getActivity();
 	}
 
 	/**

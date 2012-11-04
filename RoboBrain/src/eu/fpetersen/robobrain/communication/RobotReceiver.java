@@ -17,6 +17,12 @@ import eu.fpetersen.robobrain.util.RoboLog;
  */
 public class RobotReceiver extends BroadcastReceiver {
 
+	private RobotService service;
+
+	public RobotReceiver(RobotService service) {
+		this.service = service;
+	}
+
 	@Override
 	public void onReceive(Context context, final Intent intent) {
 
@@ -32,7 +38,7 @@ public class RobotReceiver extends BroadcastReceiver {
 			data = data.replace("\n", "");
 			String address = intent
 					.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
-			CommandCenter cc = CommandCenter.getCCForAddress(address);
+			CommandCenter cc = service.getCCForAddress(address);
 			Robot robot = cc.getRobot();
 			if (robot != null) {
 				String frontPrefix = "FRONTPROX:";

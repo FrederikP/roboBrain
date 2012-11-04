@@ -48,6 +48,8 @@ public class Starter extends Activity {
 	// For displaying progress circle stuff
 	private ProgressDialog progressDialog;
 
+	private RobotService robotService;
+
 	private static Starter instance;
 
 	public static Starter getInstance() {
@@ -158,8 +160,7 @@ public class Starter extends Activity {
 	 * information about robots and their behaviors
 	 */
 	private void updateStatus() {
-		RobotService rService = RobotService.getInstance();
-		if (rService == null || !rService.isRunning()) {
+		if (robotService == null || !robotService.isRunning()) {
 			runOnUiThread(new Runnable() {
 
 				public void run() {
@@ -203,7 +204,7 @@ public class Starter extends Activity {
 	 * Sets up Robot and Behavior information table
 	 */
 	protected void setupRobotBehaviorTable() {
-		Collection<CommandCenter> ccs = CommandCenter.getAllCCs();
+		Collection<CommandCenter> ccs = robotService.getAllCCs();
 		for (CommandCenter cc : ccs) {
 			TableRow row = new TableRow(this);
 			TextView nameView = new TextView(this);
@@ -386,5 +387,9 @@ public class Starter extends Activity {
 
 		}
 
+	}
+
+	public void setRobotService(RobotService service) {
+		this.robotService = service;
 	}
 }

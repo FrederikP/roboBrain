@@ -18,6 +18,12 @@ import eu.fpetersen.robobrain.behavior.Behavior;
  */
 public class BehaviorReceiver extends BroadcastReceiver {
 
+	private RobotService service;
+
+	public BehaviorReceiver(RobotService service) {
+		this.service = service;
+	}
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (intent.getAction().matches(RoboBrainIntent.ACTION_BEHAVIORTRIGGER)) {
@@ -25,7 +31,7 @@ public class BehaviorReceiver extends BroadcastReceiver {
 					RoboBrainIntent.EXTRA_BEHAVIORSTATE, false);
 			UUID uuid = (UUID) intent
 					.getSerializableExtra(RoboBrainIntent.EXTRA_BEHAVIORUUID);
-			final Behavior b = CommandCenter.getBehaviorForUUID(uuid);
+			final Behavior b = service.getBehaviorForUUID(uuid);
 			if (startIt) {
 				Runnable behaviorStarter = new Runnable() {
 					public void run() {
