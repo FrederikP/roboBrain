@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import android.os.Environment;
+import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.communication.RobotService;
-import eu.fpetersen.robobrain.ui.R;
 
 /**
  * Helper class for accessing external storage files. Also creates directories

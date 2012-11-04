@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.communication.ConsoleReceiver;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 
@@ -66,7 +67,7 @@ public class Console extends Activity {
 	public String getFormattedCurrentTimestamp() {
 		Calendar cal = Calendar.getInstance();
 		Date timestamp = cal.getTime();
-		String pattern = "HH:mm:ss dd:MM:yyyy --> ";
+		String pattern = getString(R.string.console_timestamp_format);
 		SimpleDateFormat format = new SimpleDateFormat(pattern);
 		return format.format(timestamp);
 	}
@@ -95,16 +96,12 @@ public class Console extends Activity {
 					+ getFormattedCurrentTimestamp() + text;
 			runOnUiThread(new Runnable() {
 				public void run() {
-					boolean scrollDownAfterAppend = true;
+
 					// Make sure that it's only scrolled automatically if user
 					// isn't scrolling around.
 					// ->Only Scrolls automatically if it was scrolled down
 					// completely before adding new line
-					int scrollY = consoleScroller.getScrollY()
-							+ consoleScroller.getHeight() + 20;
-					int cBottom = consoleTV.getBottom();
-					if (scrollY + 20 < cBottom)
-						scrollDownAfterAppend = false;
+					boolean scrollDownAfterAppend = isScrolledDown();
 
 					consoleTV.setText(consoleTextToAppend);
 
@@ -133,6 +130,20 @@ public class Console extends Activity {
 			}
 		});
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	/**
+	 * 
+	 * @return True if completely scrolled down, false if not
+	 */
+	public boolean isScrolledDown() {
+		boolean scrollDownAfterAppend = true;
+		int scrollY = consoleScroller.getScrollY()
+				+ consoleScroller.getHeight() + 20;
+		int cBottom = consoleTV.getBottom();
+		if (scrollY + 20 < cBottom)
+			scrollDownAfterAppend = false;
+		return scrollDownAfterAppend;
 	}
 
 }

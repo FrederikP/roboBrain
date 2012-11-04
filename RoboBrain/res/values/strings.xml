@@ -17,5 +17,6 @@
     <string name="avail_behaviors">Available Behaviors:</string>
     <string name="sd_robobrain_root_dir">robobrain</string>
     <string name="sd_robobrain_robots_xml_dir">robots</string>
+    <string name="console_timestamp_format">HH:mm:ss dd:MM:yyyy \-\-> </string>
 
 </resources>

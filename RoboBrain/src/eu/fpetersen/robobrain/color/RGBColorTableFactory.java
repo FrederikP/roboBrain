@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.communication.RobotService;
-import eu.fpetersen.robobrain.ui.R;
 
 /**
  * Singleton factory for creating RGB Color Tables for example from a whitespace

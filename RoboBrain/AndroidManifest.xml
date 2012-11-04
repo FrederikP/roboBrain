@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="eu.fpetersen.robobrain.ui"
+    package="eu.fpetersen.robobrain"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
          <activity
-            android:name=".Starter"
+            android:name="eu.fpetersen.robobrain.ui.Starter"
             android:label="@string/title_activity_starter">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
         </activity>
         
          <activity
-            android:name=".Console"
+            android:name="eu.fpetersen.robobrain.ui.Console"
             android:label="@string/title_activity_console">
         </activity>
         

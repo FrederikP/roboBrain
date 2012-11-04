@@ -22,6 +22,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.CommandCenter;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
