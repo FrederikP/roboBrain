@@ -28,7 +28,7 @@ public class CommandCenter {
 	 * @param behaviors
 	 *            The behaviors of the robot above.
 	 */
-	CommandCenter(Robot robot, List<Behavior> behaviors) {
+	public CommandCenter(Robot robot, List<Behavior> behaviors) {
 		this.robot = robot;
 
 		addBehaviors(behaviors);

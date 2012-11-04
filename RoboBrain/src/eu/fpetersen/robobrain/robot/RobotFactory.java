@@ -189,4 +189,11 @@ public class RobotFactory {
 		return robots;
 	}
 
+	/**
+	 * Creates Robot without any parts. For simple unit testing
+	 */
+	public Robot createSimpleRobot(String name) {
+		return new Robot("----------", name);
+	}
+
 }

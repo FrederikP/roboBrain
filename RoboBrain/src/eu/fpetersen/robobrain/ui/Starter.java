@@ -132,15 +132,6 @@ public class Starter extends Activity {
 				}
 			});
 		}
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-
-			@Override
-			public void run() {
-				updateStatus();
-				progressDialog.dismiss();
-			}
-		}, 3000);
 	}
 
 	@Override
@@ -164,6 +155,9 @@ public class Starter extends Activity {
 			runOnUiThread(new Runnable() {
 
 				public void run() {
+					if (progressDialog.isShowing()) {
+						progressDialog.dismiss();
+					}
 					statusTV.setText("Stopped!");
 					statusTV.setTextColor(Color.RED);
 					toggleStatusB.setChecked(false);
@@ -176,6 +170,9 @@ public class Starter extends Activity {
 			runOnUiThread(new Runnable() {
 
 				public void run() {
+					if (progressDialog.isShowing()) {
+						progressDialog.dismiss();
+					}
 					statusTV.setText("Started!");
 					statusTV.setTextColor(Color.GREEN);
 					toggleStatusB.setChecked(true);
@@ -198,6 +195,15 @@ public class Starter extends Activity {
 			robotBehaviorTable.removeViewAt(i);
 		}
 
+	}
+
+	/**
+	 * Return the table that holds robots and behaviors
+	 * 
+	 * @return table that holds robots and behaviors
+	 */
+	public TableLayout getRobotBehaviorTable() {
+		return robotBehaviorTable;
 	}
 
 	/**
@@ -389,7 +395,15 @@ public class Starter extends Activity {
 
 	}
 
+	/**
+	 * Sets robot service and updates it's status
+	 * 
+	 * @param service
+	 *            RobotService the Starter is controlling. Set to null if
+	 *            Service is destroyed.
+	 */
 	public void setRobotService(RobotService service) {
 		this.robotService = service;
+		updateStatus();
 	}
 }

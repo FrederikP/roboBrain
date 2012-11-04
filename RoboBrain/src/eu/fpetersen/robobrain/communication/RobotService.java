@@ -93,7 +93,6 @@ public class RobotService extends Service {
 		bReceiver = new BehaviorReceiver(RobotService.this);
 		rReceiver = new RobotReceiver(RobotService.this);
 		dSpeechReceiver = new DistributingSpeechReceiver();
-		Starter.getInstance().setRobotService(RobotService.this);
 		super.onCreate();
 	}
 
@@ -124,6 +123,9 @@ public class RobotService extends Service {
 				RoboBrainIntent.ACTION_SPEECH));
 
 		running = true;
+
+		Starter.getInstance().setRobotService(RobotService.this);
+
 		return START_STICKY;
 	}
 
@@ -131,6 +133,9 @@ public class RobotService extends Service {
 	public boolean stopService(Intent name) {
 		Log.v(TAG, "Stopping RoboBrain service");
 		running = false;
+
+		Starter.getInstance().setRobotService(RobotService.this);
+
 		disconnectAll();
 		return super.stopService(name);
 	}
@@ -143,7 +148,7 @@ public class RobotService extends Service {
 		unregisterReceiver(bReceiver);
 		unregisterReceiver(dSpeechReceiver);
 		disconnectAll();
-		removeAll();
+		removeAllCCsAndBehaviors();
 
 		Starter.getInstance().setRobotService(null);
 
@@ -227,7 +232,7 @@ public class RobotService extends Service {
 	/**
 	 * Remove all CommandCenters and behavior references
 	 */
-	public void removeAll() {
+	public void removeAllCCsAndBehaviors() {
 		ccPerRobot.clear();
 		allBehaviors.clear();
 	}

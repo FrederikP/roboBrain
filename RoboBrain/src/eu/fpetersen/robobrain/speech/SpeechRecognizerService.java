@@ -153,9 +153,12 @@ public class SpeechRecognizerService extends Service {
 		Starter.getInstance().runOnUiThread(new Runnable() {
 
 			public void run() {
-
-				intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
-				speechR.startListening(intent);
+				if (speechR != null) {
+					intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
+					speechR.startListening(intent);
+				} else {
+					stopSelf();
+				}
 
 			}
 		});
