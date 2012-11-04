@@ -116,7 +116,8 @@ public class SpeechRecognizerService extends Service {
 				}
 			});
 		} else {
-			RoboLog.log("No Speech Recognition available on this device.");
+			RoboLog.log(instance,
+					"No Speech Recognition available on this device.");
 			this.stopSelf();
 		}
 	}

@@ -55,7 +55,7 @@ public class RobotReceiver extends BroadcastReceiver {
 					robot.getMainMotor().delayActionDone();
 				} else if (data.startsWith(consolePrefix)) {
 					String substring = data.substring(consolePrefix.length());
-					RoboLog.log(substring);
+					RoboLog.log(RobotService.getInstance(), substring);
 				}
 
 				/*

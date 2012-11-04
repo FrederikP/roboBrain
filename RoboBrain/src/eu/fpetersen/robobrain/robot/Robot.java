@@ -54,8 +54,8 @@ public class Robot {
 	 */
 	public void sendToArduino(char flag, String data) {
 
-		RoboLog.log("Send data to Robot " + name + ": Flag: " + flag
-				+ " Data: " + data);
+		RoboLog.log(RobotService.getInstance(), "Send data to Robot " + name
+				+ ": Flag: " + flag + " Data: " + data);
 		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
 				data);
 	}
@@ -78,8 +78,8 @@ public class Robot {
 				dataString = dataString + ",";
 			}
 		}
-		RoboLog.log("Send data to Robot " + name + ": Flag: " + flag
-				+ " Data: " + dataString);
+		RoboLog.log(RobotService.getInstance(), "Send data to Robot " + name
+				+ ": Flag: " + flag + " Data: " + dataString);
 		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
 				data);
 	}
@@ -94,8 +94,8 @@ public class Robot {
 	 *            device.
 	 */
 	public void sendToArduino(char flag, int data) {
-		RoboLog.log("Send data to Robot " + name + ": Flag: " + flag
-				+ " Data: " + Integer.toString(data));
+		RoboLog.log(RobotService.getInstance(), "Send data to Robot " + name
+				+ ": Flag: " + flag + " Data: " + Integer.toString(data));
 		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
 				data);
 	}
@@ -117,8 +117,8 @@ public class Robot {
 				dataString = dataString + ",";
 			}
 		}
-		RoboLog.log("Send data to Robot " + name + ": Flag: " + flag
-				+ " Data: " + dataString);
+		RoboLog.log(RobotService.getInstance(), "Send data to Robot " + name
+				+ ": Flag: " + flag + " Data: " + dataString);
 		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
 				data);
 	}

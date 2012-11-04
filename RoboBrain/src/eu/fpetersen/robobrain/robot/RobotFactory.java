@@ -12,6 +12,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Service;
 import android.util.Xml;
+import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.XMLParserHelper;
@@ -167,7 +168,8 @@ public class RobotFactory {
 	 */
 	public Map<String, Robot> createRobots() {
 		Map<String, Robot> robots = new HashMap<String, Robot>();
-		File robotsXmlDir = ExternalStorageManager.getRobotsXmlDir();
+		File robotsXmlDir = ExternalStorageManager.getRobotsXmlDir(RobotService
+				.getInstance());
 		try {
 			if (robotsXmlDir != null) {
 				for (File robotXml : robotsXmlDir.listFiles()) {
@@ -177,10 +179,12 @@ public class RobotFactory {
 					}
 				}
 			} else {
-				RoboLog.log("Robots XML Dir could not be accessed on sd card!");
+				RoboLog.log(RobotService.getInstance(),
+						"Robots XML Dir could not be accessed on sd card!");
 			}
 		} catch (NullPointerException e) {
-			RoboLog.log("SDCard could not be accessed. Please check if SDCard is mounted.");
+			RoboLog.log(RobotService.getInstance(),
+					"SDCard could not be accessed. Please check if SDCard is mounted.");
 		}
 		return robots;
 	}

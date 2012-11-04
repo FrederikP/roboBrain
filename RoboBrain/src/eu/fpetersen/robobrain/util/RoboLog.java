@@ -1,9 +1,9 @@
 package eu.fpetersen.robobrain.util;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
-import eu.fpetersen.robobrain.communication.RobotService;
 
 /**
  * Allows logging to android logging system and robobrains console at the same
@@ -22,11 +22,11 @@ public class RoboLog {
 	 * @param message
 	 *            Message to be logged
 	 */
-	public static void log(String message) {
+	public static void log(Context context, String message) {
 		Log.v(TAG, message);
 		Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
 		cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, message);
-		RobotService.getInstance().sendBroadcast(cIntent);
+		context.sendBroadcast(cIntent);
 	}
 
 }

@@ -12,6 +12,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
+import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.XMLParserHelper;
@@ -42,14 +43,16 @@ public class BehaviorMappingFactory {
 		InputStream in = null;
 		try {
 			in = new FileInputStream(
-					ExternalStorageManager.getBehaviorMappingFile());
+					ExternalStorageManager.getBehaviorMappingFile(RobotService
+							.getInstance()));
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(in, null);
 			parser.nextTag();
 			return readMappings(parser);
 		} catch (XmlPullParserException e) {
 			if (e.getMessage().contains("Premature end of document")) {
-				RoboLog.log("Empty behaviormapping.xml on sd card. Please configure...");
+				RoboLog.log(RobotService.getInstance(),
+						"Empty behaviormapping.xml on sd card. Please configure...");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

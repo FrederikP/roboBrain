@@ -62,7 +62,8 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 				if (colorMatch) {
 					RGBColor color = colorTable.getColorForName(colorName);
-					RoboLog.log("Displaying color: " + colorName);
+					RoboLog.log(RobotService.getInstance(),
+							"Displaying color: " + colorName);
 					led.set(color.getRed(), color.getGreen(), color.getBlue());
 					break;
 				}
@@ -108,7 +109,8 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 		if (SpeechRecognizerService.getInstance() != null) {
 			super.startBehavior();
 		} else {
-			RoboLog.log("Cannot connect to speech Recognition Service.");
+			RoboLog.log(RobotService.getInstance(),
+					"Cannot connect to speech Recognition Service.");
 			stopBehavior();
 		}
 

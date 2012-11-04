@@ -1,4 +1,4 @@
-package eu.fpetersen.robobrain.test;
+package eu.fpetersen.robobrain.ui.test;
 
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
@@ -6,6 +6,7 @@ import android.test.MoreAsserts;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
+import eu.fpetersen.robobrain.test.util.Helper;
 import eu.fpetersen.robobrain.ui.Console;
 
 /**
@@ -52,7 +53,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2 {
 				.findViewById(R.id.consoleTextView);
 		String findThis = "INTHEMIDDLE";
 		for (int i = 0; i < 100; i++) {
-			sleepMillis(200);
+			Helper.sleepMillis(200);
 			consoleActivity.appendText("Test " + i);
 			if (i == 50) {
 				consoleActivity.appendText(findThis);
@@ -76,24 +77,10 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2 {
 		cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, appendMe);
 		consoleActivity.sendBroadcast(cIntent);
 
-		sleepMillis(500);
+		Helper.sleepMillis(500);
 		String allText = consoleTextView.getText().toString();
 		assertTrue(allText.contains(appendMe));
 
 	}
 
-	/**
-	 * Set the Thread to sleep for the given amount of milli seconds
-	 * 
-	 * @param millis
-	 *            Time to sleep in milli seconds
-	 */
-	private void sleepMillis(long millis) {
-		try {
-			Thread.sleep(millis);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

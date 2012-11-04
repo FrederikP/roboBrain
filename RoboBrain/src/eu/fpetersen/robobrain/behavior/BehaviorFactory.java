@@ -1,5 +1,6 @@
 package eu.fpetersen.robobrain.behavior;
 
+import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.util.RoboLog;
 
@@ -51,13 +52,17 @@ public class BehaviorFactory {
 					.newInstance();
 			behavior.initialize(robot, name);
 		} catch (InstantiationException e) {
-			RoboLog.log("Behavior class " + name + " could not be instantiated");
+			RoboLog.log(RobotService.getInstance(), "Behavior class " + name
+					+ " could not be instantiated");
 		} catch (IllegalAccessException e) {
-			RoboLog.log("Behavior class "
-					+ name
-					+ " could not be instantiated due to the constructor having restricted access");
+			RoboLog.log(
+					RobotService.getInstance(),
+					"Behavior class "
+							+ name
+							+ " could not be instantiated due to the constructor having restricted access");
 		} catch (ClassNotFoundException e) {
-			RoboLog.log("Behavior class " + name + " could not be found");
+			RoboLog.log(RobotService.getInstance(), "Behavior class " + name
+					+ " could not be found");
 		}
 		return behavior;
 	}
