@@ -5,6 +5,12 @@ import java.io.File;
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
 
+/**
+ * Tests the {@link ExternalStorageManager}
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class ExternalStorageManagerTest extends AndroidTestCase {
 
 	/**

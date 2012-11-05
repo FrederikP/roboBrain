@@ -10,6 +10,13 @@ import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
 
+/**
+ * Simple mock for the {@link RobotService} class, so that tests for activities
+ * don't have to depend on the Service to work.
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class MockRobotService extends RobotService {
 
 	/**

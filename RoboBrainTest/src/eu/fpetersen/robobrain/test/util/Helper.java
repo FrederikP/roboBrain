@@ -1,5 +1,12 @@
 package eu.fpetersen.robobrain.test.util;
 
+/**
+ * Helper class for all Test classes. A central repository for methods used
+ * throughout the testing system
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class Helper {
 
 	/**

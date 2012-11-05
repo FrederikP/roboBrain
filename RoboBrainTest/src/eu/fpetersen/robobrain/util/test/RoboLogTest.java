@@ -8,8 +8,8 @@ import eu.fpetersen.robobrain.ui.Console;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
- * Unit Testing for the RoboLog Helper class. This is also using the Console
- * acitivity to check for the output
+ * Unit Testing for the {@link RoboLog} Helper class. This is also using the
+ * Console acitivity to check for the output
  * 
  * @author Frederik Petersen
  * 

@@ -13,6 +13,12 @@ import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
 import eu.fpetersen.robobrain.test.util.Helper;
 
+/**
+ * Tests the {@link DistributingSpeechReceiver}.
+ * 
+ * @author Frederik Petersen
+ * 
+ */
 public class DistributingSpeechReceiverTest extends AndroidTestCase {
 
 	DistributingSpeechReceiver distSR;
@@ -25,6 +31,11 @@ public class DistributingSpeechReceiverTest extends AndroidTestCase {
 		super.setUp();
 	}
 
+	/**
+	 * Tests the {@link DistributingSpeechReceiver} by setting up some
+	 * {@link SpeechReceiver}s and checking if they receive the speech result
+	 * data if intent is sent to {@link DistributingSpeechReceiver}
+	 */
 	public void testDistributingResults() {
 		final Set<Integer> successfulReceivers = new HashSet<Integer>();
 		final Set<SpeechReceiver> receivers = new HashSet<SpeechReceiver>();
@@ -58,6 +69,9 @@ public class DistributingSpeechReceiverTest extends AndroidTestCase {
 
 	}
 
+	/**
+	 * Send a mocked up result data intent to the DistributingSpeechReceiver
+	 */
 	private void sendMockResultsToDistReceiver() {
 		ArrayList<String> resultMock = new ArrayList<String>();
 		resultMock.add("One");
