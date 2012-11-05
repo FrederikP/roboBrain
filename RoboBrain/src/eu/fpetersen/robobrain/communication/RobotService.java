@@ -21,6 +21,7 @@ import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
 import eu.fpetersen.robobrain.ui.Starter;
+import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
  * Main Service of this App. When started from {@link Starter} activity, it
@@ -124,7 +125,7 @@ public class RobotService extends Service {
 
 		running = true;
 
-		Starter.getInstance().setRobotService(RobotService.this);
+		updateStarterUI(RobotService.this);
 
 		return START_STICKY;
 	}
@@ -134,7 +135,7 @@ public class RobotService extends Service {
 		Log.v(TAG, "Stopping RoboBrain service");
 		running = false;
 
-		Starter.getInstance().setRobotService(RobotService.this);
+		updateStarterUI(RobotService.this);
 
 		disconnectAll();
 		return super.stopService(name);
@@ -150,9 +151,22 @@ public class RobotService extends Service {
 		disconnectAll();
 		removeAllCCsAndBehaviors();
 
-		Starter.getInstance().setRobotService(null);
+		updateStarterUI(null);
 
 		super.onDestroy();
+	}
+
+	/**
+	 * Try updating status information in UI
+	 */
+	private void updateStarterUI(RobotService service) {
+		Starter starter = Starter.getInstance();
+		if (starter != null) {
+			Starter.getInstance().setRobotService(service);
+		} else {
+			RoboLog.log(RobotService.this,
+					"Status couldn't be updated in UI as Starter activity was not found");
+		}
 	}
 
 	/**

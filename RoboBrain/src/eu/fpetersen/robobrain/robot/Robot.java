@@ -43,7 +43,9 @@ public class Robot {
 	 * Stop the robots movement by stopping the main Motor.
 	 */
 	public void stop() {
-		getMainMotor().stop(0);
+		if (getMainMotor() != null) {
+			getMainMotor().stop(0);
+		}
 	}
 
 	/**
