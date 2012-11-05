@@ -50,10 +50,10 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 		TextView consoleTextView = (TextView) consoleActivity
 				.findViewById(R.id.consoleTextView);
 		String findThis = "INTHEMIDDLE";
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 30; i++) {
 			Helper.sleepMillis(200);
 			consoleActivity.appendText("Test " + i);
-			if (i == 50) {
+			if (i == 15) {
 				consoleActivity.appendText(findThis);
 			}
 		}
