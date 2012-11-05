@@ -28,7 +28,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	@Override
 	protected void setUp() throws Exception {
 		starterActivity = getActivity();
-		robotService = new MockRobotService();
+		robotService = new MockRobotService(starterActivity);
 		super.setUp();
 	}
 

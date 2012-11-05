@@ -22,6 +22,7 @@ public class Motor extends RobotPart {
 	public void backOff(int speed) {
 		getRobot().sendToArduino('B', speed);
 		setState(MotorState.BACKWARD);
+
 	}
 
 	/**
@@ -43,7 +44,7 @@ public class Motor extends RobotPart {
 	 */
 	public void stop(int delay) {
 		getRobot().sendToArduino('S', delay);
-		if (delay <= 0) {
+		if (delay <= 0 && state != MotorState.STOPPED) {
 			setState(MotorState.STOPPED);
 		} else {
 			setState(MotorState.STOPPINGWITHDELAY);

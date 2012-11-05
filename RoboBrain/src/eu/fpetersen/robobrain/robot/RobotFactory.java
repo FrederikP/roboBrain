@@ -27,18 +27,18 @@ public class RobotFactory {
 
 	private static RobotFactory instance;
 
-	private Service service;
+	private RobotService service;
 
 	/**
 	 * Namespace for xml parser. Is null if no namespace is used.
 	 */
 	private static final String ns = null;
 
-	private RobotFactory(Service service) {
+	private RobotFactory(RobotService service) {
 		this.service = service;
 	}
 
-	public static RobotFactory getInstance(Service service) {
+	public static RobotFactory getInstance(RobotService service) {
 		if (instance == null) {
 			instance = new RobotFactory(service);
 		} else if (instance.getService() != service) {
@@ -51,7 +51,7 @@ public class RobotFactory {
 		return service;
 	}
 
-	private void setService(Service service) {
+	private void setService(RobotService service) {
 		this.service = service;
 	}
 
@@ -97,7 +97,7 @@ public class RobotFactory {
 		parser.require(XmlPullParser.START_TAG, ns, "robot");
 		String address = parser.getAttributeValue(ns, "address");
 		String robotName = parser.getAttributeValue(ns, "name");
-		Robot robot = new Robot(address, robotName);
+		Robot robot = new Robot(service, address, robotName);
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -193,7 +193,7 @@ public class RobotFactory {
 	 * Creates Robot without any parts. For simple unit testing
 	 */
 	public Robot createSimpleRobot(String name) {
-		return new Robot("----------", name);
+		return new Robot(service, "----------", name);
 	}
 
 }

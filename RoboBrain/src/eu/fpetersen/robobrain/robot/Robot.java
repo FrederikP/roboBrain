@@ -22,6 +22,7 @@ public class Robot {
 	private String name;
 	private Map<String, RobotPart> parts;
 	private String address;
+	private RobotService service;
 
 	/**
 	 * Create robot with given address and name. Empty Part map is initialized.
@@ -31,7 +32,8 @@ public class Robot {
 	 * @param name
 	 *            Name of the robot.
 	 */
-	public Robot(String address, String name) {
+	public Robot(RobotService service, String address, String name) {
+		this.service = service;
 		this.name = name;
 		this.address = address;
 		parts = new HashMap<String, RobotPart>();
@@ -54,10 +56,9 @@ public class Robot {
 	 */
 	public void sendToArduino(char flag, String data) {
 
-		RoboLog.log(RobotService.getInstance(), "Send data to Robot " + name
-				+ ": Flag: " + flag + " Data: " + data);
-		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
-				data);
+		RoboLog.log(service, "Send data to Robot " + name + ": Flag: " + flag
+				+ " Data: " + data);
+		Amarino.sendDataToArduino(service, address, flag, data);
 	}
 
 	/**
@@ -78,10 +79,9 @@ public class Robot {
 				dataString = dataString + ",";
 			}
 		}
-		RoboLog.log(RobotService.getInstance(), "Send data to Robot " + name
-				+ ": Flag: " + flag + " Data: " + dataString);
-		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
-				data);
+		RoboLog.log(service, "Send data to Robot " + name + ": Flag: " + flag
+				+ " Data: " + dataString);
+		Amarino.sendDataToArduino(service, address, flag, data);
 	}
 
 	/**
@@ -94,10 +94,9 @@ public class Robot {
 	 *            device.
 	 */
 	public void sendToArduino(char flag, int data) {
-		RoboLog.log(RobotService.getInstance(), "Send data to Robot " + name
-				+ ": Flag: " + flag + " Data: " + Integer.toString(data));
-		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
-				data);
+		RoboLog.log(service, "Send data to Robot " + name + ": Flag: " + flag
+				+ " Data: " + Integer.toString(data));
+		Amarino.sendDataToArduino(service, address, flag, data);
 	}
 
 	/**
@@ -117,10 +116,9 @@ public class Robot {
 				dataString = dataString + ",";
 			}
 		}
-		RoboLog.log(RobotService.getInstance(), "Send data to Robot " + name
-				+ ": Flag: " + flag + " Data: " + dataString);
-		Amarino.sendDataToArduino(RobotService.getInstance(), address, flag,
-				data);
+		RoboLog.log(service, "Send data to Robot " + name + ": Flag: " + flag
+				+ " Data: " + dataString);
+		Amarino.sendDataToArduino(service, address, flag, data);
 	}
 
 	public String getName() {
@@ -192,6 +190,14 @@ public class Robot {
 	 */
 	public RGBLED getHeadColorLED() {
 		return (RGBLED) getPart("headcolor_rgbled");
+	}
+
+	/**
+	 * 
+	 * @return Service this Robot is created in
+	 */
+	public RobotService getRobotService() {
+		return service;
 	}
 
 }

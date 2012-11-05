@@ -24,7 +24,7 @@ import eu.fpetersen.robobrain.test.util.Helper;
 public class SpeechResultManagerTest extends AndroidTestCase {
 
 	/**
-	 * Test allocatiting mocked speech results to the speech result manager
+	 * Test allocating mocked speech results to the speech result manager
 	 */
 	public void testAllocatingResults() {
 		SpeechResultManager resultManager = SpeechResultManager.getInstance();

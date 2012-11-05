@@ -3,6 +3,8 @@ package eu.fpetersen.robobrain.test.mock;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import android.content.Context;
+import android.content.Intent;
 import eu.fpetersen.robobrain.behavior.BackAndForthBehavior;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.CommandCenter;
@@ -18,6 +20,22 @@ import eu.fpetersen.robobrain.robot.RobotFactory;
  * 
  */
 public class MockRobotService extends RobotService {
+
+	Context testContext;
+
+	public MockRobotService(Context context) {
+		testContext = context;
+	}
+
+	@Override
+	public void sendBroadcast(Intent intent) {
+		testContext.sendBroadcast(intent);
+	}
+
+	@Override
+	public void sendBroadcast(Intent intent, String receiverPermission) {
+		testContext.sendBroadcast(intent, receiverPermission);
+	}
 
 	/**
 	 * To make the status be set from testing classes.
