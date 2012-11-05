@@ -65,6 +65,7 @@ public abstract class Behavior {
 				behaviorLoop();
 			}
 
+			onStop();
 			robot.stop();
 		}
 	}
@@ -128,5 +129,11 @@ public abstract class Behavior {
 	 * in existing behaviors
 	 */
 	protected abstract void behaviorLoop();
+
+	/**
+	 * Called when behavior is stopped. Try undoing everything that changed the
+	 * robot during the behavior, except maybe its new location
+	 */
+	protected abstract void onStop();
 
 }

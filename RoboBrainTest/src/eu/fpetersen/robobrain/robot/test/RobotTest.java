@@ -17,6 +17,9 @@ import eu.fpetersen.robobrain.test.mock.MockRobotService;
  */
 public class RobotTest extends AndroidTestCase {
 
+	/**
+	 * Test adding the standard Motor, setting its speed and stopping the robot.
+	 */
 	public void testPartAddingWithMainMotor() {
 		Robot robot = RobotFactory.getInstance(
 				new MockRobotService(getContext()))

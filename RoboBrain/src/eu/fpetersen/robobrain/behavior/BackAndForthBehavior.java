@@ -49,4 +49,9 @@ public class BackAndForthBehavior extends Behavior {
 		}
 	}
 
+	@Override
+	protected void onStop() {
+		getRobot().stop();
+	}
+
 }

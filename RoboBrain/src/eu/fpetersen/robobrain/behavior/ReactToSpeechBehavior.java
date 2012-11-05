@@ -132,4 +132,9 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 		setLED(results);
 	}
 
+	@Override
+	protected void onStop() {
+		getRobot().getHeadColorLED().set(0, 0, 0);
+	}
+
 }
