@@ -2,6 +2,7 @@ package eu.fpetersen.robobrain.speech;
 
 import java.util.List;
 
+import android.content.Context;
 import android.content.Intent;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 
@@ -31,18 +32,19 @@ public class SpeechResultManager {
 	 * 
 	 * @param latestResultList
 	 */
-	public void allocateNewResults(List<String> latestResultList) {
+	public void allocateNewResults(Context context,
+			List<String> latestResultList) {
 		this.latestResultList = latestResultList;
-		broadcastResults();
+		broadcastResults(context);
 	}
 
 	/**
 	 * Send out intent to be receives by {@link DistributingSpeechReceiver}
 	 */
-	private void broadcastResults() {
+	private void broadcastResults(Context context) {
 		Intent intent = new Intent(RoboBrainIntent.ACTION_SPEECH);
 		intent.putExtra(RoboBrainIntent.EXTRA_SPEECH_RESULTS,
 				latestResultList.toArray(new String[latestResultList.size()]));
-		SpeechRecognizerService.getInstance().sendBroadcast(intent);
+		context.sendBroadcast(intent);
 	}
 }

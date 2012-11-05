@@ -85,7 +85,7 @@ public class SpeechRecognizerService extends Service {
 
 					public void run() {
 						SpeechResultManager.getInstance().allocateNewResults(
-								data);
+								SpeechRecognizerService.this, data);
 					}
 				};
 				Thread thread = new Thread(interpretTask);
