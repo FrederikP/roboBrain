@@ -1,28 +1,62 @@
+<!--
+  RoboBrain - Control your Arduino Robots per Android Device
+  Copyright (c) 2012 Frederik Petersen.
+  All rights reserved.
+  
+  This file is part of RoboBrain.
+  
+      RoboBrain is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+  
+      RoboBrain is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+      FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  
+      You should have received a copy of the GNU General Public License
+      along with RoboBrain.  If not, see <http://www.gnu.org/licenses/>.
+  
+  Contributors:
+      Frederik Petersen - Project Owner, initial Implementation
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" >
+
     <TextView
         android:id="@+id/status_label_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/status_label"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
+
+
+
+
+
     <TextView
         android:id="@+id/status_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20dp" />
-
+
+
     <ToggleButton
         android:id="@+id/togglestatus_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/service_switch" />
-
+
+
+
+
+
+
+
     <TableLayout
         android:id="@+id/robot_behavior_table"
         android:layout_width="match_parent"
@@ -33,7 +67,12 @@
             android:id="@+id/tableRow1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
-
+
+
+
+
+
+
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
@@ -42,7 +81,11 @@
                 android:text="@string/robot_name"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textSize="14dp" />
-
+
+
+
+
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"

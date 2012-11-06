@@ -1,9 +1,30 @@
+/*******************************************************************************
+ *RoboBrain - Control your Arduino Robots per Android Device
+ *Copyright (c) 2012 Frederik Petersen.
+ *All rights reserved.
+ *
+ *This file is part of RoboBrain.
+ *
+ *    RoboBrain is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    RoboBrain is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ *    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with RoboBrain.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *Contributors:
+ *    Frederik Petersen - Project Owner, initial Implementation
+ *******************************************************************************/
 // Only modify this file to include
 // - function definitions (prototypes)
 // - include files
 // - extern variable definitions
 // In the appropriate section
-
 #ifndef YARP_H_
 #define YARP_H_
 #include "Arduino.h"
@@ -11,7 +32,6 @@
 #include "HardwareSerial.h"
 #include <MeetAndroid.h>
 #include <Servo.h>
-
 
 //Library references
 extern HardwareSerial Serial;
@@ -61,7 +81,6 @@ void setLED(byte flag, byte numOfValues);
 
 //LED functions
 void setLEDtoColor(int red = 0, int green = 0, int blue = 0);
-
 
 //Do not add code below this line
 #endif /* YARP_H_ */
