@@ -99,9 +99,10 @@ public class RobotService extends Service {
 		Map<String, Robot> robots = robotFactory.createRobots();
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 				.getInstance();
+		// Enter null for standard sd location
 		Map<String, List<String>> behaviorMapping = behaviorFactory
-				.createMappings();
-		BehaviorFactory bFac = BehaviorFactory.getInstance();
+				.createMappings(null);
+		BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
 		for (String robotName : robots.keySet()) {
 			// TODO Exception handling
 			Robot robot = robots.get(robotName);

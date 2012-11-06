@@ -20,22 +20,38 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.robot.test;
+package eu.fpetersen.robobrain.behavior.test;
+
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 import android.test.AndroidTestCase;
-import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.robot.RobotFactory;
-import eu.fpetersen.robobrain.test.mock.MockRobotService;
+import eu.fpetersen.robobrain.R;
+import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
 
-public class RobotFactoryClass extends AndroidTestCase {
+/**
+ * 
+ * Tests the {@link BehaviorMappingFactory} class
+ * 
+ * @author Frederik Petersen
+ * 
+ */
+public class BehaviorMappingFactoryTest extends AndroidTestCase {
 
-	public void testSimpleRobotCreation() {
-		String robotName = "TestBot";
-		Robot robot = RobotFactory.getInstance(
-				new MockRobotService(getContext()))
-				.createSimpleRobot(robotName);
-		assertNotNull(robot);
-		assertEquals(robot.getName(), robotName);
+	public void testCreatingBehaviorMappingFromXML() {
+		InputStream mappingXML = getContext().getResources().openRawResource(
+				R.raw.behaviormapping);
+		assertNotNull(mappingXML);
+		BehaviorMappingFactory bmFac = BehaviorMappingFactory.getInstance();
+		assertNotNull(bmFac);
+		Map<String, List<String>> mapping = bmFac.createMappings(mappingXML);
+		assertNotNull(mapping);
+		assertEquals(1, mapping.keySet().size());
+		String robotName = mapping.keySet().toArray(
+				new String[mapping.keySet().size()])[0];
+		List<String> behaviorNames = mapping.get(robotName);
+		assertEquals(3, behaviorNames.size());
 	}
 
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<robot name="YARP" address="07:12:05:03:53:76">
+<robot name="TESTBOT" address="TESTADDRESS">
 	<parts>
 		<part type="Motor" id="main_motor" />
 		<part type="ProximitySensor" id="front_proxsensor" />

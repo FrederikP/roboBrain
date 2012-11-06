@@ -38,19 +38,31 @@ public class BehaviorFactory {
 
 	private static BehaviorFactory instance;
 
-	private BehaviorFactory() {
+	private RobotService service;
 
+	private BehaviorFactory(RobotService service) {
+		this.service = service;
 	}
 
 	/**
 	 * 
 	 * @return Singleton instance of BehaviorFactory
 	 */
-	public static BehaviorFactory getInstance() {
+	public static BehaviorFactory getInstance(RobotService service) {
 		if (instance == null) {
-			instance = new BehaviorFactory();
+			instance = new BehaviorFactory(service);
+		} else if (instance.getService() != service) {
+			instance.setService(service);
 		}
 		return instance;
+	}
+
+	private void setService(RobotService service) {
+		this.service = service;
+	}
+
+	private RobotService getService() {
+		return service;
 	}
 
 	/**
@@ -67,26 +79,26 @@ public class BehaviorFactory {
 	 *         is amiss, check log.
 	 */
 	public Behavior createBehavior(String name, Robot robot) {
-		String behaviorClassName = "eu.fpetersen.robobrain.behavior." + name;
+		if (!name.contains(".")) {
+			name = "eu.fpetersen.robobrain.behavior." + name;
+		}
 		Behavior behavior = null;
 		try {
-			behavior = (Behavior) Class.forName(behaviorClassName)
-					.newInstance();
+			behavior = (Behavior) Class.forName(name).newInstance();
 			behavior.initialize(robot, name);
 		} catch (InstantiationException e) {
-			RoboLog.log(RobotService.getInstance(), "Behavior class " + name
+			RoboLog.log(service, "Behavior class " + name
 					+ " could not be instantiated");
 		} catch (IllegalAccessException e) {
 			RoboLog.log(
-					RobotService.getInstance(),
+					service,
 					"Behavior class "
 							+ name
 							+ " could not be instantiated due to the constructor having restricted access");
 		} catch (ClassNotFoundException e) {
-			RoboLog.log(RobotService.getInstance(), "Behavior class " + name
+			RoboLog.log(service, "Behavior class " + name
 					+ " could not be found");
 		}
 		return behavior;
 	}
-
 }

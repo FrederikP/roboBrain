@@ -88,6 +88,22 @@ public class RobotFactory {
 		InputStream in = null;
 		try {
 			in = new FileInputStream(robotXml);
+			return createRobotFromXML(in);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				in.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		// TODO Exception handling
+		return null;
+	}
+
+	public Robot createRobotFromXML(InputStream in) {
+		try {
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(in, null);
 			parser.nextTag();

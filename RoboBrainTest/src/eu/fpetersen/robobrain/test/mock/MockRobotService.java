@@ -43,7 +43,7 @@ import eu.fpetersen.robobrain.robot.RobotFactory;
  */
 public class MockRobotService extends RobotService {
 
-	Context testContext;
+	private Context testContext;
 
 	public MockRobotService(Context context) {
 		testContext = context;

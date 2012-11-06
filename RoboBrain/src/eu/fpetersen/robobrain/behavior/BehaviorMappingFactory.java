@@ -59,14 +59,20 @@ public class BehaviorMappingFactory {
 	 * Uses behavior.xml in [sdcard]/robobrain and parses robot and it's
 	 * behaviors from the file.
 	 * 
+	 * @param in
+	 *            The Input Stream to read the Mapping from, enter null for
+	 *            standard sd card file
+	 * 
 	 * @return Mapping of robotname to behaviornames.
 	 */
-	public Map<String, List<String>> createMappings() {
-		InputStream in = null;
+	public Map<String, List<String>> createMappings(InputStream in) {
 		try {
-			in = new FileInputStream(
-					ExternalStorageManager.getBehaviorMappingFile(RobotService
-							.getInstance()));
+			if (in == null) {
+				in = new FileInputStream(
+						ExternalStorageManager
+								.getBehaviorMappingFile(RobotService
+										.getInstance()));
+			}
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(in, null);
 			parser.nextTag();
