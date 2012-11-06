@@ -28,8 +28,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+import android.content.Context;
 import eu.fpetersen.robobrain.R;
-import eu.fpetersen.robobrain.communication.RobotService;
 
 /**
  * Singleton factory for creating RGB Color Tables for example from a whitespace
@@ -60,12 +60,11 @@ public class RGBColorTableFactory {
 	 * @return RGBColorTable filled with colors that don't include numbers in
 	 *         the names.
 	 */
-	public RGBColorTable getStandardColorTableFromTextFile() {
+	public RGBColorTable getStandardColorTableFromTextFile(Context context) {
 		RGBColorTable table = new RGBColorTable();
 
 		// The InputStream opens the resourceId and sends it to the buffer
-		InputStream is = RobotService.getInstance().getResources()
-				.openRawResource(R.raw.rgb);
+		InputStream is = context.getResources().openRawResource(R.raw.rgb);
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		String readLine = null;
 

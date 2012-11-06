@@ -28,7 +28,6 @@ import java.util.StringTokenizer;
 import eu.fpetersen.robobrain.color.RGBColor;
 import eu.fpetersen.robobrain.color.RGBColorTable;
 import eu.fpetersen.robobrain.color.RGBColorTableFactory;
-import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.RGBLED;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
 import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
@@ -54,8 +53,9 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	 * Creates the colorTable upon instantiation
 	 */
 	public ReactToSpeechBehavior() {
-		colorTable = RGBColorTableFactory.getInstance()
-				.getStandardColorTableFromTextFile();
+		colorTable = RGBColorTableFactory
+				.getInstance()
+				.getStandardColorTableFromTextFile(getRobot().getRobotService());
 		colorNames = colorTable.getNames();
 	}
 
@@ -84,7 +84,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 				if (colorMatch) {
 					RGBColor color = colorTable.getColorForName(colorName);
-					RoboLog.log(RobotService.getInstance(),
+					RoboLog.log(getRobot().getRobotService(),
 							"Displaying color: " + colorName);
 					led.set(color.getRed(), color.getGreen(), color.getBlue());
 					break;
@@ -126,12 +126,12 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	@Override
 	public void startBehavior() {
 
-		RobotService.getInstance().getDistributingSpeechReceiver()
+		getRobot().getRobotService().getDistributingSpeechReceiver()
 				.addReceiver(ReactToSpeechBehavior.this);
 		if (SpeechRecognizerService.getInstance() != null) {
 			super.startBehavior();
 		} else {
-			RoboLog.log(RobotService.getInstance(),
+			RoboLog.log(getRobot().getRobotService(),
 					"Cannot connect to speech Recognition Service.");
 			stopBehavior();
 		}
@@ -145,7 +145,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 	@Override
 	public void stopBehavior() {
-		RobotService.getInstance().getDistributingSpeechReceiver()
+		getRobot().getRobotService().getDistributingSpeechReceiver()
 				.removeReceiver(ReactToSpeechBehavior.this);
 		super.stopBehavior();
 	}
