@@ -36,6 +36,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.util.Xml;
 import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
+import eu.fpetersen.robobrain.util.RoboBrainFactory;
 import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.XMLParserHelper;
 
@@ -46,13 +47,13 @@ import eu.fpetersen.robobrain.util.XMLParserHelper;
  * @author Frederik Petersen
  * 
  */
-public class BehaviorMappingFactory {
+public class BehaviorMappingFactory extends RoboBrainFactory {
 
 	private static BehaviorMappingFactory instance;
 	private static final String ns = null;
 
-	private BehaviorMappingFactory() {
-
+	private BehaviorMappingFactory(RobotService service) {
+		super(service);
 	}
 
 	/**
@@ -70,8 +71,7 @@ public class BehaviorMappingFactory {
 			if (in == null) {
 				in = new FileInputStream(
 						ExternalStorageManager
-								.getBehaviorMappingFile(RobotService
-										.getInstance()));
+								.getBehaviorMappingFile(getService()));
 			}
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(in, null);
@@ -79,7 +79,7 @@ public class BehaviorMappingFactory {
 			return readMappings(parser);
 		} catch (XmlPullParserException e) {
 			if (e.getMessage().contains("Premature end of document")) {
-				RoboLog.log(RobotService.getInstance(),
+				RoboLog.log(getService(),
 						"Empty behaviormapping.xml on sd card. Please configure...");
 			}
 		} catch (Exception e) {
@@ -177,9 +177,11 @@ public class BehaviorMappingFactory {
 
 	}
 
-	public static BehaviorMappingFactory getInstance() {
+	public static BehaviorMappingFactory getInstance(RobotService service) {
 		if (instance == null) {
-			instance = new BehaviorMappingFactory();
+			instance = new BehaviorMappingFactory(service);
+		} else if (instance.getService() != service) {
+			instance.setService(service);
 		}
 		return instance;
 	}

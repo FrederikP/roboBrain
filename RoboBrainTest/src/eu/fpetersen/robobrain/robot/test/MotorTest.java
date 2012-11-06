@@ -23,6 +23,7 @@
 package eu.fpetersen.robobrain.robot.test;
 
 import android.test.AndroidTestCase;
+import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
@@ -42,13 +43,13 @@ public class MotorTest extends AndroidTestCase {
 	 * Test if Motor is in the right state, after called methods
 	 */
 	public void testStateManagement() {
+		RobotService service = new MockRobotService(getContext());
 		int speed = 200;
 		int angle = 90;
-		Robot mockRobot = RobotFactory.getInstance(
-				new MockRobotService(getContext()))
-				.createSimpleRobot("TestBot");
-		Motor motor = (Motor) RobotPartFactory.getInstance().createRobotPart(
-				"Motor", mockRobot);
+		Robot mockRobot = RobotFactory.getInstance(service).createSimpleRobot(
+				"TestBot");
+		Motor motor = (Motor) RobotPartFactory.getInstance(service)
+				.createRobotPart("Motor", mockRobot);
 
 		motor.advance(speed);
 		assertEquals(MotorState.FORWARD, motor.getState());

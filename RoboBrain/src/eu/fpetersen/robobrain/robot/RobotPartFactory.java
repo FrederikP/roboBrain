@@ -23,6 +23,7 @@
 package eu.fpetersen.robobrain.robot;
 
 import eu.fpetersen.robobrain.communication.RobotService;
+import eu.fpetersen.robobrain.util.RoboBrainFactory;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
@@ -31,17 +32,20 @@ import eu.fpetersen.robobrain.util.RoboLog;
  * @author Frederik Petersen
  * 
  */
-public class RobotPartFactory {
+public class RobotPartFactory extends RoboBrainFactory {
 
 	private static RobotPartFactory instance;
 
-	private RobotPartFactory() {
+	private RobotPartFactory(RobotService service) {
+		super(service);
 
 	}
 
-	public static RobotPartFactory getInstance() {
+	public static RobotPartFactory getInstance(RobotService service) {
 		if (instance == null) {
-			instance = new RobotPartFactory();
+			instance = new RobotPartFactory(service);
+		} else if (instance.getService() != service) {
+			instance.setService(service);
 		}
 		return instance;
 	}
@@ -66,16 +70,16 @@ public class RobotPartFactory {
 			part = (RobotPart) Class.forName(partClassName).newInstance();
 			part.initialize(robot);
 		} catch (InstantiationException e) {
-			RoboLog.log(RobotService.getInstance(), "RobotPart class " + type
+			RoboLog.log(getService(), "RobotPart class " + type
 					+ " could not be instantiated");
 		} catch (IllegalAccessException e) {
 			RoboLog.log(
-					RobotService.getInstance(),
+					getService(),
 					"RobotPart class "
 							+ type
 							+ " could not be instantiated due to the constructor having restricted access");
 		} catch (ClassNotFoundException e) {
-			RoboLog.log(RobotService.getInstance(), "RobotPart class " + type
+			RoboLog.log(getService(), "RobotPart class " + type
 					+ " could not be found");
 		}
 		return part;

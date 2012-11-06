@@ -29,6 +29,8 @@ import java.util.Map;
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
+import eu.fpetersen.robobrain.communication.RobotService;
+import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**
  * 
@@ -40,10 +42,12 @@ import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
 public class BehaviorMappingFactoryTest extends AndroidTestCase {
 
 	public void testCreatingBehaviorMappingFromXML() {
+		RobotService service = new MockRobotService(getContext());
 		InputStream mappingXML = getContext().getResources().openRawResource(
 				R.raw.behaviormapping);
 		assertNotNull(mappingXML);
-		BehaviorMappingFactory bmFac = BehaviorMappingFactory.getInstance();
+		BehaviorMappingFactory bmFac = BehaviorMappingFactory
+				.getInstance(service);
 		assertNotNull(bmFac);
 		Map<String, List<String>> mapping = bmFac.createMappings(mappingXML);
 		assertNotNull(mapping);

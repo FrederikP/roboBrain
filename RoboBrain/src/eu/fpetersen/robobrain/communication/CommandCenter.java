@@ -72,7 +72,7 @@ public class CommandCenter {
 	 * Connect to the Arduino device of this CommandCenters Robot.
 	 */
 	public void connect() {
-		RobotService rService = RobotService.getInstance();
+		RobotService rService = robot.getRobotService();
 
 		Amarino.connect(rService, robot.getAddress());
 	}
@@ -82,7 +82,7 @@ public class CommandCenter {
 	 */
 	public void disconnect() {
 
-		RobotService rService = RobotService.getInstance();
+		RobotService rService = robot.getRobotService();
 
 		Amarino.disconnect(rService, robot.getAddress());
 	}

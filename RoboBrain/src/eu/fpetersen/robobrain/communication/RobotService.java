@@ -87,10 +87,6 @@ public class RobotService extends Service {
 		return running;
 	}
 
-	public static RobotService getInstance() {
-		return instance;
-	}
-
 	@Override
 	public void onCreate() {
 		Log.v(TAG, "Creating RoboBrain service");
@@ -98,7 +94,7 @@ public class RobotService extends Service {
 		RobotFactory robotFactory = RobotFactory.getInstance(this);
 		Map<String, Robot> robots = robotFactory.createRobots();
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
-				.getInstance();
+				.getInstance(RobotService.this);
 		// Enter null for standard sd location
 		Map<String, List<String>> behaviorMapping = behaviorFactory
 				.createMappings(null);

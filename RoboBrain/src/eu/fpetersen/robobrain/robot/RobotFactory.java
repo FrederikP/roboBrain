@@ -32,10 +32,10 @@ import java.util.Map;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import android.app.Service;
 import android.util.Xml;
 import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
+import eu.fpetersen.robobrain.util.RoboBrainFactory;
 import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.XMLParserHelper;
 
@@ -45,11 +45,9 @@ import eu.fpetersen.robobrain.util.XMLParserHelper;
  * @author Frederik Petersen
  * 
  */
-public class RobotFactory {
+public class RobotFactory extends RoboBrainFactory {
 
 	private static RobotFactory instance;
-
-	private RobotService service;
 
 	/**
 	 * Namespace for xml parser. Is null if no namespace is used.
@@ -57,7 +55,7 @@ public class RobotFactory {
 	private static final String ns = null;
 
 	private RobotFactory(RobotService service) {
-		this.service = service;
+		super(service);
 	}
 
 	public static RobotFactory getInstance(RobotService service) {
@@ -67,14 +65,6 @@ public class RobotFactory {
 			instance.setService(service);
 		}
 		return instance;
-	}
-
-	private Service getService() {
-		return service;
-	}
-
-	private void setService(RobotService service) {
-		this.service = service;
 	}
 
 	/**
@@ -135,7 +125,7 @@ public class RobotFactory {
 		parser.require(XmlPullParser.START_TAG, ns, "robot");
 		String address = parser.getAttributeValue(ns, "address");
 		String robotName = parser.getAttributeValue(ns, "name");
-		Robot robot = new Robot(service, address, robotName);
+		Robot robot = new Robot(getService(), address, robotName);
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -190,7 +180,7 @@ public class RobotFactory {
 	 */
 	private void readInPart(XmlPullParser parser, Robot robot)
 			throws XmlPullParserException, IOException {
-		RobotPartFactory rbFac = RobotPartFactory.getInstance();
+		RobotPartFactory rbFac = RobotPartFactory.getInstance(getService());
 		parser.require(XmlPullParser.START_TAG, ns, "part");
 		String type = parser.getAttributeValue(ns, "type");
 		String id = parser.getAttributeValue(ns, "id");
@@ -206,8 +196,8 @@ public class RobotFactory {
 	 */
 	public Map<String, Robot> createRobots() {
 		Map<String, Robot> robots = new HashMap<String, Robot>();
-		File robotsXmlDir = ExternalStorageManager.getRobotsXmlDir(RobotService
-				.getInstance());
+		File robotsXmlDir = ExternalStorageManager
+				.getRobotsXmlDir(getService());
 		try {
 			if (robotsXmlDir != null) {
 				for (File robotXml : robotsXmlDir.listFiles()) {
@@ -217,11 +207,11 @@ public class RobotFactory {
 					}
 				}
 			} else {
-				RoboLog.log(RobotService.getInstance(),
+				RoboLog.log(getService(),
 						"Robots XML Dir could not be accessed on sd card!");
 			}
 		} catch (NullPointerException e) {
-			RoboLog.log(RobotService.getInstance(),
+			RoboLog.log(getService(),
 					"SDCard could not be accessed. Please check if SDCard is mounted.");
 		}
 		return robots;
@@ -231,7 +221,7 @@ public class RobotFactory {
 	 * Creates Robot without any parts. For simple unit testing
 	 */
 	public Robot createSimpleRobot(String name) {
-		return new Robot(service, "----------", name);
+		return new Robot(getService(), "----------", name);
 	}
 
 }
