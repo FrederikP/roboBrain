@@ -41,7 +41,8 @@ public class Helper {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			// Usually works. Is only used for tests so try again. And look at
+			// stacktrace.
 			e.printStackTrace();
 		}
 	}

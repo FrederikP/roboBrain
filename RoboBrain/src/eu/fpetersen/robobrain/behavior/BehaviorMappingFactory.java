@@ -79,8 +79,11 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 			return readMappings(parser);
 		} catch (XmlPullParserException e) {
 			if (e.getMessage().contains("Premature end of document")) {
-				RoboLog.log(getService(),
+				RoboLog.alertWarning(getService(),
 						"Empty behaviormapping.xml on sd card. Please configure...");
+			} else {
+				RoboLog.alertError(getService(),
+						"Error parsing your behaviormapping.xml. Is it valid xml?");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,7 +94,6 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 				e.printStackTrace();
 			}
 		}
-		// TODO Exception handling
 		return null;
 	}
 

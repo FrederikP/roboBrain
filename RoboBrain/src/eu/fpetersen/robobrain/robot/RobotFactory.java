@@ -88,7 +88,9 @@ public class RobotFactory extends RoboBrainFactory {
 				e.printStackTrace();
 			}
 		}
-		// TODO Exception handling
+		RoboLog.alertError(
+				getService(),
+				"Something went wrong while building Robot. Check for valid and accessable conf files.");
 		return null;
 	}
 
@@ -99,6 +101,9 @@ public class RobotFactory extends RoboBrainFactory {
 			parser.nextTag();
 			return readRobot(parser);
 		} catch (Exception e) {
+			RoboLog.alertError(
+					getService(),
+					"Something went wrong while building Robot. Check for valid and accessable conf files.");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -107,7 +112,6 @@ public class RobotFactory extends RoboBrainFactory {
 				e.printStackTrace();
 			}
 		}
-		// TODO Exception handling
 		return null;
 	}
 
@@ -207,11 +211,11 @@ public class RobotFactory extends RoboBrainFactory {
 					}
 				}
 			} else {
-				RoboLog.log(getService(),
+				RoboLog.alertError(getService(),
 						"Robots XML Dir could not be accessed on sd card!");
 			}
 		} catch (NullPointerException e) {
-			RoboLog.log(getService(),
+			RoboLog.alertError(getService(),
 					"SDCard could not be accessed. Please check if SDCard is mounted.");
 		}
 		return robots;

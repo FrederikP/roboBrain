@@ -106,6 +106,10 @@ public class RobotService extends Service {
 		if (getAllCCs().isEmpty()) {
 			RobotFactory robotFactory = RobotFactory.getInstance(this);
 			Map<String, Robot> robots = robotFactory.createRobots();
+			if (robots.size() == 0) {
+				RoboLog.alertWarning(RobotService.this,
+						"No robot configured. See documentation for explanation on xml config.");
+			}
 			BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 					.getInstance(RobotService.this);
 			// Enter null for standard sd location
@@ -114,7 +118,6 @@ public class RobotService extends Service {
 			BehaviorFactory bFac = BehaviorFactory
 					.getInstance(RobotService.this);
 			for (String robotName : robots.keySet()) {
-				// TODO Exception handling
 				Robot robot = robots.get(robotName);
 				List<String> behaviorNames = behaviorMapping.get(robotName);
 				List<Behavior> behaviors = new ArrayList<Behavior>();
@@ -261,7 +264,8 @@ public class RobotService extends Service {
 				return center;
 			}
 		}
-		// TODO Exception handling
+		RoboLog.alertError(RobotService.this,
+				"CommandCenter not found for MAC: " + address);
 		return null;
 	}
 

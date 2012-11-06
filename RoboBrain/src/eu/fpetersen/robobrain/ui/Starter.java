@@ -27,7 +27,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -427,5 +429,35 @@ public class Starter extends Activity {
 	public void setRobotService(RobotService service) {
 		this.robotService = service;
 		updateStatus();
+	}
+
+	/**
+	 * Displays an error/warning dialog to show the user that something went
+	 * wrong
+	 * 
+	 * @param title
+	 *            Title of the dialog message
+	 * @param message
+	 *            Message to display
+	 */
+	public void showAlertDialog(String title, String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(Starter.this);
+
+		// 2. Chain together various setter methods to set the dialog
+		// characteristics
+		builder.setMessage(message).setTitle(title);
+
+		builder.setPositiveButton(R.string.ok,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				});
+
+		// 3. Get the AlertDialog from create()
+		AlertDialog dialog = builder.create();
+
+		dialog.show();
+
 	}
 }

@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
+import eu.fpetersen.robobrain.ui.Starter;
 
 /**
  * Allows logging to android logging system and robobrains console at the same
@@ -49,6 +50,39 @@ public class RoboLog {
 		Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
 		cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, message);
 		context.sendBroadcast(cIntent);
+	}
+
+	/**
+	 * Print error to log and console and try showing Alert in starter activity
+	 * 
+	 * @param context
+	 * @param message
+	 *            Error message to display to user and in log
+	 */
+	public static void alertError(Context context, String message) {
+		String errorTag = "[ERROR]";
+		log(context, message + errorTag);
+		Starter starter = Starter.getInstance();
+		if (starter != null) {
+			starter.showAlertDialog(errorTag, message);
+		}
+	}
+
+	/**
+	 * Print warning to log and console and try showing Alert in starter
+	 * activity
+	 * 
+	 * @param context
+	 * @param message
+	 *            Warning message to display to user and in log
+	 */
+	public static void alertWarning(Context context, String message) {
+		String errorTag = "[WARNING]";
+		log(context, message + errorTag);
+		Starter starter = Starter.getInstance();
+		if (starter != null) {
+			starter.showAlertDialog(errorTag, message);
+		}
 	}
 
 }

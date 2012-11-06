@@ -51,6 +51,7 @@ public final class R {
         public static final int menu_console=0x7f05000a;
         public static final int menu_settings=0x7f050001;
         public static final int menu_starter=0x7f050009;
+        public static final int ok=0x7f050012;
         public static final int robot_name=0x7f05000d;
         public static final int sd_robobrain_robots_xml_dir=0x7f050010;
         public static final int sd_robobrain_root_dir=0x7f05000f;

@@ -80,7 +80,9 @@ public class ExternalStorageManager {
 			try {
 				behaviorMappingFile.createNewFile();
 			} catch (IOException e) {
-				// TODO Exception handling
+				RoboLog.alertError(
+						context,
+						"Something went wrong when trying to create behaviormapping file. Check sd card and log.");
 				e.printStackTrace();
 			}
 		}
