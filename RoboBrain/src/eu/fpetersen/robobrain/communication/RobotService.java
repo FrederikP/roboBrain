@@ -69,8 +69,6 @@ public class RobotService extends Service {
 	 */
 	private Map<UUID, Behavior> allBehaviors = new HashMap<UUID, Behavior>();
 
-	private static RobotService instance;
-
 	protected boolean running = false;
 
 	private BehaviorReceiver bReceiver;
@@ -90,25 +88,6 @@ public class RobotService extends Service {
 	@Override
 	public void onCreate() {
 		Log.v(TAG, "Creating RoboBrain service");
-		instance = this;
-		RobotFactory robotFactory = RobotFactory.getInstance(this);
-		Map<String, Robot> robots = robotFactory.createRobots();
-		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
-				.getInstance(RobotService.this);
-		// Enter null for standard sd location
-		Map<String, List<String>> behaviorMapping = behaviorFactory
-				.createMappings(null);
-		BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
-		for (String robotName : robots.keySet()) {
-			// TODO Exception handling
-			Robot robot = robots.get(robotName);
-			List<String> behaviorNames = behaviorMapping.get(robotName);
-			List<Behavior> behaviors = new ArrayList<Behavior>();
-			for (String bName : behaviorNames) {
-				behaviors.add(bFac.createBehavior(bName, robot));
-			}
-			createCommandCenter(robot, behaviors);
-		}
 
 		bReceiver = new BehaviorReceiver(RobotService.this);
 		rReceiver = new RobotReceiver(RobotService.this);
@@ -124,6 +103,28 @@ public class RobotService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.v(TAG, "Starting RoboBrain service");
+		if (getAllCCs().isEmpty()) {
+			RobotFactory robotFactory = RobotFactory.getInstance(this);
+			Map<String, Robot> robots = robotFactory.createRobots();
+			BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
+					.getInstance(RobotService.this);
+			// Enter null for standard sd location
+			Map<String, List<String>> behaviorMapping = behaviorFactory
+					.createMappings(null);
+			BehaviorFactory bFac = BehaviorFactory
+					.getInstance(RobotService.this);
+			for (String robotName : robots.keySet()) {
+				// TODO Exception handling
+				Robot robot = robots.get(robotName);
+				List<String> behaviorNames = behaviorMapping.get(robotName);
+				List<Behavior> behaviors = new ArrayList<Behavior>();
+				for (String bName : behaviorNames) {
+					behaviors.add(bFac.createBehavior(bName, robot));
+				}
+				createCommandCenter(robot, behaviors);
+			}
+		}
+
 		connectAll();
 		IntentFilter behaviorReceiverFilter = new IntentFilter();
 		behaviorReceiverFilter
@@ -153,22 +154,24 @@ public class RobotService extends Service {
 	public boolean stopService(Intent name) {
 		Log.v(TAG, "Stopping RoboBrain service");
 		running = false;
-
+		disconnectAll();
+		removeAllCCsAndBehaviors();
 		updateStarterUI(RobotService.this);
 
-		disconnectAll();
 		return super.stopService(name);
 	}
 
 	@Override
 	public void onDestroy() {
 		Log.v(TAG, "Destroying RoboBrain service");
-		running = false;
-		unregisterReceiver(rReceiver);
-		unregisterReceiver(bReceiver);
-		unregisterReceiver(dSpeechReceiver);
-		disconnectAll();
-		removeAllCCsAndBehaviors();
+		if (running) {
+			running = false;
+			unregisterReceiver(rReceiver);
+			unregisterReceiver(bReceiver);
+			unregisterReceiver(dSpeechReceiver);
+			disconnectAll();
+			removeAllCCsAndBehaviors();
+		}
 
 		updateStarterUI(null);
 
