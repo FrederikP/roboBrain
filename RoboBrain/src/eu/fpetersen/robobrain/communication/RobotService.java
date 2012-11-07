@@ -22,6 +22,7 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.communication;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -35,6 +36,7 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
+import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.behavior.BehaviorFactory;
 import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
@@ -102,29 +104,21 @@ public class RobotService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		String testingEnvvar;
+		try {
+			testingEnvvar = System
+					.getProperty(getString(R.string.envvar_testing));
+		} catch (Exception e) {
+			testingEnvvar = null;
+		}
+		boolean testing = (testingEnvvar != null && testingEnvvar
+				.matches("true"));
 		Log.v(TAG, "Starting RoboBrain service");
 		if (getAllCCs().isEmpty()) {
-			RobotFactory robotFactory = RobotFactory.getInstance(this);
-			Map<String, Robot> robots = robotFactory.createRobots();
-			if (robots.size() == 0) {
-				RoboLog.alertWarning(RobotService.this,
-						"No robot configured. See documentation for explanation on xml config.");
-			}
-			BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
-					.getInstance(RobotService.this);
-			// Enter null for standard sd location
-			Map<String, List<String>> behaviorMapping = behaviorFactory
-					.createMappings(null);
-			BehaviorFactory bFac = BehaviorFactory
-					.getInstance(RobotService.this);
-			for (String robotName : robots.keySet()) {
-				Robot robot = robots.get(robotName);
-				List<String> behaviorNames = behaviorMapping.get(robotName);
-				List<Behavior> behaviors = new ArrayList<Behavior>();
-				for (String bName : behaviorNames) {
-					behaviors.add(bFac.createBehavior(bName, robot));
-				}
-				createCommandCenter(robot, behaviors);
+			if (testing) {
+				setupCommandCentersTest();
+			} else {
+				setupCommandCenters();
 			}
 		}
 
@@ -153,10 +147,67 @@ public class RobotService extends Service {
 		return START_STICKY;
 	}
 
+	/**
+	 * This is called when running integration tests. It does not require the sd
+	 * card to be filled with conf files. Files are loaded from App's raw
+	 * resources
+	 */
+	private void setupCommandCentersTest() {
+		RobotFactory robotFactory = RobotFactory.getInstance(this);
+		InputStream robotFile = getResources().openRawResource(R.raw.testbot);
+		Robot robot = robotFactory.createRobotFromXML(robotFile);
+		if (robot == null) {
+			RoboLog.alertError(RobotService.this,
+					"Setting up test robot failed. What the heck?");
+		}
+		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
+				.getInstance(RobotService.this);
+		InputStream mappingFile = getResources().openRawResource(
+				R.raw.behaviormapping);
+		Map<String, List<String>> behaviorMapping = behaviorFactory
+				.createMappings(mappingFile);
+		BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
+
+		List<String> behaviorNames = behaviorMapping.get(robot.getName());
+		List<Behavior> behaviors = new ArrayList<Behavior>();
+		for (String bName : behaviorNames) {
+			behaviors.add(bFac.createBehavior(bName, robot));
+		}
+		createCommandCenter(robot, behaviors);
+
+	}
+
+	private void setupCommandCenters() {
+		RobotFactory robotFactory = RobotFactory.getInstance(this);
+		Map<String, Robot> robots = robotFactory.createRobots();
+		if (robots.size() == 0) {
+			RoboLog.alertWarning(RobotService.this,
+					"No robot configured. See documentation for explanation on xml config.");
+		}
+		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
+				.getInstance(RobotService.this);
+		// Enter null for standard sd location
+		Map<String, List<String>> behaviorMapping = behaviorFactory
+				.createMappings(null);
+		BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
+		for (String robotName : robots.keySet()) {
+			Robot robot = robots.get(robotName);
+			List<String> behaviorNames = behaviorMapping.get(robotName);
+			List<Behavior> behaviors = new ArrayList<Behavior>();
+			for (String bName : behaviorNames) {
+				behaviors.add(bFac.createBehavior(bName, robot));
+			}
+			createCommandCenter(robot, behaviors);
+		}
+	}
+
 	@Override
 	public boolean stopService(Intent name) {
 		Log.v(TAG, "Stopping RoboBrain service");
 		running = false;
+		unregisterReceiver(rReceiver);
+		unregisterReceiver(bReceiver);
+		unregisterReceiver(dSpeechReceiver);
 		disconnectAll();
 		removeAllCCsAndBehaviors();
 		updateStarterUI(RobotService.this);

@@ -23,11 +23,14 @@
 package eu.fpetersen.robobrain.ui;
 
 import java.util.Collection;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -51,6 +54,7 @@ import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.CommandCenter;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 import eu.fpetersen.robobrain.communication.RobotService;
+import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
 
 /**
@@ -73,6 +77,9 @@ public class Starter extends Activity {
 	private ProgressDialog progressDialog;
 
 	private RobotService robotService;
+	private Set<Dialog> allOpenDialogs;
+
+	private Map<Robot, LinearLayout> behaviorLayoutPerRobot;
 
 	private static Starter instance;
 
@@ -86,6 +93,8 @@ public class Starter extends Activity {
 		super.onCreate(savedInstanceState);
 		instance = this;
 		setContentView(R.layout.activity_starter);
+
+		allOpenDialogs = new HashSet<Dialog>();
 
 		// get handles to Views defined in our layout file
 		statusTV = (TextView) findViewById(R.id.status_textview);
@@ -122,6 +131,9 @@ public class Starter extends Activity {
 			progressDialog.setMessage("Starting Robobrain Service");
 			progressDialog.setTitle("Service Starting");
 			progressDialog.show();
+
+			behaviorLayoutPerRobot = new HashMap<Robot, LinearLayout>();
+
 			toggleStatusB.post(new Runnable() {
 				public void run() {
 					startService(new Intent(getApplicationContext(),
@@ -135,6 +147,9 @@ public class Starter extends Activity {
 			progressDialog.setMessage("Stopping Robobrain Service");
 			progressDialog.setTitle("Service Stopping");
 			progressDialog.show();
+
+			behaviorLayoutPerRobot = null;
+
 			toggleStatusB.post(new Runnable() {
 				public void run() {
 					progressDialog.setMessage("Sending stop behavior signal");
@@ -241,6 +256,7 @@ public class Starter extends Activity {
 			nameView.setText(cc.getRobot().getName());
 			nameView.setPadding(5, 5, 5, 5);
 			LinearLayout behaviorLayout = new LinearLayout(this);
+			behaviorLayoutPerRobot.put(cc.getRobot(), behaviorLayout);
 			behaviorLayout.setOrientation(LinearLayout.VERTICAL);
 			addBehaviorButtons(behaviorLayout, cc);
 			row.addView(nameView);
@@ -285,15 +301,6 @@ public class Starter extends Activity {
 				Thread thread = new Thread(behavior);
 				thread.start();
 				behaviorLayout.removeAllViews();
-				Timer timer = new Timer();
-				timer.schedule(new TimerTask() {
-
-					@Override
-					public void run() {
-						addBehaviorButtons(behaviorLayout, cc);
-						progressDialog.dismiss();
-					}
-				}, 500);
 			}
 		});
 	}
@@ -333,15 +340,6 @@ public class Starter extends Activity {
 				Thread thread = new Thread(behaviorStopper);
 				thread.start();
 				behaviorLayout.removeAllViews();
-				Timer timer = new Timer();
-				timer.schedule(new TimerTask() {
-
-					@Override
-					public void run() {
-						addBehaviorButtons(behaviorLayout, cc);
-						progressDialog.dismiss();
-					}
-				}, 500);
 
 			}
 		});
@@ -457,7 +455,39 @@ public class Starter extends Activity {
 		// 3. Get the AlertDialog from create()
 		AlertDialog dialog = builder.create();
 
+		allOpenDialogs.add(dialog);
+
 		dialog.show();
 
 	}
+
+	public void removeAllOpenDialogs() {
+		runOnUiThread(new Runnable() {
+
+			public void run() {
+				for (Dialog d : allOpenDialogs) {
+					d.dismiss();
+				}
+				allOpenDialogs.clear();
+			}
+		});
+
+	}
+
+	public RobotService getRobotService() {
+
+		return robotService;
+	}
+
+	public void updateUIDueToBehaviorStateSwitch(Robot robot) {
+		if (robotService != null && behaviorLayoutPerRobot != null) {
+			CommandCenter cc = robotService.getCCForAddress(robot.getAddress());
+			LinearLayout bLayout = behaviorLayoutPerRobot.get(robot);
+			if (bLayout != null) {
+				addBehaviorButtons(bLayout, cc);
+				progressDialog.dismiss();
+			}
+		}
+	}
+
 }

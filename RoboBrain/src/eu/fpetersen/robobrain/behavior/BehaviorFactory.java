@@ -22,6 +22,8 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.behavior;
 
+import java.util.StringTokenizer;
+
 import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
@@ -76,7 +78,13 @@ public class BehaviorFactory extends RoboBrainFactory {
 		Behavior behavior = null;
 		try {
 			behavior = (Behavior) Class.forName(name).newInstance();
-			behavior.initialize(robot, name);
+			String shortName = name;
+			StringTokenizer nameTokenizer = new StringTokenizer(name, ".");
+			while (nameTokenizer.hasMoreTokens()) {
+				shortName = nameTokenizer.nextToken();
+			}
+
+			behavior.initialize(robot, shortName);
 		} catch (InstantiationException e) {
 			RoboLog.log(getService(), "Behavior class " + name
 					+ " could not be instantiated");

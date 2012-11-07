@@ -47,6 +47,7 @@ public final class R {
         public static final int avail_behaviors=0x7f05000e;
         public static final int console_menu_item=0x7f05000b;
         public static final int console_timestamp_format=0x7f050011;
+        public static final int envvar_testing=0x7f050013;
         public static final int initial_console_output=0x7f050006;
         public static final int menu_console=0x7f05000a;
         public static final int menu_settings=0x7f050001;

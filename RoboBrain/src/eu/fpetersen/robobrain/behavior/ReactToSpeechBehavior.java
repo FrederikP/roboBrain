@@ -29,6 +29,7 @@ import eu.fpetersen.robobrain.color.RGBColor;
 import eu.fpetersen.robobrain.color.RGBColorTable;
 import eu.fpetersen.robobrain.color.RGBColorTableFactory;
 import eu.fpetersen.robobrain.robot.RGBLED;
+import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
 import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
 import eu.fpetersen.robobrain.util.RoboLog;
@@ -49,10 +50,9 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	private RGBColorTable colorTable;
 	private List<String> colorNames;
 
-	/**
-	 * Creates the colorTable upon instantiation
-	 */
-	public ReactToSpeechBehavior() {
+	@Override
+	public void initialize(Robot robot, String name) {
+		super.initialize(robot, name);
 		colorTable = RGBColorTableFactory
 				.getInstance()
 				.getStandardColorTableFromTextFile(getRobot().getRobotService());

@@ -41,6 +41,9 @@ import eu.fpetersen.robobrain.test.mock.MockRobotService;
  */
 public class RobotFactoryTest extends AndroidTestCase {
 
+	/**
+	 * Creates really simple robot, no parts, no file
+	 */
 	public void testSimpleRobotCreation() {
 		String robotName = "TestBot";
 		Robot robot = RobotFactory.getInstance(
@@ -50,6 +53,9 @@ public class RobotFactoryTest extends AndroidTestCase {
 		assertEquals(robot.getName(), robotName);
 	}
 
+	/**
+	 * Creates robot from raw resource xml file used in integration tests
+	 */
 	public void testXMLRobotCreation() {
 		InputStream robotXml = getContext().getResources().openRawResource(
 				R.raw.testbot);

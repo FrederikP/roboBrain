@@ -74,7 +74,12 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 			}
 		});
 		// Wait a while to make sure any real service can be started
-		Helper.sleepMillis(5000);
+		int waitedSecs = 0;
+		while (!statusTV.getText().toString().matches("Started!")
+				&& waitedSecs < 5) {
+			Helper.sleepMillis(1000);
+			waitedSecs++;
+		}
 
 		// set mock service to running
 		robotService.setRunning(true);
@@ -105,10 +110,15 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 				assertTrue(toggleButton.performClick());
 			}
 		});
-		// Wait a while to make sure any real service can be started
-		Helper.sleepMillis(3000);
+		// Wait a while to make sure any real service can be stopped
+		waitedSecs = 0;
+		while (!statusTV.getText().toString().matches("Stopped!")
+				&& waitedSecs < 5) {
+			Helper.sleepMillis(1000);
+			waitedSecs++;
+		}
 
-		// set mock service to running
+		// set mock service to not running
 		robotService.setRunning(false);
 
 		// Overwrite real Service with Mock, because we only want to check this
@@ -126,5 +136,11 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		assertFalse(starterActivity.getRobotBehaviorTable().isShown());
 
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		starterActivity.finish();
+		super.tearDown();
 	}
 }

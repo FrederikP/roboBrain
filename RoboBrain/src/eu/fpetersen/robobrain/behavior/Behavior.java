@@ -25,6 +25,7 @@ package eu.fpetersen.robobrain.behavior;
 import java.util.UUID;
 
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.ui.Starter;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 //TODO: Requirement-Management for behaviors and robots.
@@ -81,6 +82,8 @@ public abstract class Behavior {
 
 			turnedOn = true;
 
+			updateBehaviorStatusInUI();
+
 			while (turnedOn) {
 				behaviorLoop();
 			}
@@ -89,11 +92,20 @@ public abstract class Behavior {
 		}
 	}
 
+	private void updateBehaviorStatusInUI() {
+		// Try updating UI here
+		Starter starter = Starter.getInstance();
+		if (starter != null) {
+			starter.updateUIDueToBehaviorStateSwitch(getRobot());
+		}
+	}
+
 	/**
 	 * Turns the behavior off, stopping it's main loop.
 	 */
 	public void stopBehavior() {
 		this.turnedOn = false;
+		updateBehaviorStatusInUI();
 	}
 
 	/**

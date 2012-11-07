@@ -103,4 +103,10 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 
 	}
 
+	@Override
+	protected void tearDown() throws Exception {
+		consoleActivity.finish();
+		super.tearDown();
+	}
+
 }

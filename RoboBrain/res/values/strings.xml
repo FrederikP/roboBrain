@@ -41,5 +41,6 @@
     <string name="sd_robobrain_robots_xml_dir">robots</string>
     <string name="console_timestamp_format">HH:mm:ss dd:MM:yyyy \-\-> </string>
     <string name="ok">OK</string>
+    <string name="envvar_testing">robobrain_testing</string>
 
 </resources>
