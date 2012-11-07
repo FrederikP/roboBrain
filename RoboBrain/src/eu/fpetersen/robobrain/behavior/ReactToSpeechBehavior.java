@@ -28,6 +28,8 @@ import java.util.StringTokenizer;
 import eu.fpetersen.robobrain.color.RGBColor;
 import eu.fpetersen.robobrain.color.RGBColorTable;
 import eu.fpetersen.robobrain.color.RGBColorTableFactory;
+import eu.fpetersen.robobrain.robot.Motor;
+import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.RGBLED;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
@@ -140,7 +142,20 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 	@Override
 	protected void behaviorLoop() {
-
+		if (getRobot().getMainMotor().getState() != MotorState.STOPPED) {
+			if (getRobot().getFrontSensor().getValue() < 30
+					&& getRobot().getMainMotor().getState() != MotorState.FORWARD) {
+				RoboLog.log(getRobot().getRobotService(),
+						"Stopping due to obstacle in front");
+				getRobot().getMainMotor().stop(0);
+			}
+			if (getRobot().getBackSensor().getValue() == 0
+					&& getRobot().getMainMotor().getState() != MotorState.BACKWARD) {
+				RoboLog.log(getRobot().getRobotService(),
+						"Stopping due to obstacle in back");
+				getRobot().getMainMotor().stop(0);
+			}
+		}
 	}
 
 	@Override
@@ -151,7 +166,45 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	}
 
 	public void onReceive(List<String> results) {
+		setMotor(results);
 		setLED(results);
+	}
+
+	/**
+	 * Check the speech resultList for hints about motor state switching
+	 * 
+	 * @param results
+	 *            Speech Result List
+	 */
+	private void setMotor(List<String> results) {
+		// First of all, if Motor is not stopped. And stop is in results -> Stop
+		// Robot, nothing else
+		Motor motor = getRobot().getMainMotor();
+		if (motor.getState() != MotorState.STOPPED) {
+			for (String resultLine : results) {
+				if (resultLine.toLowerCase().contains("stop")) {
+					RoboLog.log(getRobot().getRobotService(),
+							"Received voice command to stop");
+					motor.stop(0);
+					break;
+				}
+			}
+		} else {
+			for (String resultLine : results) {
+				if (resultLine.toLowerCase().contains("forward")) {
+					RoboLog.log(getRobot().getRobotService(),
+							"Received voice command to advance");
+					motor.advance(200);
+					break;
+				} else if (resultLine.toLowerCase().contains("backward")) {
+					RoboLog.log(getRobot().getRobotService(),
+							"Received voice command to backoff");
+					motor.backOff(200);
+					break;
+				}
+			}
+		}
+
 	}
 
 	@Override
