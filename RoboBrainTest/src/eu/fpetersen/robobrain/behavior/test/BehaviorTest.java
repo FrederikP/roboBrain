@@ -27,6 +27,7 @@ import java.util.Map;
 
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.behavior.Behavior;
+import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.test.util.Helper;
 
 public class BehaviorTest extends AndroidTestCase {
@@ -53,6 +54,11 @@ public class BehaviorTest extends AndroidTestCase {
 					testMap.put(started, true);
 					calledOnce = true;
 				}
+			}
+
+			@Override
+			protected void fillRequirements(Requirements requirements) {
+				// nothing to do here
 			}
 		};
 

@@ -173,7 +173,10 @@ public class Robot {
 	 * @return RobotPart identified by ID
 	 */
 	public RobotPart getPart(String id) {
-		return parts.get(id);
+		if (parts.containsKey(id)) {
+			return parts.get(id);
+		}
+		return null;
 	}
 
 	/**

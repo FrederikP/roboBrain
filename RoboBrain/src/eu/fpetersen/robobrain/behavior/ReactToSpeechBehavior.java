@@ -28,10 +28,13 @@ import java.util.StringTokenizer;
 import eu.fpetersen.robobrain.color.RGBColor;
 import eu.fpetersen.robobrain.color.RGBColorTable;
 import eu.fpetersen.robobrain.color.RGBColorTableFactory;
+import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
+import eu.fpetersen.robobrain.robot.ProximitySensor;
 import eu.fpetersen.robobrain.robot.RGBLED;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.robot.Servo;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
 import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
 import eu.fpetersen.robobrain.util.RoboLog;
@@ -210,6 +213,17 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	@Override
 	protected void onStop() {
 		getRobot().getHeadColorLED().set(0, 0, 0);
+	}
+
+	@Override
+	protected void fillRequirements(Requirements requirements) {
+		requirements.addPart("main_motor", Motor.class.getName());
+		requirements.addPart("head_servo", Servo.class.getName());
+		requirements.addPart("front_proxsensor",
+				ProximitySensor.class.getName());
+		requirements
+				.addPart("back_proxsensor", ProximitySensor.class.getName());
+		requirements.addPart("headcolor_rgbled", RGBLED.class.getName());
 	}
 
 }

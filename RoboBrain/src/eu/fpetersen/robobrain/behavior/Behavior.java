@@ -24,6 +24,7 @@ package eu.fpetersen.robobrain.behavior;
 
 import java.util.UUID;
 
+import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.ui.Starter;
 import eu.fpetersen.robobrain.util.RoboLog;
@@ -49,6 +50,7 @@ public abstract class Behavior {
 	private Robot robot;
 	private String name;
 	private UUID id;
+	private Requirements requirements = new Requirements();
 
 	/**
 	 * Is to be called right after creating a new instance of this class. It
@@ -68,10 +70,11 @@ public abstract class Behavior {
 	/**
 	 * Standard constructor to allow dynamically creating different subclasses.
 	 * Creates a UUID to identify the behavior, making it easily addressable by
-	 * the UI.
+	 * the UI. If you overwrite this constructor, make sure calling super();
 	 */
 	protected Behavior() {
 		id = UUID.randomUUID();
+		fillRequirements(requirements);
 	}
 
 	/**
@@ -92,6 +95,10 @@ public abstract class Behavior {
 		}
 	}
 
+	/**
+	 * Call this everytime you want to update the Behavior state in the Starter
+	 * activity
+	 */
 	private void updateBehaviorStatusInUI() {
 		// Try updating UI here
 		Starter starter = Starter.getInstance();
@@ -163,5 +170,18 @@ public abstract class Behavior {
 	 * robot during the behavior, except maybe its new location
 	 */
 	protected abstract void onStop();
+
+	/**
+	 * Use this to fill the requirements
+	 * 
+	 * See other Behaviors for examples on how to do that. If it's not filled
+	 * Requirements will not be checked and if a robot is not capable of running
+	 * the behavior it's likely to crash with a NullPointer
+	 */
+	protected abstract void fillRequirements(Requirements requirements);
+
+	public Requirements getRequirements() {
+		return requirements;
+	}
 
 }

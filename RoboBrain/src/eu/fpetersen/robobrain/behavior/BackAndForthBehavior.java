@@ -22,8 +22,12 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.behavior;
 
+import eu.fpetersen.robobrain.requirements.Requirements;
+import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
+import eu.fpetersen.robobrain.robot.ProximitySensor;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.robot.Servo;
 
 /**
  * Makes the robot go back and forth. Very simple behavior. Checks front and
@@ -74,6 +78,17 @@ public class BackAndForthBehavior extends Behavior {
 	@Override
 	protected void onStop() {
 		getRobot().stop();
+	}
+
+	@Override
+	protected void fillRequirements(Requirements requirements) {
+		requirements.addPart("main_motor", Motor.class.getName());
+		requirements.addPart("head_servo", Servo.class.getName());
+		requirements.addPart("front_proxsensor",
+				ProximitySensor.class.getName());
+		requirements
+				.addPart("back_proxsensor", ProximitySensor.class.getName());
+
 	}
 
 }

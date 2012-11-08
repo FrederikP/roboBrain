@@ -23,8 +23,12 @@
 package eu.fpetersen.robobrain.behavior;
 
 import android.util.Log;
+import eu.fpetersen.robobrain.requirements.Requirements;
+import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
+import eu.fpetersen.robobrain.robot.ProximitySensor;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.robot.Servo;
 
 /**
  * Makes robot avoid obstacles by backing off and looking in both directions for
@@ -128,6 +132,16 @@ public class ObstAvoidanceBehavior extends Behavior {
 	@Override
 	protected void onStop() {
 		getRobot().stop();
+	}
+
+	@Override
+	protected void fillRequirements(Requirements requirements) {
+		requirements.addPart("main_motor", Motor.class.getName());
+		requirements.addPart("head_servo", Servo.class.getName());
+		requirements.addPart("front_proxsensor",
+				ProximitySensor.class.getName());
+		requirements
+				.addPart("back_proxsensor", ProximitySensor.class.getName());
 	}
 
 }

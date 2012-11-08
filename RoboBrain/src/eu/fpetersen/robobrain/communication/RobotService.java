@@ -177,6 +177,10 @@ public class RobotService extends Service {
 
 	}
 
+	/**
+	 * This the the Standard CommandCenter setup. It uses the xml conf files to
+	 * setup Robot's and their behaviors
+	 */
 	private void setupCommandCenters() {
 		RobotFactory robotFactory = RobotFactory.getInstance(this);
 		Map<String, Robot> robots = robotFactory.createRobots();
@@ -195,7 +199,10 @@ public class RobotService extends Service {
 			List<String> behaviorNames = behaviorMapping.get(robotName);
 			List<Behavior> behaviors = new ArrayList<Behavior>();
 			for (String bName : behaviorNames) {
-				behaviors.add(bFac.createBehavior(bName, robot));
+				Behavior behavior = bFac.createBehavior(bName, robot);
+				if (behavior.getRequirements().fulfillsRequirements(robot)) {
+					behaviors.add(behavior);
+				}
 			}
 			createCommandCenter(robot, behaviors);
 		}
