@@ -49,6 +49,8 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	protected void setUp() throws Exception {
 		super.setUp();
 		consoleActivity = getActivity();
+		System.setProperty(consoleActivity.getString(R.string.envvar_testing),
+				"true");
 	}
 
 	/**

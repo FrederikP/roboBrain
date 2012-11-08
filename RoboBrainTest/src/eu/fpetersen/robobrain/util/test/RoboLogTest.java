@@ -62,7 +62,7 @@ public class RoboLogTest extends ActivityInstrumentationTestCase2 {
 
 		RoboLog.log(consoleActivity, findThis);
 
-		Helper.sleepMillis(200);
+		Helper.sleepMillis(1000);
 
 		String allText = consoleTextView.getText().toString();
 		assertTrue(allText.contains(findThis));

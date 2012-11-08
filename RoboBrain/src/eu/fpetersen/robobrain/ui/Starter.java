@@ -438,27 +438,32 @@ public class Starter extends Activity {
 	 * @param message
 	 *            Message to display
 	 */
-	public void showAlertDialog(String title, String message) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(Starter.this);
+	public void showAlertDialog(final String title, final String message) {
+		runOnUiThread(new Runnable() {
 
-		// 2. Chain together various setter methods to set the dialog
-		// characteristics
-		builder.setMessage(message).setTitle(title);
+			public void run() {
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						Starter.this);
 
-		builder.setPositiveButton(R.string.ok,
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.dismiss();
-					}
-				});
+				// 2. Chain together various setter methods to set the dialog
+				// characteristics
+				builder.setMessage(message).setTitle(title);
 
-		// 3. Get the AlertDialog from create()
-		AlertDialog dialog = builder.create();
+				builder.setPositiveButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int id) {
+								dialog.dismiss();
+							}
+						});
 
-		allOpenDialogs.add(dialog);
+				// 3. Get the AlertDialog from create()
+				AlertDialog dialog = builder.create();
 
-		dialog.show();
+				allOpenDialogs.add(dialog);
 
+				dialog.show();
+			}
+		});
 	}
 
 	public void removeAllOpenDialogs() {
@@ -488,6 +493,12 @@ public class Starter extends Activity {
 				progressDialog.dismiss();
 			}
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		removeAllOpenDialogs();
+		super.onDestroy();
 	}
 
 }

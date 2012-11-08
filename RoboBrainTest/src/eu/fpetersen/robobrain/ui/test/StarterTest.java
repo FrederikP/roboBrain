@@ -23,6 +23,7 @@
 package eu.fpetersen.robobrain.ui.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -51,6 +52,8 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	protected void setUp() throws Exception {
 		starterActivity = getActivity();
 		robotService = new MockRobotService(starterActivity);
+		System.setProperty(starterActivity.getString(R.string.envvar_testing),
+				"true");
 		super.setUp();
 	}
 
@@ -85,11 +88,23 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		robotService.setRunning(true);
 		assertTrue(robotService.isRunning());
 
+		Helper.sleepMillis(5000);
+
 		// Overwrite real Service with Mock, because we only want to check this
 		// Activity
 		starterActivity.setRobotService(robotService);
 
-		Helper.sleepMillis(500);
+		TextView robotNameView = getRobotNameTextView();
+		int seconds = 0;
+		while ((robotNameView == null || robotNameView.getText().toString()
+				.matches("TESTBOT"))
+				&& seconds < 20) {
+			Helper.sleepMillis(1000);
+			seconds++;
+			robotNameView = getRobotNameTextView();
+		}
+
+		Helper.sleepMillis(1000);
 
 		assertTrue(robotService.isRunning());
 		assertEquals("Started!", statusTV.getText());
@@ -99,7 +114,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		assertSame(2, tableChilds);
 
-		TextView robotNameView = (TextView) ((TableRow) starterActivity
+		robotNameView = (TextView) ((TableRow) starterActivity
 				.getRobotBehaviorTable().getChildAt(1)).getChildAt(0);
 		assertSame("TestBot", robotNameView.getText());
 
@@ -125,7 +140,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		// Activity
 		starterActivity.setRobotService(robotService);
 
-		Helper.sleepMillis(500);
+		Helper.sleepMillis(2000);
 
 		assertEquals("Stopped!", statusTV.getText());
 		assertFalse(robotService.isRunning());
@@ -135,7 +150,23 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		assertSame(1, tableChilds);
 
 		assertFalse(starterActivity.getRobotBehaviorTable().isShown());
+		starterActivity.removeAllOpenDialogs();
 
+	}
+
+	/**
+	 * Returns null if not there
+	 * 
+	 * @return TextView for RobotName
+	 */
+	private TextView getRobotNameTextView() {
+		TableLayout behaviorTable = starterActivity.getRobotBehaviorTable();
+		TableRow firstRobotRow = (TableRow) behaviorTable.getChildAt(1);
+		if (firstRobotRow != null) {
+			TextView robotNameView = (TextView) firstRobotRow.getChildAt(0);
+			return robotNameView;
+		}
+		return null;
 	}
 
 	@Override

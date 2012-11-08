@@ -63,7 +63,7 @@ public class RobotServiceTest extends ServiceTestCase<RobotService> {
 		assertNotNull(service.getDistributingSpeechReceiver());
 
 		countSecs = 0;
-		while (!service.isRunning() && countSecs < 5) {
+		while (!service.isRunning() && countSecs < 20) {
 			Helper.sleepMillis(1000);
 			countSecs++;
 		}

@@ -28,9 +28,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
@@ -111,7 +114,7 @@ public class RobotService extends Service {
 		} catch (Exception e) {
 			testingEnvvar = null;
 		}
-		boolean testing = (testingEnvvar != null && testingEnvvar
+		final boolean testing = (testingEnvvar != null && testingEnvvar
 				.matches("true"));
 		Log.v(TAG, "Starting RoboBrain service");
 		if (getAllCCs().isEmpty()) {
@@ -122,29 +125,138 @@ public class RobotService extends Service {
 			}
 		}
 
+		final Map<String, Boolean> connectionTable = new HashMap<String, Boolean>();
+
+		// Setup IntentFilter to receive Intents from Amarino about Connection
+		// details
+		IntentFilter amarinoConnectionFilter = new IntentFilter();
+		amarinoConnectionFilter.addAction(AmarinoIntent.ACTION_CONNECTED);
+		amarinoConnectionFilter
+				.addAction(AmarinoIntent.ACTION_CONNECTION_FAILED);
+		final BroadcastReceiver connectionDetailReceiver = setupConnectionDetailReceiver(connectionTable);
+		registerReceiver(connectionDetailReceiver, amarinoConnectionFilter);
+
 		connectAll();
-		IntentFilter behaviorReceiverFilter = new IntentFilter();
-		behaviorReceiverFilter
-				.addAction(RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
-		behaviorReceiverFilter
-				.addAction(RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
-		registerReceiver(bReceiver, behaviorReceiverFilter);
 
-		// in order to receive broadcasted intents we need to register our
-		// receiver
-		registerReceiver(rReceiver, new IntentFilter(
-				AmarinoIntent.ACTION_RECEIVED));
+		Runnable doThatInNewThread = new Runnable() {
 
-		// Register distributing Speech Receiver to redistribute Speech input
-		// from Speech Recognition Service to all registered Speech Receivers
-		registerReceiver(dSpeechReceiver, new IntentFilter(
-				RoboBrainIntent.ACTION_SPEECH));
+			public void run() {
+				if (!testing) {
+					checkConnectionDetails(connectionTable, 16);
+				}
 
-		running = true;
+				unregisterReceiver(connectionDetailReceiver);
 
-		updateStarterUI(RobotService.this);
+				IntentFilter behaviorReceiverFilter = new IntentFilter();
+				behaviorReceiverFilter
+						.addAction(RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
+				behaviorReceiverFilter
+						.addAction(RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
+				registerReceiver(bReceiver, behaviorReceiverFilter);
+
+				// in order to receive broadcasted intents we need to register
+				// our
+				// receiver
+				registerReceiver(rReceiver, new IntentFilter(
+						AmarinoIntent.ACTION_RECEIVED));
+
+				// Register distributing Speech Receiver to redistribute Speech
+				// input
+				// from Speech Recognition Service to all registered Speech
+				// Receivers
+				registerReceiver(dSpeechReceiver, new IntentFilter(
+						RoboBrainIntent.ACTION_SPEECH));
+
+				running = true;
+
+				updateStarterUI(RobotService.this);
+
+			}
+		};
+
+		Thread restThread = new Thread(doThatInNewThread);
+
+		restThread.start();
 
 		return START_STICKY;
+	}
+
+	/**
+	 * Returned Broadcast Receiver will listen for connectiond detail intents
+	 * from Amarino
+	 * 
+	 * @param connectionTable
+	 *            this table will be filled with connection information about
+	 *            device.
+	 * @return The configured broadcast receiver
+	 */
+	private BroadcastReceiver setupConnectionDetailReceiver(
+			final Map<String, Boolean> connectionTable) {
+		BroadcastReceiver connectionDetailReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction().matches(AmarinoIntent.ACTION_CONNECTED)) {
+					String mac = intent
+							.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+					connectionTable.put(mac, true);
+				} else if (intent.getAction().matches(
+						AmarinoIntent.ACTION_CONNECTION_FAILED)) {
+					String mac = intent
+							.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+					connectionTable.put(mac, false);
+				}
+			}
+		};
+		return connectionDetailReceiver;
+	}
+
+	/**
+	 * Waits and checks the connection table for max. 8 secs
+	 * 
+	 * @param connectionTable
+	 */
+	private void checkConnectionDetails(
+			final Map<String, Boolean> connectionTable, int timeout) {
+
+		int waitedSeconds = 0;
+		while (connectionTable.size() < getAllCCs().size()
+				&& waitedSeconds < timeout) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				RoboLog.alertError(RobotService.this,
+						"Thread was interupted while waiting for connection status.");
+			}
+			waitedSeconds++;
+		}
+
+		if (waitedSeconds >= timeout) {
+			if (connectionTable.size() == 0) {
+				RoboLog.alertError(RobotService.this,
+						"There was no response from Amarino. Have you installed Amarino toolkit?");
+			} else {
+				RoboLog.alertError(
+						RobotService.this,
+						"There was no response from Amarino for at least one device. "
+								+ "Are you sure the MAC addresses in the config are correct? Is every robot"
+								+ " registered with Amarino?");
+			}
+		}
+
+		for (Entry<String, Boolean> connectionEntry : connectionTable
+				.entrySet()) {
+			if (!connectionEntry.getValue()) {
+				String robotName = getCCForAddress(connectionEntry.getKey())
+						.getRobot().getName();
+				// Device was successfully registered with Amarino. The
+				// connection failed anyways. Turned off?
+				RoboLog.alertError(RobotService.this,
+						"Connection failed for robot: " + robotName
+								+ ". Are you sure this robot is turned on?");
+			}
+		}
+
 	}
 
 	/**
@@ -211,12 +323,9 @@ public class RobotService extends Service {
 	@Override
 	public boolean stopService(Intent name) {
 		Log.v(TAG, "Stopping RoboBrain service");
-		running = false;
-		unregisterReceiver(rReceiver);
-		unregisterReceiver(bReceiver);
-		unregisterReceiver(dSpeechReceiver);
-		disconnectAll();
-		removeAllCCsAndBehaviors();
+		if (running) {
+			stopRunningService();
+		}
 		updateStarterUI(RobotService.this);
 
 		return super.stopService(name);
@@ -226,12 +335,7 @@ public class RobotService extends Service {
 	public void onDestroy() {
 		Log.v(TAG, "Destroying RoboBrain service");
 		if (running) {
-			running = false;
-			unregisterReceiver(rReceiver);
-			unregisterReceiver(bReceiver);
-			unregisterReceiver(dSpeechReceiver);
-			disconnectAll();
-			removeAllCCsAndBehaviors();
+			stopRunningService();
 		}
 
 		updateStarterUI(null);
@@ -348,6 +452,20 @@ public class RobotService extends Service {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * Do all what's required to disconnect and stop the RoboBrain connections
+	 * and service
+	 */
+	private void stopRunningService() {
+		running = false;
+		unregisterReceiver(rReceiver);
+		unregisterReceiver(bReceiver);
+		unregisterReceiver(dSpeechReceiver);
+
+		disconnectAll();
+		removeAllCCsAndBehaviors();
 	}
 
 }
