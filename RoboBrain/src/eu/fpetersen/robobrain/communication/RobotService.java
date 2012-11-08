@@ -82,6 +82,8 @@ public class RobotService extends Service {
 
 	private DistributingSpeechReceiver dSpeechReceiver;
 
+	private BroadcastReceiver disconnectedReceiver;
+
 	/**
 	 * 
 	 * @return True if service is running, false if not.
@@ -97,6 +99,28 @@ public class RobotService extends Service {
 		bReceiver = new BehaviorReceiver(RobotService.this);
 		rReceiver = new RobotReceiver(RobotService.this);
 		dSpeechReceiver = new DistributingSpeechReceiver();
+
+		disconnectedReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (getAllCCs() != null) {
+					if (intent.getAction().matches(
+							AmarinoIntent.ACTION_CONNECTED)) {
+						String address = intent
+								.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+						CommandCenter cc = getCCForAddress(address);
+						if (cc != null) {
+							String robotName = cc.getRobot().getName();
+							RoboLog.alertError(RobotService.this, robotName
+									+ " unexpectedly disconnected.");
+						}
+
+					}
+				}
+			}
+		};
+
 		super.onCreate();
 	}
 
@@ -168,6 +192,9 @@ public class RobotService extends Service {
 						RoboBrainIntent.ACTION_SPEECH));
 
 				running = true;
+
+				registerReceiver(disconnectedReceiver, new IntentFilter(
+						AmarinoIntent.ACTION_DISCONNECTED));
 
 				updateStarterUI(RobotService.this);
 
@@ -459,6 +486,7 @@ public class RobotService extends Service {
 	 * and service
 	 */
 	private void stopRunningService() {
+		unregisterReceiver(disconnectedReceiver);
 		running = false;
 		unregisterReceiver(rReceiver);
 		unregisterReceiver(bReceiver);
