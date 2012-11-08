@@ -25,6 +25,7 @@ package eu.fpetersen.robobrain.ui;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,6 +35,8 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,6 +59,7 @@ import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
+import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
  * Gives the user the option to turn the RoboBrain services on and off. When
@@ -117,6 +121,38 @@ public class Starter extends Activity {
 		 * @Override public void run() { updateStatus(); } }, 2000, 2000);
 		 */
 
+		checkForInstalledAmarino();
+
+	}
+
+	/**
+	 * Checks if required Amarino apk is installed. If not, alert is displayed.
+	 */
+	private void checkForInstalledAmarino() {
+		Integer amarinoVersion = isAmarinoInstalled();
+		if (amarinoVersion == null) {
+			RoboLog.alertError(
+					Starter.this,
+					"Amarino toolkit not installed. Please get it from www.amarino-toolkit.net and install.");
+		} else if (amarinoVersion < 13) {
+			RoboLog.alertWarning(
+					Starter.this,
+					"RoboBrain was only tested with newer Amarino Version (0.55) "
+							+ "If you experience problems get it from www.amarino-toolkit.net and install.");
+		}
+	}
+
+	private Integer isAmarinoInstalled() {
+		PackageManager packageManager = getPackageManager();
+		List<PackageInfo> listOfAllApps = packageManager
+				.getInstalledPackages(0);
+		for (PackageInfo info : listOfAllApps) {
+			if (info.packageName.matches("at.abraxas.amarino")) {
+				return info.versionCode;
+			}
+		}
+
+		return null;
 	}
 
 	/**
