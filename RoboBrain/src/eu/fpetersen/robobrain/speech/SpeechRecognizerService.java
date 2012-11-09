@@ -129,18 +129,20 @@ public class SpeechRecognizerService extends Service {
 	@Override
 	public void onCreate() {
 		instance = SpeechRecognizerService.this;
-		if (SpeechRecognizer.isRecognitionAvailable(SpeechRecognizerService
-				.getInstance())) {
-			Starter.getInstance().runOnUiThread(new Runnable() {
+		if (Starter.getInstance() != null) {
+			if (SpeechRecognizer.isRecognitionAvailable(SpeechRecognizerService
+					.getInstance())) {
+				Starter.getInstance().runOnUiThread(new Runnable() {
 
-				public void run() {
-					setupSpeechRecognition();
-				}
-			});
-		} else {
-			RoboLog.alertWarning(instance,
-					"No Speech Recognition available on this device.");
-			this.stopSelf();
+					public void run() {
+						setupSpeechRecognition();
+					}
+				});
+			} else {
+				RoboLog.alertWarning(instance,
+						"No Speech Recognition available on this device.");
+				this.stopSelf();
+			}
 		}
 	}
 

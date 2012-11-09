@@ -30,16 +30,12 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.behavior;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import android.media.MediaPlayer;
-import android.media.audiofx.Visualizer;
 import android.net.Uri;
 import android.os.Environment;
 import eu.fpetersen.robobrain.color.RGBColor;
@@ -62,8 +58,6 @@ import eu.fpetersen.robobrain.util.RoboLog;
 public class DanceBehavior extends Behavior {
 
 	private MediaPlayer mPlayer;
-
-	private Visualizer mVisualizer;
 
 	@Override
 	protected void onStart() {
@@ -94,13 +88,12 @@ public class DanceBehavior extends Behavior {
 			} else {
 				startPlayingRandomMusic();
 			}
-		} else {
-			stopBehavior();
 		}
 	}
 
 	@Override
 	protected void onStop() {
+		stopMusic();
 		getRobot().getMainMotor().stop(0);
 		getRobot().getHeadColorLED().set(0, 0, 0);
 	}
@@ -141,11 +134,8 @@ public class DanceBehavior extends Behavior {
 				mPlayer.stop();
 			}
 			mPlayer.release();
-			if (mVisualizer != null) {
-				mVisualizer.release();
-				mVisualizer = null;
-			}
 			mPlayer = null;
+
 		}
 	}
 
@@ -156,6 +146,8 @@ public class DanceBehavior extends Behavior {
 	 *            Rate at which to change color in milli seconds
 	 */
 	private void setupRgbTimer(final long milliSeconds) {
+		final Timer timer = new Timer();
+
 		TimerTask rgbTask = new TimerTask() {
 
 			private RGBColorTable colorTable = RGBColorTableFactory
@@ -164,12 +156,15 @@ public class DanceBehavior extends Behavior {
 
 			@Override
 			public void run() {
-				RGBColor randomColor = colorTable.getRandomColor();
-				getRobot().getHeadColorLED().set(randomColor);
+				if (!isTurnedOn()) {
+					timer.cancel();
+				} else {
+					RGBColor randomColor = colorTable.getRandomColor();
+					getRobot().getHeadColorLED().set(randomColor);
+				}
 			}
 		};
 
-		Timer timer = new Timer();
 		timer.scheduleAtFixedRate(rgbTask, 0, milliSeconds);
 	}
 
@@ -200,98 +195,10 @@ public class DanceBehavior extends Behavior {
 						"No music in directory /robobrain/music");
 			} else {
 				int random = (int) (Math.random() * numberOfFiles);
-				startMusic(new File(musicDir.getAbsolutePath()
-						+ musicFiles[random]));
-				setupFFTListener();
+				startMusic(new File(musicDir, musicFiles[random]));
 			}
 		}
 
 	}
 
-	/**
-	 * Use the {@link Visualizer} to extract FFT data from the
-	 * {@link MediaPlayer}
-	 */
-	private void setupFFTListener() {
-		if (mVisualizer == null && mPlayer != null) {
-			mVisualizer = new Visualizer(mPlayer.getAudioSessionId());
-			mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
-			Visualizer.OnDataCaptureListener listener = new Visualizer.OnDataCaptureListener() {
-
-				public void onWaveFormDataCapture(Visualizer visualizer,
-						byte[] waveform, int samplingRate) {
-					// Don't do anything, Shouldn't be called anyways
-				}
-
-				public void onFftDataCapture(Visualizer visualizer,
-						final byte[] fft, int samplingRate) {
-					Runnable reactTask = new Runnable() {
-
-						public void run() {
-							reactToFFTData(fft);
-						}
-					};
-
-					Thread thread = new Thread(reactTask);
-					thread.start();
-
-				}
-			};
-			mVisualizer.setDataCaptureListener(listener,
-					Visualizer.getMaxCaptureRate() / 32, false, true);
-
-			// Enabled Visualizer and disable when we're done with the stream
-			mVisualizer.setEnabled(true);
-			mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-				public void onCompletion(MediaPlayer mp) {
-					mVisualizer.setEnabled(false);
-				}
-
-			});
-
-		}
-	}
-
-	/**
-	 * Everytime fft data coming from audio is updated. This can be used to
-	 * react to patterns in music.
-	 * 
-	 * @param fft
-	 *            The fast forier transform data coming from the media
-	 */
-	protected void reactToFFTData(byte[] fft) {
-		// TODO Do something useful here. For now: Save raw data to file, to
-		// analyze:
-		File sdcard = Environment.getExternalStorageDirectory();
-		File musicDir = new File(sdcard, "robobrain/tmp");
-		if (!musicDir.exists()) {
-			musicDir.mkdir();
-		}
-
-		File fftDataTextFile = new File(musicDir, "fftData.txt");
-		if (fftDataTextFile.exists()) {
-			fftDataTextFile.delete();
-		}
-		BufferedWriter out;
-		try {
-			// Create file
-			FileWriter fstream = new FileWriter("fftData.txt");
-			out = new BufferedWriter(fstream);
-			int currentPosInMillis = mPlayer.getCurrentPosition();
-			int seconds = (int) (currentPosInMillis / 1000);
-			int millis = (int) (currentPosInMillis % 1000);
-			out.append(seconds + "." + millis + "-->");
-			for (byte b : fft) {
-				Byte by = new Byte(b);
-				out.append(by.intValue() + " ");
-			}
-			// Close the output stream
-			out.close();
-
-		} catch (IOException e) {
-			RoboLog.alertError(getRobot().getRobotService(),
-					"Failed to create fftData.txt");
-		}
-	}
 }
