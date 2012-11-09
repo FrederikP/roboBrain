@@ -19,6 +19,14 @@
  * 
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
+ *     
+ *     Snippets taken from  https://github.com/felixpalmer/android-visualizer/blob/master/src/com/pheelicks/visualizer/VisualizerView.java
+ *     {
+ *     		Copyright 2011, Felix Palmer
+ *
+ * 			Licensed under the MIT license:
+ * 			http://creativecommons.org/licenses/MIT/
+ * 		}
  ******************************************************************************/
 package eu.fpetersen.robobrain.behavior;
 
@@ -28,6 +36,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.media.MediaPlayer;
+import android.media.audiofx.Visualizer;
 import android.net.Uri;
 import android.os.Environment;
 import eu.fpetersen.robobrain.color.RGBColor;
@@ -51,10 +60,12 @@ public class DanceBehavior extends Behavior {
 
 	private MediaPlayer mPlayer;
 
+	private Visualizer mVisualizer;
+
 	@Override
 	protected void onStart() {
 		setupRgbTimer(1000);
-		startRandomPlayingMusic();
+		startPlayingRandomMusic();
 	}
 
 	@Override
@@ -72,6 +83,16 @@ public class DanceBehavior extends Behavior {
 						"Stopping due to obstacle in back");
 				getRobot().getMainMotor().stop(0);
 			}
+		}
+
+		if (mPlayer != null) {
+			if (mPlayer.isPlaying()) {
+
+			} else {
+				startPlayingRandomMusic();
+			}
+		} else {
+			stopBehavior();
 		}
 	}
 
@@ -92,6 +113,12 @@ public class DanceBehavior extends Behavior {
 		requirements.addPart("headcolor_rgbled", RGBLED.class.getName());
 	}
 
+	/**
+	 * Starts playing the supplied file
+	 * 
+	 * @param musicFile
+	 *            The media file to play.
+	 */
 	private void startMusic(File musicFile) {
 
 		if (musicFile.exists()) {
@@ -111,6 +138,11 @@ public class DanceBehavior extends Behavior {
 				mPlayer.stop();
 			}
 			mPlayer.release();
+			if (mVisualizer != null) {
+				mVisualizer.release();
+				mVisualizer = null;
+			}
+			mPlayer = null;
 		}
 	}
 
@@ -141,7 +173,7 @@ public class DanceBehavior extends Behavior {
 	/**
 	 * Randomly choose music file from /robobrain/music/ dir and play it
 	 */
-	private void startRandomPlayingMusic() {
+	private void startPlayingRandomMusic() {
 		File sdcard = Environment.getExternalStorageDirectory();
 		File musicDir = new File(sdcard, "robobrain/music");
 		if (!musicDir.exists() || !musicDir.isDirectory()) {
@@ -151,7 +183,8 @@ public class DanceBehavior extends Behavior {
 			FilenameFilter filter = new FilenameFilter() {
 
 				public boolean accept(File dir, String filename) {
-					if (filename.endsWith(".mp3") || filename.endsWith(".wma")) {
+					if (filename.endsWith(".mp3") || filename.endsWith(".wma")
+							|| filename.endsWith(".ogg")) {
 						return true;
 					}
 					return false;
@@ -166,8 +199,58 @@ public class DanceBehavior extends Behavior {
 				int random = (int) (Math.random() * numberOfFiles);
 				startMusic(new File(musicDir.getAbsolutePath()
 						+ musicFiles[random]));
+				setupFFTListener();
 			}
 		}
+
+	}
+
+	/**
+	 * Use the {@link Visualizer} to extract FFT data from the
+	 * {@link MediaPlayer}
+	 */
+	private void setupFFTListener() {
+		if (mVisualizer == null && mPlayer != null) {
+			mVisualizer = new Visualizer(mPlayer.getAudioSessionId());
+			mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+			Visualizer.OnDataCaptureListener listener = new Visualizer.OnDataCaptureListener() {
+
+				public void onWaveFormDataCapture(Visualizer visualizer,
+						byte[] waveform, int samplingRate) {
+					// Don't do anything, Shouldn't be called anyways
+				}
+
+				public void onFftDataCapture(Visualizer visualizer, byte[] fft,
+						int samplingRate) {
+					reactToFFTData(fft);
+				}
+			};
+			mVisualizer.setDataCaptureListener(listener,
+					Visualizer.getMaxCaptureRate() / 4, false, true);
+
+			// Enabled Visualizer and disable when we're done with the stream
+			mVisualizer.setEnabled(true);
+			mPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+				public void onCompletion(MediaPlayer mp) {
+					mVisualizer.setEnabled(false);
+				}
+
+			});
+
+		}
+	}
+
+	/**
+	 * Everytime fft data coming from audio is updated. This can be used to
+	 * react to patterns in music.
+	 * 
+	 * @param fft
+	 *            The fast forier transform data coming from the media
+	 */
+	protected void reactToFFTData(byte[] fft) {
+		// TODO Do something useful here. For now: Save raw data to file, to
+		// analyze:
 
 	}
 }
