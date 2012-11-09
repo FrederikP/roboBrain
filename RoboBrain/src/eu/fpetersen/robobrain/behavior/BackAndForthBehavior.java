@@ -76,6 +76,11 @@ public class BackAndForthBehavior extends Behavior {
 	}
 
 	@Override
+	protected void onStart() {
+		// Nothing to setup for now
+	}
+
+	@Override
 	protected void onStop() {
 		getRobot().stop();
 	}

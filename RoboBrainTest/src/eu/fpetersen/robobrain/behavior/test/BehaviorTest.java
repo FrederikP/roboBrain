@@ -60,6 +60,11 @@ public class BehaviorTest extends AndroidTestCase {
 			protected void fillRequirements(Requirements requirements) {
 				// nothing to do here
 			}
+
+			@Override
+			protected void onStart() {
+				// Nothing to setup for now
+			}
 		};
 
 		Runnable runThis = new Runnable() {

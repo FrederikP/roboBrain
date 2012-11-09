@@ -226,4 +226,9 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 		requirements.addPart("headcolor_rgbled", RGBLED.class.getName());
 	}
 
+	@Override
+	protected void onStart() {
+		// Nothing to setup for now.
+	}
+
 }

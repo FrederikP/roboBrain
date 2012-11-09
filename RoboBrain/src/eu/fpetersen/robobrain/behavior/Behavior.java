@@ -85,6 +85,8 @@ public abstract class Behavior {
 
 			turnedOn = true;
 
+			onStart();
+
 			updateBehaviorStatusInUI();
 
 			while (turnedOn) {
@@ -170,6 +172,12 @@ public abstract class Behavior {
 	 * robot during the behavior, except maybe its new location
 	 */
 	protected abstract void onStop();
+
+	/**
+	 * Called when behavior is started, before behavior Loop is started. Do any
+	 * setup stuff here.
+	 */
+	protected abstract void onStart();
 
 	/**
 	 * Use this to fill the requirements

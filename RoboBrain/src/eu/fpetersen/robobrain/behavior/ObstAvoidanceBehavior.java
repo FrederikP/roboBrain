@@ -144,4 +144,9 @@ public class ObstAvoidanceBehavior extends Behavior {
 				.addPart("back_proxsensor", ProximitySensor.class.getName());
 	}
 
+	@Override
+	protected void onStart() {
+		// Nothing to setup for now
+	}
+
 }

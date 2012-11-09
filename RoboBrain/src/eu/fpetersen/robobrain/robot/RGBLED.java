@@ -22,6 +22,8 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot;
 
+import eu.fpetersen.robobrain.color.RGBColor;
+
 /**
  * Represents a RGBLED connected to the analog pins of an Arduino device. Where
  * the range of pin values goes from 0 to 1023
@@ -55,6 +57,16 @@ public class RGBLED extends RobotPart {
 			int[] colors = { red * 4, green * 4, blue * 4 };
 			getRobot().sendToArduino('D', colors);
 		}
+	}
+
+	/**
+	 * 
+	 * 
+	 * @param color
+	 *            The color the LED should be set to
+	 */
+	public void set(RGBColor color) {
+		set(color.getRed(), color.getGreen(), color.getBlue());
 	}
 
 }

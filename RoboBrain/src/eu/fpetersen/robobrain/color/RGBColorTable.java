@@ -23,6 +23,7 @@
 package eu.fpetersen.robobrain.color;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -101,6 +102,17 @@ public class RGBColorTable {
 		} else {
 			return null;
 		}
+	}
+
+	/**
+	 * 
+	 * @return a random color from the table
+	 */
+	public RGBColor getRandomColor() {
+		int size = colors.size();
+		Collection<RGBColor> rgbColors = colors.values();
+		int random = (int) (Math.random() * size);
+		return rgbColors.toArray(new RGBColor[rgbColors.size()])[random];
 	}
 
 }
