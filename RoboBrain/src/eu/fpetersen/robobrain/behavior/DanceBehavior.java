@@ -30,8 +30,11 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.behavior;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -220,13 +223,22 @@ public class DanceBehavior extends Behavior {
 					// Don't do anything, Shouldn't be called anyways
 				}
 
-				public void onFftDataCapture(Visualizer visualizer, byte[] fft,
-						int samplingRate) {
-					reactToFFTData(fft);
+				public void onFftDataCapture(Visualizer visualizer,
+						final byte[] fft, int samplingRate) {
+					Runnable reactTask = new Runnable() {
+
+						public void run() {
+							reactToFFTData(fft);
+						}
+					};
+
+					Thread thread = new Thread(reactTask);
+					thread.start();
+
 				}
 			};
 			mVisualizer.setDataCaptureListener(listener,
-					Visualizer.getMaxCaptureRate() / 4, false, true);
+					Visualizer.getMaxCaptureRate() / 32, false, true);
 
 			// Enabled Visualizer and disable when we're done with the stream
 			mVisualizer.setEnabled(true);
@@ -251,6 +263,35 @@ public class DanceBehavior extends Behavior {
 	protected void reactToFFTData(byte[] fft) {
 		// TODO Do something useful here. For now: Save raw data to file, to
 		// analyze:
+		File sdcard = Environment.getExternalStorageDirectory();
+		File musicDir = new File(sdcard, "robobrain/tmp");
+		if (!musicDir.exists()) {
+			musicDir.mkdir();
+		}
 
+		File fftDataTextFile = new File(musicDir, "fftData.txt");
+		if (fftDataTextFile.exists()) {
+			fftDataTextFile.delete();
+		}
+		BufferedWriter out;
+		try {
+			// Create file
+			FileWriter fstream = new FileWriter("fftData.txt");
+			out = new BufferedWriter(fstream);
+			int currentPosInMillis = mPlayer.getCurrentPosition();
+			int seconds = (int) (currentPosInMillis / 1000);
+			int millis = (int) (currentPosInMillis % 1000);
+			out.append(seconds + "." + millis + "-->");
+			for (byte b : fft) {
+				Byte by = new Byte(b);
+				out.append(by.intValue() + " ");
+			}
+			// Close the output stream
+			out.close();
+
+		} catch (IOException e) {
+			RoboLog.alertError(getRobot().getRobotService(),
+					"Failed to create fftData.txt");
+		}
 	}
 }
