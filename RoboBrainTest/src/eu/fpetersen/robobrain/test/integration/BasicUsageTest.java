@@ -63,6 +63,8 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 	public void testTurningOnAndOff() {
 
+		starterActivity.removeAllOpenDialogs();
+
 		// ----Open Console activity-----
 		ActivityMonitor amConsole = getInstrumentation().addMonitor(
 				Console.class.getName(), null, false);
