@@ -57,16 +57,35 @@ import eu.fpetersen.robobrain.util.RoboLog;
  */
 public class DanceBehavior extends Behavior {
 
+	protected static final int SPEED = 200;
+	protected static final int ANGLE = 200;
 	private MediaPlayer mPlayer;
 
 	@Override
 	protected void onStart() {
-		setupRgbTimer(1000);
+		setupRgbTimer(250);
 		startPlayingRandomMusic();
+		startMovingRandomly(500);
 	}
 
 	@Override
 	protected void behaviorLoop() {
+
+		checkForObstacle();
+
+		if (mPlayer != null) {
+			if (mPlayer.isPlaying()) {
+
+			} else {
+				startPlayingRandomMusic();
+			}
+		}
+	}
+
+	/**
+	 * Makes sure that the robot does not hit an obstacle
+	 */
+	private void checkForObstacle() {
 		if (getRobot().getMainMotor().getState() != MotorState.STOPPED) {
 			if (getRobot().getFrontSensor().getValue() < 30
 					&& getRobot().getMainMotor().getState() != MotorState.FORWARD) {
@@ -79,14 +98,6 @@ public class DanceBehavior extends Behavior {
 				RoboLog.log(getRobot().getRobotService(),
 						"Stopping due to obstacle in back");
 				getRobot().getMainMotor().stop(0);
-			}
-		}
-
-		if (mPlayer != null) {
-			if (mPlayer.isPlaying()) {
-
-			} else {
-				startPlayingRandomMusic();
 			}
 		}
 	}
@@ -198,6 +209,51 @@ public class DanceBehavior extends Behavior {
 				startMusic(new File(musicDir, musicFiles[random]));
 			}
 		}
+
+	}
+
+	/**
+	 * Moves randomly changing movement at the rate specified.
+	 * 
+	 * @param millis
+	 *            Rate at which to change movement
+	 */
+	private void startMovingRandomly(int millis) {
+		final Timer timer = new Timer();
+
+		TimerTask movementTask = new TimerTask() {
+
+			@Override
+			public void run() {
+				if (!isTurnedOn()) {
+					timer.cancel();
+				} else {
+					int randomMotorMovement = (int) (Math.random() * 5);
+					if (randomMotorMovement == 0) {
+						getRobot().getMainMotor().advance(SPEED);
+					} else if (randomMotorMovement == 1) {
+						getRobot().getMainMotor().backOff(SPEED);
+					} else if (randomMotorMovement == 2) {
+						getRobot().getMainMotor().turnLeft(ANGLE);
+					} else if (randomMotorMovement == 3) {
+						getRobot().getMainMotor().turnRight(ANGLE);
+					} else if (randomMotorMovement == 4) {
+						getRobot().getMainMotor().stop(0);
+					}
+
+					int randomSensorMovement = (int) (Math.random() * 3);
+					if (randomSensorMovement == 0) {
+						getRobot().getHeadServo().setToAngle(95);
+					} else if (randomSensorMovement == 1) {
+						getRobot().getHeadServo().setToAngle(140);
+					} else if (randomSensorMovement == 1) {
+						getRobot().getHeadServo().setToAngle(50);
+					}
+				}
+			}
+		};
+
+		timer.scheduleAtFixedRate(movementTask, 0, millis);
 
 	}
 
