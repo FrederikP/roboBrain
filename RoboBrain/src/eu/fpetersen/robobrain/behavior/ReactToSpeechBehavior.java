@@ -45,6 +45,9 @@ import eu.fpetersen.robobrain.util.RoboLog;
  * long list of color names. When speech is detected, the longest possible color
  * name is matched.
  * 
+ * Now there is also a reaction to movement commands: Stop, Forward, Backward,
+ * Left, Right
+ * 
  * @author Frederik Petersen
  * 
  * 
@@ -52,6 +55,8 @@ import eu.fpetersen.robobrain.util.RoboLog;
 public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 	protected static final String TAG = "ReactToSpeech-Behavior";
+	private static final int SPEED = 200;
+	private static final int ANGLE = 30;
 	private RGBColorTable colorTable;
 	private List<String> colorNames;
 
@@ -193,16 +198,27 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 				}
 			}
 		} else {
+			// If stop is not in results, do whatever is found first
 			for (String resultLine : results) {
 				if (resultLine.toLowerCase().contains("forward")) {
 					RoboLog.log(getRobot().getRobotService(),
 							"Received voice command to advance");
-					motor.advance(200);
+					motor.advance(SPEED);
 					break;
 				} else if (resultLine.toLowerCase().contains("backward")) {
 					RoboLog.log(getRobot().getRobotService(),
 							"Received voice command to backoff");
-					motor.backOff(200);
+					motor.backOff(SPEED);
+					break;
+				} else if (resultLine.toLowerCase().contains("right")) {
+					RoboLog.log(getRobot().getRobotService(),
+							"Received voice command to turn right");
+					motor.turnRight(ANGLE);
+					break;
+				} else if (resultLine.toLowerCase().contains("left")) {
+					RoboLog.log(getRobot().getRobotService(),
+							"Received voice command to turn left");
+					motor.turnLeft(ANGLE);
 					break;
 				}
 			}
