@@ -19,13 +19,21 @@
  *
  *Contributors:
  *    Frederik Petersen - Project Owner, initial Implementation
+ *
+ *Uses MeetAndroid and Servo library. Thanks to the creators!
  *******************************************************************************/
+
+/*
+ * This sketch is being developed in a Eclipse environment which was configured to allow Arduino programming. There
+ * are several tutorials that you can find in the www for setting up Eclipse for Arduino development.
+ *
+ * But there is the option to copy the code and use the easy-to-use Arduino SDK.
+ * It should work out of the box, just remove the #include below.
+ *
+ */
+
 // Do not remove the include below
 #include "YARP.h"
-
-//Set timed event modes
-#define NONE 0
-#define STOPDELAY 1
 
 //RGB LED stuff
 #define RED A2
@@ -33,31 +41,45 @@
 #define BLUE1 A4
 #define BLUE2 A5
 
-MeetAndroid meetAndroid;
-Servo usservo;
+//Set timed event modes
+#define NONE 0
+#define STOPDELAY 1
 
-//Port numbers
+//Motor Port numbers
 int E1 = 5; //M1 Speed Control
 int E2 = 6; //M2 Speed Control
 int M1 = 4; //M1 Direction Control
 int M2 = 7; //M1 Direction Control
 
+//Other hardware port numbers
 int IR_BACK = 11; //Infrared sensor back
 int SERVO_US = 10; //Servo for ultrasonic sensor movement
 int URPWM = 3; // US PWM Output 0-25000US,Eqvery 50US represent 1cm
 
+//Baud Rate of Bluetooth shield. 115200 works well for me,
+//but I had to configure my shield to work at that rate
 long BAUD_RATE_BT = 115200;
 
+//Some values for setting servo to specific positions
 int SERVO_MIDDLE = 95;
 int SERVO_RIGHT = 50;
 int SERVO_LEFT = 140;
 
+//Speed at which to turn
 int TURN_SPEED = 240; //constant because turn is given in angular value from android.
-int TURN_MILLIS_PER_DEG = 15;
+
+//How many milli seconds does it take for the robot to turn one degree at the speed above
+int TURN_MILLIS_PER_DEG = 12;
 
 //For timed events like stopping with delay and turning
 unsigned long millisTimer = 0;
 int eventTimerMode = NONE;
+
+//Used to communicate with Android
+MeetAndroid meetAndroid;
+
+//Control the servo with this object
+Servo usservo;
 
 //The setup function is called once at startup of the sketch
 void setup() {
@@ -77,7 +99,7 @@ void setup() {
 	//Set servo to middle
 	usservo.write(SERVO_MIDDLE);
 
-	//Register functions for events sent from Android Brain
+	//Register functions for events sent from Android "Brain"
 	meetAndroid.registerFunction(advanceAtSpeed, 'A');
 	meetAndroid.registerFunction(backOffAtSpeed, 'B');
 	meetAndroid.registerFunction(stopWithDelay, 'S');
@@ -151,6 +173,8 @@ void loop() {
 	}
 }
 
+//Methods to read sensor data
+
 int getUSMeasurement() {
 	int value; // This value will be populated
 	unsigned long LowLevelTime = pulseIn(URPWM, LOW);
@@ -170,6 +194,8 @@ int getIRMeasurement() {
 	int backBool = digitalRead(IR_BACK);
 	return backBool;
 }
+
+//Motor control methods
 
 void stop(void) {
 	digitalWrite(E1, LOW);
@@ -213,6 +239,7 @@ void setServoTo(int angle) {
 }
 
 //Functions registered for events sent from Android
+
 void setServo(byte flag, byte numOfValues) {
 	if (numOfValues == 0) {
 		setServoMiddle();
@@ -292,6 +319,9 @@ void setLED(byte flag, byte numOfValues) {
 
 }
 
+
+//Methods for sending data to Android
+
 void sendData(const String& prefix, int value) {
 	String toTrans = prefix + value;
 	int length = toTrans.length() + 1;
@@ -314,6 +344,9 @@ void sendData(const String& text) {
 	text.toCharArray(charBuf, length);
 	meetAndroid.send(charBuf);
 }
+
+
+//LED methods
 
 void setLEDtoColor(int red, int green, int blue) {
 	//Set Color to white
