@@ -33,7 +33,7 @@ import eu.fpetersen.robobrain.color.RgbColorTableFactory;
  * @author Frederik Petersen
  * 
  */
-public class RGBColorTableFactoryTest extends AndroidTestCase {
+public class RgbColorTableFactoryTest extends AndroidTestCase {
 
 	/**
 	 * Test if RGBColorTable is successfully generated from the file in the
