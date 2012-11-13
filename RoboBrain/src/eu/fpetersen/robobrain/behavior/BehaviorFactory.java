@@ -24,8 +24,8 @@ package eu.fpetersen.robobrain.behavior;
 
 import java.util.StringTokenizer;
 
-import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
 import eu.fpetersen.robobrain.util.RoboLog;
 

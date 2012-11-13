@@ -28,6 +28,7 @@ import java.util.List;
 import at.abraxas.amarino.Amarino;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.services.RobotService;
 
 /**
  * Each command center holds a reference to one robot and it's behaviors. The

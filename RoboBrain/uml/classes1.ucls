@@ -160,16 +160,17 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="21" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.communication.RobotService" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/communication/RobotService.java" binary="false">    
+  <class id="21" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.services.RobotService" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/services/RobotService.java" binary="false">    
     <position height="-1" width="-1" x="-486" y="204"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="22" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.communication.BehaviorReceiver" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/communication/BehaviorReceiver.java" binary="false">    
+  <class id="22" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.switching.BehaviorReceiver" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/switching/BehaviorReceiver.java" 
+    binary="false">    
     <position height="-1" width="-1" x="-827" y="129"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
@@ -217,8 +218,9 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </interface>  
-  <class id="28" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.speech.SpeechRecognizerService" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/speech/SpeechRecognizerService.java" binary="false">    
+  <class id="28" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.services.SpeechRecognizerService" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/services/SpeechRecognizerService.java" 
+    binary="false">    
     <position height="-1" width="-1" x="-798" y="821"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      

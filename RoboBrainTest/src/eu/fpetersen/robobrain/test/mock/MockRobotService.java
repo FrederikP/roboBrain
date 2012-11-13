@@ -30,9 +30,9 @@ import android.content.Intent;
 import eu.fpetersen.robobrain.behavior.BackAndForthBehavior;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.CommandCenter;
-import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
+import eu.fpetersen.robobrain.services.RobotService;
 
 /**
  * Simple mock for the {@link RobotService} class, so that tests for activities

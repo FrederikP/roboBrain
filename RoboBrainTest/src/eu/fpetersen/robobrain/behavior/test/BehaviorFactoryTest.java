@@ -26,9 +26,9 @@ import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.behavior.BackAndForthBehavior;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.behavior.BehaviorFactory;
-import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
+import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**

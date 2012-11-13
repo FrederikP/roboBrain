@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import at.abraxas.amarino.Amarino;
-import eu.fpetersen.robobrain.communication.RobotService;
+import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 /**

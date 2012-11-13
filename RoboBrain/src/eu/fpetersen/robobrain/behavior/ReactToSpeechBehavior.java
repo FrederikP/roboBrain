@@ -35,8 +35,8 @@ import eu.fpetersen.robobrain.robot.ProximitySensor;
 import eu.fpetersen.robobrain.robot.RgbLed;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.Servo;
+import eu.fpetersen.robobrain.services.SpeechRecognizerService;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
-import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 /**

@@ -30,7 +30,7 @@ import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.BehaviorInitializer;
 import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
-import eu.fpetersen.robobrain.communication.RobotService;
+import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**

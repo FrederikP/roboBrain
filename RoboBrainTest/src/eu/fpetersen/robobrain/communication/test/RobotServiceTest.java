@@ -24,7 +24,7 @@ package eu.fpetersen.robobrain.communication.test;
 
 import android.content.Intent;
 import android.test.ServiceTestCase;
-import eu.fpetersen.robobrain.communication.RobotService;
+import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.test.util.Helper;
 
 /**

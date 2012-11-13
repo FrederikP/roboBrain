@@ -30,8 +30,8 @@ import java.util.Set;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import eu.fpetersen.robobrain.behavior.switching.SpeechControlledBehaviorSwitcher;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
-import eu.fpetersen.robobrain.communication.SpeechControlledBehaviorSwitcher;
 
 /**
  * Distributes the results of speech recognition to all registered

@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 /**

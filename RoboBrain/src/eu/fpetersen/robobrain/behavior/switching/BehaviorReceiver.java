@@ -20,30 +20,46 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.util;
+package eu.fpetersen.robobrain.behavior.switching;
 
-import eu.fpetersen.robobrain.services.RobotService;
+import java.util.UUID;
+
+import eu.fpetersen.robobrain.communication.RoboBrainIntent;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 
 /**
- * Bundle service reference for all of the App's factories
+ * 
+ * Receives behavior trigger intents and starts/stops the behavior. This enables
+ * the RobotService to receive behavior triggers from other components i.e. the
+ * UI.
  * 
  * @author Frederik Petersen
  * 
  */
-public abstract class RoboBrainFactory {
+public class BehaviorReceiver extends BroadcastReceiver {
 
-	private RobotService mService;
+	private BehaviorSwitcher mSwitcher;
 
-	public RoboBrainFactory(RobotService service) {
-		this.mService = service;
+	public BehaviorReceiver(BehaviorSwitcher behaviorSwitcher) {
+		this.mSwitcher = behaviorSwitcher;
 	}
 
-	public RobotService getService() {
-		return mService;
-	}
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		if (intent.getAction().matches(RoboBrainIntent.ACTION_BEHAVIORTRIGGER)) {
+			boolean startIt = intent.getBooleanExtra(RoboBrainIntent.EXTRA_BEHAVIORSTATE, false);
+			UUID uuid = (UUID) intent.getSerializableExtra(RoboBrainIntent.EXTRA_BEHAVIORUUID);
 
-	public void setService(RobotService service) {
-		this.mService = service;
+			if (startIt) {
+				mSwitcher.startBehavior(uuid);
+			} else {
+				mSwitcher.stopBehavior(uuid);
+			}
+
+		}
 	}
 
 }

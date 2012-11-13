@@ -22,7 +22,7 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot;
 
-import eu.fpetersen.robobrain.communication.RobotService;
+import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
 import eu.fpetersen.robobrain.util.RoboLog;
 

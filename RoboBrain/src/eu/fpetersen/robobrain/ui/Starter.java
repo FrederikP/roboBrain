@@ -56,9 +56,9 @@ import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.CommandCenter;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
-import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.speech.SpeechRecognizerService;
+import eu.fpetersen.robobrain.services.RobotService;
+import eu.fpetersen.robobrain.services.SpeechRecognizerService;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 /**

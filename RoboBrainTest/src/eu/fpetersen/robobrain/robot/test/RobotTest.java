@@ -23,13 +23,13 @@
 package eu.fpetersen.robobrain.robot.test;
 
 import android.test.AndroidTestCase;
-import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.robot.RobotPart;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
+import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**
