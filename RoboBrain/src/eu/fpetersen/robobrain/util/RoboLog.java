@@ -44,12 +44,18 @@ public class RoboLog {
 	 * 
 	 * @param message
 	 *            Message to be logged
+	 * @param toUIConsole
+	 *            True if message should be send to Console activity. Set to
+	 *            false if it would be called way to much. This hugely
+	 *            influences performance
 	 */
-	public static void log(Context context, String message) {
+	public static void log(Context context, String message, boolean toUIConsole) {
 		Log.v(TAG, message);
-		Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
-		cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, message);
-		context.sendBroadcast(cIntent);
+		if (toUIConsole) {
+			Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
+			cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, message);
+			context.sendBroadcast(cIntent);
+		}
 	}
 
 	/**
@@ -61,7 +67,7 @@ public class RoboLog {
 	 */
 	public static void alertError(Context context, String message) {
 		String errorTag = "[ERROR]";
-		log(context, message + errorTag);
+		log(context, message + errorTag, true);
 		Starter starter = Starter.getInstance();
 		if (starter != null) {
 			starter.showAlertDialog(errorTag, message);
@@ -78,7 +84,7 @@ public class RoboLog {
 	 */
 	public static void alertWarning(Context context, String message) {
 		String errorTag = "[WARNING]";
-		log(context, message + errorTag);
+		log(context, message + errorTag, true);
 		Starter starter = Starter.getInstance();
 		if (starter != null) {
 			starter.showAlertDialog(errorTag, message);

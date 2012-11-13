@@ -47,7 +47,8 @@ public class ExternalStorageManager {
 	private static void createDirIfNotExistant(Context context, File dir) {
 		if (!dir.exists()) {
 			if (!dir.mkdir()) {
-				RoboLog.log(context, "Directory could not be created: " + dir.getAbsolutePath());
+				RoboLog.alertError(context,
+						"Directory could not be created: " + dir.getAbsolutePath());
 			}
 		}
 	}

@@ -70,12 +70,13 @@ public class RobotPartFactory extends RoboBrainFactory {
 			part = (RobotPart) Class.forName(partClassName).newInstance();
 			part.initialize(robot);
 		} catch (InstantiationException e) {
-			RoboLog.log(getService(), "RobotPart class " + type + " could not be instantiated");
+			RoboLog.alertWarning(getService(), "RobotPart class " + type
+					+ " could not be instantiated");
 		} catch (IllegalAccessException e) {
-			RoboLog.log(getService(), "RobotPart class " + type
+			RoboLog.alertWarning(getService(), "RobotPart class " + type
 					+ " could not be instantiated due to the constructor having restricted access");
 		} catch (ClassNotFoundException e) {
-			RoboLog.log(getService(), "RobotPart class " + type + " could not be found");
+			RoboLog.alertWarning(getService(), "RobotPart class " + type + " could not be found");
 		}
 		return part;
 	}

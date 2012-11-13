@@ -80,7 +80,8 @@ public class Robot {
 	 */
 	public void sendToArduino(char flag, String data) {
 
-		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: " + data);
+		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: " + data,
+				false);
 		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
@@ -103,7 +104,7 @@ public class Robot {
 			}
 		}
 		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: "
-				+ dataString);
+				+ dataString, false);
 		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
@@ -118,7 +119,7 @@ public class Robot {
 	 */
 	public void sendToArduino(char flag, int data) {
 		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: "
-				+ Integer.toString(data));
+				+ Integer.toString(data), false);
 		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
@@ -140,7 +141,7 @@ public class Robot {
 			}
 		}
 		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: "
-				+ dataString);
+				+ dataString, false);
 		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 

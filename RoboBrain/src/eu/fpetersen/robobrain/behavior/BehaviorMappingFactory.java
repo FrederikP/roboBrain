@@ -172,8 +172,15 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 			XmlPullParser parser) throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, NS, "behavior");
 
-		behaviorInitializersForRobot.add(new BehaviorInitializer(parser.getAttributeValue(NS,
-				"name"), parser.getAttributeValue(NS, "speechName")));
+		String name = parser.getAttributeValue(NS, "name");
+
+		try {
+			behaviorInitializersForRobot.add(new BehaviorInitializer(name, parser
+					.getAttributeValue(NS, "speechName")));
+		} catch (NullPointerException e) {
+			RoboLog.alertWarning(getService(), "No SpeechName configured for behavior: " + name);
+			behaviorInitializersForRobot.add(new BehaviorInitializer(name, ""));
+		}
 		parser.nextTag();
 		parser.require(XmlPullParser.END_TAG, NS, "behavior");
 

@@ -326,18 +326,20 @@ public class RobotService extends Service {
 		// Enter null for standard sd location
 		Map<String, List<BehaviorInitializer>> behaviorMapping = behaviorFactory
 				.createMappings(null);
-		BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
-		for (String robotName : robots.keySet()) {
-			Robot robot = robots.get(robotName);
-			List<BehaviorInitializer> behaviorInitializers = behaviorMapping.get(robotName);
-			List<Behavior> behaviors = new ArrayList<Behavior>();
-			for (BehaviorInitializer initializer : behaviorInitializers) {
-				Behavior behavior = bFac.createBehavior(initializer, robot);
-				if (behavior.getRequirements().fulfillsRequirements(robot)) {
-					behaviors.add(behavior);
+		if (behaviorMapping != null) {
+			BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
+			for (String robotName : robots.keySet()) {
+				Robot robot = robots.get(robotName);
+				List<BehaviorInitializer> behaviorInitializers = behaviorMapping.get(robotName);
+				List<Behavior> behaviors = new ArrayList<Behavior>();
+				for (BehaviorInitializer initializer : behaviorInitializers) {
+					Behavior behavior = bFac.createBehavior(initializer, robot);
+					if (behavior.getRequirements().fulfillsRequirements(robot)) {
+						behaviors.add(behavior);
+					}
 				}
+				createCommandCenter(robot, behaviors);
 			}
-			createCommandCenter(robot, behaviors);
 		}
 	}
 
@@ -377,7 +379,7 @@ public class RobotService extends Service {
 			Starter.getInstance().setRobotService(service);
 		} else {
 			RoboLog.log(RobotService.this,
-					"Status couldn't be updated in UI as Starter activity was not found");
+					"Status couldn't be updated in UI as Starter activity was not found", true);
 		}
 	}
 

@@ -83,6 +83,10 @@ public class SpeechControlledBehaviorSwitcher implements SpeechReceiver {
 			if (speechName == null || speechName.matches("")) {
 				continue;
 			}
+			if (result.contains("all")) {
+				mSwitcher.stopAllBehaviors();
+			}
+
 			if (result.contains(speechName)) {
 				if (start) {
 					mSwitcher.startBehavior(entry.getKey());

@@ -24,11 +24,10 @@ package eu.fpetersen.robobrain.behavior.switching;
 
 import java.util.UUID;
 
-import eu.fpetersen.robobrain.communication.RoboBrainIntent;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 
 /**
  * 
@@ -58,6 +57,10 @@ public class BehaviorReceiver extends BroadcastReceiver {
 			} else {
 				mSwitcher.stopBehavior(uuid);
 			}
+
+		} else if (intent.getAction().matches(RoboBrainIntent.ACTION_STOPALLBEHAVIORS)) {
+
+			mSwitcher.stopAllBehaviors();
 
 		}
 	}

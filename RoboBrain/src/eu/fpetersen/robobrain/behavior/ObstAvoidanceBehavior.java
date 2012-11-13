@@ -125,6 +125,7 @@ public class ObstAvoidanceBehavior extends Behavior {
 
 	@Override
 	protected void onStop() {
+		getRobot().getHeadServo().setToAngle(95);
 		getRobot().stop();
 	}
 
@@ -138,7 +139,7 @@ public class ObstAvoidanceBehavior extends Behavior {
 
 	@Override
 	protected void onStart() {
-		// Nothing to setup for now
+		getRobot().getHeadServo().setToAngle(95);
 	}
 
 }

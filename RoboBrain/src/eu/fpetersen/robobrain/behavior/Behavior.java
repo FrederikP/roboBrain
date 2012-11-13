@@ -84,6 +84,8 @@ public abstract class Behavior {
 	 * Starts the behavior, starting it's main loop.
 	 */
 	public void startBehavior() {
+		RoboLog.log(getRobot().getRobotService(), "Started behavior: " + mName + " for robot: "
+				+ getRobot().getName(), true);
 		if (mTurnedOn == false) {
 
 			mTurnedOn = true;
@@ -117,6 +119,8 @@ public abstract class Behavior {
 	 */
 	public void stopBehavior() {
 		this.mTurnedOn = false;
+		RoboLog.log(getRobot().getRobotService(), "Stopped behavior: " + mName + " for robot: "
+				+ getRobot().getName(), true);
 		updateBehaviorStatusInUI();
 	}
 
@@ -152,7 +156,7 @@ public abstract class Behavior {
 	 *            Message that is to be displayed in the Console UI
 	 */
 	public void toConsole(String message) {
-		RoboLog.log(getRobot().getRobotService(), message);
+		RoboLog.log(getRobot().getRobotService(), message, true);
 	}
 
 	/**

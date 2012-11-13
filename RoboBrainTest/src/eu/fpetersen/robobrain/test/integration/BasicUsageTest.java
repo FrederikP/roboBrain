@@ -37,6 +37,7 @@ import android.widget.ToggleButton;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.CommandCenter;
+import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.speech.SpeechResultManager;
 import eu.fpetersen.robobrain.test.util.Helper;
 import eu.fpetersen.robobrain.ui.Console;
@@ -265,7 +266,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		TextView consoleTextView = (TextView) console.findViewById(R.id.consoleTextView);
 
 		// Check if stuff was written to console
-		assertTrue(consoleTextView.getText().toString().contains("Flag"));
+		assertTrue(consoleTextView.getText().toString().contains("Started behavior: "));
 
 		console.finish();
 
@@ -273,6 +274,10 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 	@Override
 	protected void tearDown() throws Exception {
+		RobotService service = starterActivity.getRobotService();
+		if (service != null) {
+			service.stopSelf();
+		}
 		starterActivity.finish();
 		super.tearDown();
 	}

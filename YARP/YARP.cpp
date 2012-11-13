@@ -301,7 +301,7 @@ void turnRightWithAngle(byte flag, byte numOfValues) {
 void setLED(byte flag, byte numOfValues) {
 	int num = numOfValues - 0;
 	if (num != 3) {
-		sendMessage("CONSOLE:", "LED TURNED OFF");
+//		sendMessage("CONSOLE:", "LED TURNED OFF");
 		setLEDtoColor();
 	} else {
 		int colors[num];
@@ -309,16 +309,15 @@ void setLED(byte flag, byte numOfValues) {
 		int red = colors[0];
 		int green = colors[1];
 		int blue = colors[2];
-		String starter = "LED TURNED TO ";
-		String comma = ",";
-		String dot = ".";
-		String message = starter + red + comma + green + comma + blue + dot;
-		sendMessage("CONSOLE:", message);
+//		String starter = "LED TURNED TO ";
+//		String comma = ",";
+//		String dot = ".";
+//		String message = starter + red + comma + green + comma + blue + dot;
+//		sendMessage("CONSOLE:", message);
 		setLEDtoColor(colors[0], colors[1], colors[2]);
 	}
 
 }
-
 
 //Methods for sending data to Android
 
@@ -344,7 +343,6 @@ void sendData(const String& text) {
 	text.toCharArray(charBuf, length);
 	meetAndroid.send(charBuf);
 }
-
 
 //LED methods
 

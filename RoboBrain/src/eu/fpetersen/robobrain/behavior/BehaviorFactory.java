@@ -89,12 +89,13 @@ public class BehaviorFactory extends RoboBrainFactory {
 			initializer.setName(shortName);
 			initializer.initialize(behavior, robot);
 		} catch (InstantiationException e) {
-			RoboLog.log(getService(), "Behavior class " + name + " could not be instantiated");
+			RoboLog.alertWarning(getService(), "Behavior class " + name
+					+ " could not be instantiated");
 		} catch (IllegalAccessException e) {
-			RoboLog.log(getService(), "Behavior class " + name
+			RoboLog.alertWarning(getService(), "Behavior class " + name
 					+ " could not be instantiated due to the constructor having restricted access");
 		} catch (ClassNotFoundException e) {
-			RoboLog.log(getService(), "Behavior class " + name + " could not be found");
+			RoboLog.alertWarning(getService(), "Behavior class " + name + " could not be found");
 		}
 		return behavior;
 	}

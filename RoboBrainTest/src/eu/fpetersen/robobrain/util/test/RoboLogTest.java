@@ -56,11 +56,10 @@ public class RoboLogTest extends ActivityInstrumentationTestCase2 {
 	 * Test if RoboLog message is correctly logged to Console UI activity
 	 */
 	public void testRoboLogLogging() {
-		TextView consoleTextView = (TextView) consoleActivity
-				.findViewById(R.id.consoleTextView);
+		TextView consoleTextView = (TextView) consoleActivity.findViewById(R.id.consoleTextView);
 		String findThis = "Logged!";
 
-		RoboLog.log(consoleActivity, findThis);
+		RoboLog.log(consoleActivity, findThis, true);
 
 		Helper.sleepMillis(1000);
 

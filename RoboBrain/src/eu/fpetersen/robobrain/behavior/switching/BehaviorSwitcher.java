@@ -121,7 +121,7 @@ public class BehaviorSwitcher {
 		Behavior runningBehavior = cc.getRunningBehavior();
 		if (runningBehavior != null) {
 			RoboLog.log(mService, "Behavior with the follwing UUID is being stopped: "
-					+ runningBehavior.getId());
+					+ runningBehavior.getId(), true);
 			runningBehavior.stopBehavior();
 		}
 	}
@@ -149,6 +149,18 @@ public class BehaviorSwitcher {
 	 */
 	public RobotService getRobotService() {
 		return mService;
+	}
+
+	/**
+	 * Turns off all running behaviors
+	 */
+	public void stopAllBehaviors() {
+		for (CommandCenter cc : mService.getAllCCs()) {
+			Behavior runningB = cc.getRunningBehavior();
+			if (runningB != null) {
+				runningB.stopBehavior();
+			}
+		}
 	}
 
 }

@@ -63,6 +63,7 @@ public class DanceBehavior extends Behavior {
 
 	@Override
 	protected void onStart() {
+		getRobot().getHeadServo().setToAngle(95);
 		setupRgbTimer(250);
 		startPlayingRandomMusic();
 		startMovingRandomly(500);
@@ -89,12 +90,12 @@ public class DanceBehavior extends Behavior {
 		if (getRobot().getMainMotor().getState() != MotorState.STOPPED) {
 			if (getRobot().getFrontSensor().getValue() < 30
 					&& getRobot().getMainMotor().getState() != MotorState.FORWARD) {
-				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in front");
+				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in front", true);
 				getRobot().getMainMotor().stop(0);
 			}
 			if (getRobot().getBackSensor().getValue() == 0
 					&& getRobot().getMainMotor().getState() != MotorState.BACKWARD) {
-				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in back");
+				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in back", true);
 				getRobot().getMainMotor().stop(0);
 			}
 		}
@@ -105,6 +106,7 @@ public class DanceBehavior extends Behavior {
 		stopMusic();
 		getRobot().getMainMotor().stop(0);
 		getRobot().getHeadColorLed().set(0, 0, 0);
+		getRobot().getHeadServo().setToAngle(95);
 	}
 
 	@Override
@@ -240,7 +242,7 @@ public class DanceBehavior extends Behavior {
 						getRobot().getHeadServo().setToAngle(95);
 					} else if (randomSensorMovement == 1) {
 						getRobot().getHeadServo().setToAngle(140);
-					} else if (randomSensorMovement == 1) {
+					} else if (randomSensorMovement == 2) {
 						getRobot().getHeadServo().setToAngle(50);
 					}
 				}
