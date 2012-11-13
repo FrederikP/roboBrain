@@ -37,6 +37,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.R;
@@ -84,6 +85,8 @@ public class RobotService extends Service {
 
 	private BroadcastReceiver disconnectedReceiver;
 
+	protected PowerManager.WakeLock mWakeLock;
+
 	/**
 	 * 
 	 * @return True if service is running, false if not.
@@ -95,6 +98,12 @@ public class RobotService extends Service {
 	@Override
 	public void onCreate() {
 		Log.v(TAG, "Creating RoboBrain service");
+
+		// Make sure device stays awake
+		final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
+				"RoboBrain");
+		mWakeLock.acquire();
 
 		bReceiver = new BehaviorReceiver(RobotService.this);
 		rReceiver = new RobotReceiver(RobotService.this);
@@ -366,6 +375,10 @@ public class RobotService extends Service {
 		}
 
 		updateStarterUI(null);
+
+		if (mWakeLock != null) {
+			mWakeLock.release();
+		}
 
 		super.onDestroy();
 	}
