@@ -38,7 +38,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.Behavior;
@@ -64,8 +63,6 @@ import eu.fpetersen.robobrain.util.RoboLog;
  * 
  */
 public class RobotService extends Service {
-
-	private static final String TAG = "RoboBrain-Service";
 
 	/**
 	 * Static reference to a Map of all existing CommandCenters keyed by their
@@ -102,7 +99,7 @@ public class RobotService extends Service {
 
 	@Override
 	public void onCreate() {
-		Log.v(TAG, "Creating RoboBrain service");
+		RoboLog.log(RobotService.this, "Creating RoboBrain service", true);
 
 		// Make sure device stays awake
 		final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -148,7 +145,7 @@ public class RobotService extends Service {
 			testingEnvvar = null;
 		}
 		final boolean testing = (testingEnvvar != null && testingEnvvar.matches("true"));
-		Log.v(TAG, "Starting RoboBrain service");
+		RoboLog.log(RobotService.this, "Starting RoboBrain service", true);
 		if (getAllCCs().isEmpty()) {
 			if (testing) {
 				setupCommandCentersTest();
@@ -345,7 +342,7 @@ public class RobotService extends Service {
 
 	@Override
 	public boolean stopService(Intent name) {
-		Log.v(TAG, "Stopping RoboBrain service");
+		RoboLog.log(RobotService.this, "Stopping RoboBrain service", true);
 		if (mRunning) {
 			stopRunningService();
 		}
@@ -356,7 +353,7 @@ public class RobotService extends Service {
 
 	@Override
 	public void onDestroy() {
-		Log.v(TAG, "Destroying RoboBrain service");
+		RoboLog.log(RobotService.this, "Destroying RoboBrain service", true);
 		if (mRunning) {
 			stopRunningService();
 		}

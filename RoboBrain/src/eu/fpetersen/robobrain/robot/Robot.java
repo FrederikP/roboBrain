@@ -27,7 +27,6 @@ import java.util.Map;
 
 import at.abraxas.amarino.Amarino;
 import eu.fpetersen.robobrain.services.RobotService;
-import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
  * Representation of the controlled robot. It's hardware is controlled by an
@@ -79,9 +78,10 @@ public class Robot {
 	 *            String to be sent to the desired method on the Arduino device.
 	 */
 	public void sendToArduino(char flag, String data) {
-
-		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: " + data,
-				false);
+		// Uncomment for logging
+		// RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " +
+		// flag + " Data: " + data,
+		// false);
 		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
@@ -103,8 +103,10 @@ public class Robot {
 				dataString = dataString + ",";
 			}
 		}
-		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: "
-				+ dataString, false);
+		// Uncomment for logging
+		// RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " +
+		// flag + " Data: "
+		// + dataString, false);
 		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
@@ -118,8 +120,10 @@ public class Robot {
 	 *            device.
 	 */
 	public void sendToArduino(char flag, int data) {
-		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: "
-				+ Integer.toString(data), false);
+		// Uncomment for logging
+		// RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " +
+		// flag + " Data: "
+		// + Integer.toString(data), false);
 		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
@@ -140,8 +144,10 @@ public class Robot {
 				dataString = dataString + ",";
 			}
 		}
-		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: "
-				+ dataString, false);
+		// Uncomment for logging
+		// RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " +
+		// flag + " Data: "
+		// + dataString, false);
 		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
