@@ -26,6 +26,7 @@ import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.behavior.BackAndForthBehavior;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.behavior.BehaviorFactory;
+import eu.fpetersen.robobrain.behavior.BehaviorInitializer;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.services.RobotService;
@@ -47,8 +48,8 @@ public class BehaviorFactoryTest extends AndroidTestCase {
 		RobotService service = new MockRobotService(getContext());
 		Robot robot = RobotFactory.getInstance(service).createSimpleRobot("TESTBOT");
 		BehaviorFactory bFac = BehaviorFactory.getInstance(service);
-		Behavior behavior = bFac.createBehavior(BackAndForthBehavior.class.getName(), robot,
-				"SpeechNameTest");
+		Behavior behavior = bFac.createBehavior(
+				new BehaviorInitializer(BackAndForthBehavior.class.getName(), "speech"), robot);
 		assertNotNull(behavior);
 		assertTrue(behavior instanceof BackAndForthBehavior);
 		assertNotNull(behavior.getId());

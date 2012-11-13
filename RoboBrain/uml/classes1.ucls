@@ -1,520 +1,101 @@
 <class-diagram version="1.0.10" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.Robot" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/Robot.java" binary="false">    
-    <position height="-1" width="-1" x="178" y="196"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="2" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.RobotPart" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/RobotPart.java" binary="false">    
-    <position height="-1" width="-1" x="430" y="106"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <enumeration id="3" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.Motor.MotorState" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/Motor.java" binary="false">    
-    <position height="-1" width="-1" x="378" y="590"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </enumeration>  
-  <class id="4" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.Motor" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/Motor.java" binary="false">    
-    <position height="-1" width="-1" x="372" y="349"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="5" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.ProximitySensor" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/ProximitySensor.java" binary="false">    
-    <position height="-1" width="-1" x="580" y="436"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="6" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.Sensor" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/Sensor.java" binary="false">    
-    <position height="-1" width="-1" x="523" y="289"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="7" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.Servo" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/Servo.java" binary="false">    
-    <position height="-1" width="-1" x="675" y="311"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="8" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.communication.CommandCenter" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/communication/CommandCenter.java" binary="false">    
-    <position height="-1" width="-1" x="-137" y="198"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="9" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.Behavior" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/Behavior.java" binary="false">    
-    <position height="-1" width="-1" x="-164" y="638"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="10" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.RGBLED" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/RGBLED.java" binary="false">    
-    <position height="-1" width="-1" x="861" y="310"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="11" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.RobotFactory" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/RobotFactory.java" binary="false">    
-    <position height="-1" width="-1" x="189" y="-125"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="12" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.RobotPartFactory" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/RobotPartFactory.java" binary="false">    
-    <position height="-1" width="-1" x="453" y="-105"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="13" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.BehaviorFactory" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/BehaviorFactory.java" binary="false">    
-    <position height="-1" width="-1" x="-126" y="-98"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="14" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.BehaviorMappingFactory" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/BehaviorMappingFactory.java" binary="false">    
-    <position height="-1" width="-1" x="-481" y="-98"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="15" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.BackAndForthBehavior" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/BackAndForthBehavior.java" binary="false">    
-    <position height="-1" width="-1" x="111" y="848"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="16" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.ObstAvoidanceBehavior" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/ObstAvoidanceBehavior.java" binary="false">    
-    <position height="-1" width="-1" x="-169" y="955"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="17" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.ReactToSpeechBehavior" 
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.ReactToSpeechBehavior" 
     project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/ReactToSpeechBehavior.java" binary="false">    
-    <position height="-1" width="-1" x="-476" y="908"/>    
+    <position height="350" width="274" x="555" y="430"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="18" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.color.RGBColorTableFactory" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/color/RGBColorTableFactory.java" binary="false">    
-    <position height="-1" width="-1" x="-653" y="1165"/>    
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.ObstAvoidanceBehavior" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/ObstAvoidanceBehavior.java" binary="false">    
+    <position height="-1" width="-1" x="967" y="620"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="19" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.color.RGBColorTable" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/color/RGBColorTable.java" binary="false">    
-    <position height="146" width="193" x="-390" y="1107"/>    
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.BehaviorMappingFactory" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/BehaviorMappingFactory.java" binary="false">    
+    <position height="-1" width="-1" x="1631" y="50"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="20" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.color.RGBColor" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/color/RGBColor.java" binary="false">    
-    <position height="-1" width="-1" x="43" y="1183"/>    
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.BehaviorFactory" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/BehaviorFactory.java" binary="false">    
+    <position height="-1" width="-1" x="1555" y="209"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="21" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.services.RobotService" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/services/RobotService.java" binary="false">    
-    <position height="-1" width="-1" x="-486" y="204"/>    
+  <class id="5" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.Behavior" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/Behavior.java" binary="false">    
+    <position height="435" width="205" x="1106" y="-45"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="22" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.switching.BehaviorReceiver" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/switching/BehaviorReceiver.java" 
-    binary="false">    
-    <position height="-1" width="-1" x="-827" y="129"/>    
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.BehaviorInitializer" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/BehaviorInitializer.java" binary="false">    
+    <position height="146" width="175" x="891" y="-45"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="23" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.communication.RobotReceiver" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/communication/RobotReceiver.java" binary="false">    
-    <position height="-1" width="-1" x="-826" y="273"/>    
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.BackAndForthBehavior" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/BackAndForthBehavior.java" binary="false">    
+    <position height="146" width="197" x="1106" y="430"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="24" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.communication.RoboBrainIntent" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/communication/RoboBrainIntent.java" binary="false">    
-    <position height="-1" width="-1" x="-803" y="-103"/>    
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.behavior.DanceBehavior" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/behavior/DanceBehavior.java" binary="false">    
+    <position height="299" width="197" x="1343" y="430"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="25" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.communication.ConsoleReceiver" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/communication/ConsoleReceiver.java" binary="false">    
-    <position height="112" width="172" x="-861" y="465"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="26" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.speech.DistributingSpeechReceiver" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/speech/DistributingSpeechReceiver.java" 
-    binary="false">    
-    <position height="-1" width="-1" x="-488" y="518"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <interface id="27" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.speech.SpeechReceiver" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/speech/SpeechReceiver.java" binary="false">    
-    <position height="-1" width="-1" x="-476" y="685"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </interface>  
-  <class id="28" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.services.SpeechRecognizerService" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/services/SpeechRecognizerService.java" 
-    binary="false">    
-    <position height="-1" width="-1" x="-798" y="821"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="29" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.speech.SpeechResultManager" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/speech/SpeechResultManager.java" binary="false">    
-    <position height="-1" width="-1" x="-983" y="1056"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="30" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.ui.Console" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/ui/Console.java" binary="false">    
-    <position height="-1" width="-1" x="-1082" y="507"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="31" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.ui.Starter" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/ui/Starter.java" binary="false">    
-    <position height="-1" width="-1" x="-1200" y="175"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="32" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.util.ExternalStorageManager" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/util/ExternalStorageManager.java" binary="false">    
-    <position height="-1" width="-1" x="-1280" y="885"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="33" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.util.RoboLog" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/util/RoboLog.java" binary="false">    
-    <position height="-1" width="-1" x="-1317" y="1027"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <class id="34" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.util.XMLParserHelper" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/util/XMLParserHelper.java" binary="false">    
-    <position height="95" width="139" x="-1381" y="1106"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true"/>      
-      <operations public="true" package="true" protected="true" private="true"/>    
-    </display>  
-  </class>  
-  <association id="35">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="36" name="parts"/>      
-      <multiplicity id="37" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="38">    
-    <end type="SOURCE" refId="30" navigable="false">      
-      <attribute id="39" name="cReceiver"/>      
-      <multiplicity id="40" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="25" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="41">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="42" name="ccPerRobot"/>      
-      <multiplicity id="43" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="44">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="2"/>  
+  <generalization id="9">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="5"/>  
   </generalization>  
-  <association id="45">    
-    <end type="SOURCE" refId="21" navigable="false">      
-      <attribute id="46" name="bReceiver"/>      
-      <multiplicity id="47" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="22" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="48">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="49" name="robot"/>      
-      <multiplicity id="50" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="51">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="52" name="allBehaviors"/>      
-      <multiplicity id="53" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="54">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="55" name="robot"/>      
-      <multiplicity id="56" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="57">    
-    <end type="SOURCE" refId="17"/>    
-    <end type="TARGET" refId="9"/>  
-  </generalization>  
-  <generalization id="58">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
-  <realization id="59">    
-    <end type="SOURCE" refId="17"/>    
-    <end type="TARGET" refId="27"/>  
-  </realization>  
-  <generalization id="60">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
-  <association id="61">    
-    <end type="SOURCE" refId="25" navigable="false">      
-      <attribute id="62" name="console"/>      
-      <multiplicity id="63" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="30" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="64">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="65" name="instance"/>      
-      <multiplicity id="66" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="67">    
-    <end type="SOURCE" refId="21" navigable="false">      
-      <attribute id="68" name="rReceiver"/>      
-      <multiplicity id="69" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="23" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="70">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="71" name="state"/>      
-      <multiplicity id="72" minimum="0" maximum="1"/>    
+  <association id="10">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="11" name="sInstance"/>      
+      <multiplicity id="12" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="73">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="74" name="robot"/>      
-      <multiplicity id="75" minimum="0" maximum="1"/>    
+  <association id="13">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="14" name="sInstance"/>      
+      <multiplicity id="15" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
+    <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="76">    
-    <end type="SOURCE" refId="28" navigable="false">      
-      <attribute id="77" name="instance"/>      
-      <multiplicity id="78" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="28" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="79">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="80" name="behaviors"/>      
-      <multiplicity id="81" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="82">    
-    <end type="SOURCE" refId="21" navigable="false">      
-      <attribute id="83" name="dSpeechReceiver"/>      
-      <multiplicity id="84" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="26" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="85">    
-    <end type="SOURCE" refId="16"/>    
-    <end type="TARGET" refId="9"/>  
+  <generalization id="16">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
   </generalization>  
-  <association id="86">    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="87" name="colorTable"/>      
-      <multiplicity id="88" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="89">    
-    <end type="SOURCE" refId="19" navigable="false">      
-      <attribute id="90" name="colors"/>      
-      <multiplicity id="91" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="20" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="92">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="9"/>  
+  <generalization id="17">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
   </generalization>  
-  <association id="93">    
-    <end type="SOURCE" refId="21" navigable="false">      
-      <attribute id="94" name="instance"/>      
-      <multiplicity id="95" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="21" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="96">    
-    <end type="SOURCE" refId="26" navigable="false">      
-      <attribute id="97" name="receivers"/>      
-      <multiplicity id="98" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="27" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="99">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="100" name="instance"/>      
-      <multiplicity id="101" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="102">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
+  <generalization id="18">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="5"/>  
   </generalization>  
-  <association id="103">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="104" name="instance"/>      
-      <multiplicity id="105" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="106">    
-    <end type="SOURCE" refId="31" navigable="false">      
-      <attribute id="107" name="instance"/>      
-      <multiplicity id="108" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="31" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="109">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
-  <association id="110">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="111" name="instance"/>      
-      <multiplicity id="112" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="18" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="113">    
-    <end type="SOURCE" refId="29" navigable="false">      
-      <attribute id="114" name="instance"/>      
-      <multiplicity id="115" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="29" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <nesting id="116">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="3"/>  
-  </nesting>  
-  <association id="117">    
-    <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="118" name="instance"/>      
-      <multiplicity id="119" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     visibility="true">    
     <attributes public="true" package="true" protected="true" private="true"/>    

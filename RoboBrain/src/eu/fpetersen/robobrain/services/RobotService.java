@@ -301,8 +301,7 @@ public class RobotService extends Service {
 		List<BehaviorInitializer> behaviorInitializers = behaviorMapping.get(robot.getName());
 		List<Behavior> behaviors = new ArrayList<Behavior>();
 		for (BehaviorInitializer initializer : behaviorInitializers) {
-			Behavior behavior = bFac.createBehavior(initializer.getName(), robot,
-					initializer.getSpeechName());
+			Behavior behavior = bFac.createBehavior(initializer, robot);
 			if (behavior.getRequirements().fulfillsRequirements(robot)) {
 				behaviors.add(behavior);
 			}
@@ -333,8 +332,7 @@ public class RobotService extends Service {
 			List<BehaviorInitializer> behaviorInitializers = behaviorMapping.get(robotName);
 			List<Behavior> behaviors = new ArrayList<Behavior>();
 			for (BehaviorInitializer initializer : behaviorInitializers) {
-				Behavior behavior = bFac.createBehavior(initializer.getName(), robot,
-						initializer.getSpeechName());
+				Behavior behavior = bFac.createBehavior(initializer, robot);
 				if (behavior.getRequirements().fulfillsRequirements(robot)) {
 					behaviors.add(behavior);
 				}

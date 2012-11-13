@@ -22,6 +22,8 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.behavior;
 
+import eu.fpetersen.robobrain.robot.Robot;
+
 /**
  * Holds the values necessary for initializing the behavior, after creating it.
  * 
@@ -38,15 +40,19 @@ public class BehaviorInitializer {
 	public BehaviorInitializer(String name, String speechName) {
 		super();
 		this.mName = name;
-		this.mSpeechName = speechName;
+		this.mSpeechName = speechName.toLowerCase();
+	}
+
+	public void initialize(Behavior b, Robot r) {
+		b.initialize(r, mName, mSpeechName);
 	}
 
 	public String getName() {
 		return mName;
 	}
 
-	public String getSpeechName() {
-		return mSpeechName;
+	public void setName(String name) {
+		this.mName = name;
 	}
 
 }
