@@ -22,6 +22,9 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.test.integration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
@@ -32,6 +35,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import eu.fpetersen.robobrain.R;
+import eu.fpetersen.robobrain.behavior.Behavior;
+import eu.fpetersen.robobrain.communication.CommandCenter;
+import eu.fpetersen.robobrain.speech.SpeechResultManager;
 import eu.fpetersen.robobrain.test.util.Helper;
 import eu.fpetersen.robobrain.ui.Console;
 import eu.fpetersen.robobrain.ui.Starter;
@@ -55,8 +61,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 	protected void setUp() throws Exception {
 		starterActivity = getActivity();
 
-		System.setProperty(starterActivity.getString(R.string.envvar_testing),
-				"true");
+		System.setProperty(starterActivity.getString(R.string.envvar_testing), "true");
 
 		super.setUp();
 	}
@@ -66,31 +71,26 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		starterActivity.removeAllOpenDialogs();
 
 		// ----Open Console activity-----
-		ActivityMonitor amConsole = getInstrumentation().addMonitor(
-				Console.class.getName(), null, false);
+		ActivityMonitor amConsole = getInstrumentation().addMonitor(Console.class.getName(), null,
+				false);
 
-		getInstrumentation().invokeMenuActionSync(starterActivity,
-				R.id.console_menu_item, 0);
+		getInstrumentation().invokeMenuActionSync(starterActivity, R.id.console_menu_item, 0);
 
-		Activity consoleActivity = getInstrumentation()
-				.waitForMonitorWithTimeout(amConsole, 1000);
+		Activity consoleActivity = getInstrumentation().waitForMonitorWithTimeout(amConsole, 1000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amConsole, 1));
 
 		// ----Go back to Starter activity-----
-		ActivityMonitor amStarter = getInstrumentation().addMonitor(
-				Starter.class.getName(), null, false);
+		ActivityMonitor amStarter = getInstrumentation().addMonitor(Starter.class.getName(), null,
+				false);
 
-		getInstrumentation().invokeMenuActionSync(consoleActivity,
-				R.id.starter_menu_item, 0);
+		getInstrumentation().invokeMenuActionSync(consoleActivity, R.id.starter_menu_item, 0);
 
-		Activity starterActivity2 = getInstrumentation()
-				.waitForMonitorWithTimeout(amStarter, 1000);
+		Activity starterActivity2 = getInstrumentation().waitForMonitorWithTimeout(amStarter, 1000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amStarter, 1));
 
 		assertEquals(starterActivity, starterActivity2);
 
-		final TextView statusTV = (TextView) starterActivity
-				.findViewById(R.id.status_textview);
+		final TextView statusTV = (TextView) starterActivity.findViewById(R.id.status_textview);
 		final ToggleButton toggleButton = (ToggleButton) starterActivity
 				.findViewById(R.id.togglestatus_button);
 		assertFalse(toggleButton.isChecked());
@@ -106,8 +106,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		// Wait a while to make sure the real service can be started
 		int waitedSecs = 0;
-		while (!statusTV.getText().toString().matches("Started!")
-				&& waitedSecs < 20) {
+		while (!statusTV.getText().toString().matches("Started!") && waitedSecs < 20) {
 			Helper.sleepMillis(1000);
 			waitedSecs++;
 		}
@@ -181,6 +180,54 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		// Some more waiting just to let the UI finish building
 		Helper.sleepMillis(500);
 
+		// ----Turn on one behavior per mocked voice
+		SpeechResultManager speechResultManager = SpeechResultManager.getInstance();
+		List<String> mockedSpeechResults = new ArrayList<String>();
+		mockedSpeechResults.add("start obstacle behavior");
+		speechResultManager.allocateNewResults(consoleActivity, mockedSpeechResults);
+
+		// Wait a while to make sure the behavior can be started
+		CommandCenter cc = starterActivity.getRobotService().getCCForAddress("TESTADDRESS");
+		assertNotNull(cc);
+		waitedSecs = 0;
+		while ((cc.getRunningBehavior() == null || !cc.getRunningBehavior().getSpeechName()
+				.toLowerCase().contains("obstacle"))
+				&& waitedSecs < 20) {
+			Helper.sleepMillis(1000);
+			waitedSecs++;
+		}
+		Behavior runningBehavior = cc.getRunningBehavior();
+		assertNotNull(runningBehavior);
+		assertTrue(runningBehavior.getSpeechName().toLowerCase().contains("obstacle"));
+
+		assertEquals(1, behaviorList.getChildCount());
+
+		// Some more waiting just to let the UI finish building
+		Helper.sleepMillis(500);
+
+		final Button stopButton2 = (Button) behaviorList.getChildAt(0);
+
+		assertEquals("Stop Behavior", stopButton2.getText());
+
+		// ----Turn off behavior with mocked up voice results----
+		mockedSpeechResults.clear();
+		mockedSpeechResults.add("stop obstacle behavior");
+		speechResultManager.allocateNewResults(consoleActivity, mockedSpeechResults);
+
+		// Wait a while to make sure the behavior can be started
+		assertNotNull(cc);
+		// Wait a while to make sure the behavior can be stopped
+		waitedSecs = 0;
+		while (behaviorList.getChildCount() != 3 && waitedSecs < 20) {
+			Helper.sleepMillis(1000);
+			waitedSecs++;
+		}
+
+		assertEquals(3, behaviorList.getChildCount());
+
+		// Some more waiting just to let the UI finish building
+		Helper.sleepMillis(500);
+
 		// ----Turn off service----
 		starterActivity.runOnUiThread(new Runnable() {
 
@@ -191,8 +238,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		// Wait a while to make sure the real service can be stopped
 		waitedSecs = 0;
-		while (!statusTV.getText().toString().matches("Stopped!")
-				&& waitedSecs < 20) {
+		while (!statusTV.getText().toString().matches("Stopped!") && waitedSecs < 20) {
 			Helper.sleepMillis(1000);
 			waitedSecs++;
 		}
@@ -208,8 +254,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		// Go to Console and check for entries
 
-		getInstrumentation().invokeMenuActionSync(starterActivity,
-				R.id.console_menu_item, 0);
+		getInstrumentation().invokeMenuActionSync(starterActivity, R.id.console_menu_item, 0);
 
 		assertEquals(true, getInstrumentation().checkMonitorHit(amConsole, 1));
 
@@ -217,8 +262,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		Console console = (Console) consoleActivity;
 
-		TextView consoleTextView = (TextView) console
-				.findViewById(R.id.consoleTextView);
+		TextView consoleTextView = (TextView) console.findViewById(R.id.consoleTextView);
 
 		// Check if stuff was written to console
 		assertTrue(consoleTextView.getText().toString().contains("Flag"));

@@ -43,6 +43,7 @@ import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.behavior.BehaviorFactory;
+import eu.fpetersen.robobrain.behavior.BehaviorInitializer;
 import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
@@ -77,7 +78,7 @@ public class RobotService extends Service {
 
 	protected boolean mRunning = false;
 
-	private BehaviorReceiver mBehaviorReceiver;
+	private BehaviorSwitcher mBehaviorSwitcher;
 
 	private RobotReceiver mRobotReceiver;
 
@@ -104,7 +105,6 @@ public class RobotService extends Service {
 		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "RoboBrain");
 		mWakeLock.acquire();
 
-		mBehaviorReceiver = new BehaviorReceiver(RobotService.this);
 		mRobotReceiver = new RobotReceiver(RobotService.this);
 		mDistributingSpeechReceiver = new DistributingSpeechReceiver();
 
@@ -174,11 +174,6 @@ public class RobotService extends Service {
 
 				unregisterReceiver(connectionDetailReceiver);
 
-				IntentFilter behaviorReceiverFilter = new IntentFilter();
-				behaviorReceiverFilter.addAction(RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
-				behaviorReceiverFilter.addAction(RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
-				registerReceiver(mBehaviorReceiver, behaviorReceiverFilter);
-
 				// in order to receive broadcasted intents we need to register
 				// our
 				// receiver
@@ -190,6 +185,8 @@ public class RobotService extends Service {
 				// Receivers
 				registerReceiver(mDistributingSpeechReceiver, new IntentFilter(
 						RoboBrainIntent.ACTION_SPEECH));
+
+				mBehaviorSwitcher = new BehaviorSwitcher(RobotService.this);
 
 				mRunning = true;
 
@@ -293,13 +290,18 @@ public class RobotService extends Service {
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 				.getInstance(RobotService.this);
 		InputStream mappingFile = getResources().openRawResource(R.raw.behaviormapping);
-		Map<String, List<String>> behaviorMapping = behaviorFactory.createMappings(mappingFile);
+		Map<String, List<BehaviorInitializer>> behaviorMapping = behaviorFactory
+				.createMappings(mappingFile);
 		BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
 
-		List<String> behaviorNames = behaviorMapping.get(robot.getName());
+		List<BehaviorInitializer> behaviorInitializers = behaviorMapping.get(robot.getName());
 		List<Behavior> behaviors = new ArrayList<Behavior>();
-		for (String bName : behaviorNames) {
-			behaviors.add(bFac.createBehavior(bName, robot));
+		for (BehaviorInitializer initializer : behaviorInitializers) {
+			Behavior behavior = bFac.createBehavior(initializer.getName(), robot,
+					initializer.getSpeechName());
+			if (behavior.getRequirements().fulfillsRequirements(robot)) {
+				behaviors.add(behavior);
+			}
 		}
 		createCommandCenter(robot, behaviors);
 
@@ -319,14 +321,16 @@ public class RobotService extends Service {
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 				.getInstance(RobotService.this);
 		// Enter null for standard sd location
-		Map<String, List<String>> behaviorMapping = behaviorFactory.createMappings(null);
+		Map<String, List<BehaviorInitializer>> behaviorMapping = behaviorFactory
+				.createMappings(null);
 		BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
 		for (String robotName : robots.keySet()) {
 			Robot robot = robots.get(robotName);
-			List<String> behaviorNames = behaviorMapping.get(robotName);
+			List<BehaviorInitializer> behaviorInitializers = behaviorMapping.get(robotName);
 			List<Behavior> behaviors = new ArrayList<Behavior>();
-			for (String bName : behaviorNames) {
-				Behavior behavior = bFac.createBehavior(bName, robot);
+			for (BehaviorInitializer initializer : behaviorInitializers) {
+				Behavior behavior = bFac.createBehavior(initializer.getName(), robot,
+						initializer.getSpeechName());
 				if (behavior.getRequirements().fulfillsRequirements(robot)) {
 					behaviors.add(behavior);
 				}
@@ -480,11 +484,21 @@ public class RobotService extends Service {
 		unregisterReceiver(mDisconnectedReceiver);
 		mRunning = false;
 		unregisterReceiver(mRobotReceiver);
-		unregisterReceiver(mBehaviorReceiver);
-		unregisterReceiver(mDistributingSpeechReceiver);
 
+		unregisterReceiver(mDistributingSpeechReceiver);
+		if (mBehaviorSwitcher != null) {
+			mBehaviorSwitcher.destroy();
+		}
 		disconnectAll();
 		removeAllCCsAndBehaviors();
+	}
+
+	/**
+	 * 
+	 * @return A map containing all behaviors with UUIDs.
+	 */
+	public Map<UUID, Behavior> getAllBehaviors() {
+		return mAllBehaviors;
 	}
 
 }

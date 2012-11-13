@@ -20,44 +20,33 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.communication;
-
-import java.util.UUID;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+package eu.fpetersen.robobrain.behavior;
 
 /**
- * 
- * Receives behavior trigger intents and starts/stops the behavior. This enables
- * the RobotService to receive behavior triggers from other components i.e. the
- * UI.
+ * Holds the values necessary for initializing the behavior, after creating it.
  * 
  * @author Frederik Petersen
  * 
+ * 
  */
-public class BehaviorReceiver extends BroadcastReceiver {
+public class BehaviorInitializer {
 
-	private BehaviorSwitcher mSwitcher;
+	private String mName;
 
-	public BehaviorReceiver(BehaviorSwitcher behaviorSwitcher) {
-		this.mSwitcher = behaviorSwitcher;
+	private String mSpeechName;
+
+	public BehaviorInitializer(String name, String speechName) {
+		super();
+		this.mName = name;
+		this.mSpeechName = speechName;
 	}
 
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		if (intent.getAction().matches(RoboBrainIntent.ACTION_BEHAVIORTRIGGER)) {
-			boolean startIt = intent.getBooleanExtra(RoboBrainIntent.EXTRA_BEHAVIORSTATE, false);
-			UUID uuid = (UUID) intent.getSerializableExtra(RoboBrainIntent.EXTRA_BEHAVIORUUID);
+	public String getName() {
+		return mName;
+	}
 
-			if (startIt) {
-				mSwitcher.startBehavior(uuid);
-			} else {
-				mSwitcher.stopBehavior(uuid);
-			}
-
-		}
+	public String getSpeechName() {
+		return mSpeechName;
 	}
 
 }

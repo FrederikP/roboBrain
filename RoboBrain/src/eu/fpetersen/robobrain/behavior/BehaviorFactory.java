@@ -68,10 +68,13 @@ public class BehaviorFactory extends RoboBrainFactory {
 	 *            Name of the Behavior class.
 	 * @param robot
 	 *            The robot this behavior is supposed to be created for.
+	 * @param speechName
+	 *            The name that the behavior should react to when working with
+	 *            voice commands
 	 * @return Behavior instance or null if something went wrong. If something
 	 *         is amiss, check log.
 	 */
-	public Behavior createBehavior(String name, Robot robot) {
+	public Behavior createBehavior(String name, Robot robot, String speechName) {
 		if (!name.contains(".")) {
 			name = "eu.fpetersen.robobrain.behavior." + name;
 		}
@@ -84,7 +87,7 @@ public class BehaviorFactory extends RoboBrainFactory {
 				shortName = nameTokenizer.nextToken();
 			}
 
-			behavior.initialize(robot, shortName);
+			behavior.initialize(robot, shortName, speechName);
 		} catch (InstantiationException e) {
 			RoboLog.log(getService(), "Behavior class " + name + " could not be instantiated");
 		} catch (IllegalAccessException e) {

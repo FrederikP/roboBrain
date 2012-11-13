@@ -72,10 +72,9 @@ public class MockRobotService extends RobotService {
 	@Override
 	public Collection<CommandCenter> getAllCCs() {
 		Collection<CommandCenter> ccs = new ArrayList<CommandCenter>();
-		Robot robot = RobotFactory.getInstance(MockRobotService.this)
-				.createSimpleRobot("TestBot");
+		Robot robot = RobotFactory.getInstance(MockRobotService.this).createSimpleRobot("TestBot");
 		Behavior b1 = new BackAndForthBehavior();
-		b1.initialize(robot, "BackAndForth");
+		b1.initialize(robot, "BackAndForth", "TestSpeechName");
 		ArrayList<Behavior> behaviors = new ArrayList<Behavior>();
 		behaviors.add(b1);
 		ccs.add(new CommandCenter(robot, behaviors));

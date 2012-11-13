@@ -131,8 +131,7 @@ public class Starter extends Activity {
 	private void checkForInstalledAmarino() {
 		Integer amarinoVersion = isAmarinoInstalled();
 		if (amarinoVersion == null) {
-			RoboLog.alertError(
-					Starter.this,
+			RoboLog.alertError(Starter.this,
 					"Amarino toolkit not installed. Please get it from www.amarino-toolkit.net and install.");
 		} else if (amarinoVersion < 13) {
 			RoboLog.alertWarning(
@@ -144,8 +143,7 @@ public class Starter extends Activity {
 
 	private Integer isAmarinoInstalled() {
 		PackageManager packageManager = getPackageManager();
-		List<PackageInfo> listOfAllApps = packageManager
-				.getInstalledPackages(0);
+		List<PackageInfo> listOfAllApps = packageManager.getInstalledPackages(0);
 		for (PackageInfo info : listOfAllApps) {
 			if (info.packageName.matches("at.abraxas.amarino")) {
 				return info.versionCode;
@@ -172,10 +170,8 @@ public class Starter extends Activity {
 
 			mToggleStatusB.post(new Runnable() {
 				public void run() {
-					startService(new Intent(getApplicationContext(),
-							SpeechRecognizerService.class));
-					startService(new Intent(getApplicationContext(),
-							RobotService.class));
+					startService(new Intent(getApplicationContext(), SpeechRecognizerService.class));
+					startService(new Intent(getApplicationContext(), RobotService.class));
 				}
 			});
 
@@ -189,16 +185,13 @@ public class Starter extends Activity {
 			mToggleStatusB.post(new Runnable() {
 				public void run() {
 					mProgressDialog.setMessage("Sending stop behavior signal");
-					Intent intent = new Intent(
-							RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
+					Intent intent = new Intent(RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
 					Starter.this.sendBroadcast(intent);
 					Handler handler = new Handler();
 					handler.postDelayed(new Runnable() {
 						public void run() {
-							mProgressDialog
-									.setMessage("Sending service stop signals");
-							stopService(new Intent(getApplicationContext(),
-									RobotService.class));
+							mProgressDialog.setMessage("Sending service stop signals");
+							stopService(new Intent(getApplicationContext(), RobotService.class));
 							stopService(new Intent(getApplicationContext(),
 									SpeechRecognizerService.class));
 						}
@@ -314,9 +307,8 @@ public class Starter extends Activity {
 	 * @param cc
 	 *            CommandCenter of the robot
 	 */
-	private void setBehaviorButtonClickListener(final Button button,
-			final Behavior b, final LinearLayout behaviorLayout,
-			final CommandCenter cc) {
+	private void setBehaviorButtonClickListener(final Button button, final Behavior b,
+			final LinearLayout behaviorLayout, final CommandCenter cc) {
 		button.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -325,18 +317,14 @@ public class Starter extends Activity {
 				mProgressDialog.show();
 				Runnable behavior = new Runnable() {
 					public void run() {
-						Intent intent = new Intent(
-								RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
-						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORSTATE,
-								true);
-						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORUUID,
-								b.getId());
+						Intent intent = new Intent(RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
+						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORSTATE, true);
+						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORUUID, b.getId());
 						Starter.this.sendBroadcast(intent);
 					}
 				};
 				Thread thread = new Thread(behavior);
 				thread.start();
-				behaviorLayout.removeAllViews();
 			}
 		});
 	}
@@ -353,8 +341,7 @@ public class Starter extends Activity {
 	 * @param cc
 	 *            CommandCenter of the robot.
 	 */
-	protected void setStopBehaviorClickListener(
-			final Button stopBehaviorButton, final Behavior b,
+	protected void setStopBehaviorClickListener(final Button stopBehaviorButton, final Behavior b,
 			final LinearLayout behaviorLayout, final CommandCenter cc) {
 		stopBehaviorButton.setOnClickListener(new OnClickListener() {
 
@@ -364,18 +351,14 @@ public class Starter extends Activity {
 				mProgressDialog.show();
 				Runnable behaviorStopper = new Runnable() {
 					public void run() {
-						Intent intent = new Intent(
-								RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
-						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORSTATE,
-								false);
-						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORUUID,
-								b.getId());
+						Intent intent = new Intent(RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
+						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORSTATE, false);
+						intent.putExtra(RoboBrainIntent.EXTRA_BEHAVIORUUID, b.getId());
 						Starter.this.sendBroadcast(intent);
 					}
 				};
 				Thread thread = new Thread(behaviorStopper);
 				thread.start();
-				behaviorLayout.removeAllViews();
 
 			}
 		});
@@ -409,8 +392,12 @@ public class Starter extends Activity {
 	 * @param cc
 	 *            CommandCenter of the robot, containing all it's behaviors
 	 */
-	protected void addBehaviorButtons(final LinearLayout behaviorLayout,
-			final CommandCenter cc) {
+	protected void addBehaviorButtons(final LinearLayout behaviorLayout, final CommandCenter cc) {
+		runOnUiThread(new Runnable() {
+			public void run() {
+				behaviorLayout.removeAllViews();
+			}
+		});
 		boolean behaviorRunning = false;
 		Behavior rb = null;
 		for (Behavior b : cc.getBehaviors()) {
@@ -430,8 +417,7 @@ public class Starter extends Activity {
 						Button button = new Button(Starter.this);
 						button.setText(b.getName());
 						behaviorLayout.addView(button);
-						setBehaviorButtonClickListener(button, b,
-								behaviorLayout, cc);
+						setBehaviorButtonClickListener(button, b, behaviorLayout, cc);
 					}
 				});
 
@@ -443,8 +429,8 @@ public class Starter extends Activity {
 				public void run() {
 					Button stopBehaviorButton = new Button(Starter.this);
 					stopBehaviorButton.setText("Stop Behavior");
-					setStopBehaviorClickListener(stopBehaviorButton,
-							runningBehavior, behaviorLayout, cc);
+					setStopBehaviorClickListener(stopBehaviorButton, runningBehavior,
+							behaviorLayout, cc);
 					behaviorLayout.addView(stopBehaviorButton);
 				}
 			});
@@ -478,19 +464,17 @@ public class Starter extends Activity {
 		runOnUiThread(new Runnable() {
 
 			public void run() {
-				AlertDialog.Builder builder = new AlertDialog.Builder(
-						Starter.this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(Starter.this);
 
 				// 2. Chain together various setter methods to set the dialog
 				// characteristics
 				builder.setMessage(message).setTitle(title);
 
-				builder.setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int id) {
-								dialog.dismiss();
-							}
-						});
+				builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				});
 
 				// 3. Get the AlertDialog from create()
 				AlertDialog dialog = builder.create();

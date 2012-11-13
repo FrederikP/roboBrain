@@ -45,11 +45,10 @@ public class BehaviorFactoryTest extends AndroidTestCase {
 	 */
 	public void testBehaviorCreation() {
 		RobotService service = new MockRobotService(getContext());
-		Robot robot = RobotFactory.getInstance(service).createSimpleRobot(
-				"TESTBOT");
+		Robot robot = RobotFactory.getInstance(service).createSimpleRobot("TESTBOT");
 		BehaviorFactory bFac = BehaviorFactory.getInstance(service);
-		Behavior behavior = bFac.createBehavior(
-				BackAndForthBehavior.class.getName(), robot);
+		Behavior behavior = bFac.createBehavior(BackAndForthBehavior.class.getName(), robot,
+				"SpeechNameTest");
 		assertNotNull(behavior);
 		assertTrue(behavior instanceof BackAndForthBehavior);
 		assertNotNull(behavior.getId());

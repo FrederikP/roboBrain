@@ -103,4 +103,17 @@ public class CommandCenter {
 		return mBehaviors;
 	}
 
+	/**
+	 * 
+	 * @return Running behavior or null if there is none.
+	 */
+	public Behavior getRunningBehavior() {
+		for (Behavior b : mBehaviors) {
+			if (b.isTurnedOn()) {
+				return b;
+			}
+		}
+		return null;
+	}
+
 }

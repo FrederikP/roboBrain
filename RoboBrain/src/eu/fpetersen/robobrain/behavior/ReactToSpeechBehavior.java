@@ -61,8 +61,8 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	private List<String> mColorNames;
 
 	@Override
-	public void initialize(Robot robot, String name) {
-		super.initialize(robot, name);
+	public void initialize(Robot robot, String name, String speechName) {
+		super.initialize(robot, name, speechName);
 		mColorTable = RgbColorTableFactory.getInstance().getStandardColorTableFromTextFile(
 				getRobot().getRobotService());
 		mColorNames = mColorTable.getNames();

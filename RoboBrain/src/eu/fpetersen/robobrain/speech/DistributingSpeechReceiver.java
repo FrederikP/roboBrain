@@ -31,6 +31,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
+import eu.fpetersen.robobrain.communication.SpeechControlledBehaviorSwitcher;
 
 /**
  * Distributes the results of speech recognition to all registered
@@ -43,9 +44,12 @@ public class DistributingSpeechReceiver extends BroadcastReceiver {
 
 	/**
 	 * All registered SpeechReceivers that are being fed with Speech Recognition
-	 * Results
+	 * Results, except for the {@link SpeechControlledBehaviorSwitcher} see
+	 * below.
 	 */
 	private Set<SpeechReceiver> mReceivers;
+
+	private SpeechControlledBehaviorSwitcher mSpeechControlledBehaviorSwitcher;
 
 	public DistributingSpeechReceiver() {
 		mReceivers = new HashSet<SpeechReceiver>();
@@ -53,19 +57,51 @@ public class DistributingSpeechReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		boolean isBehaviorCommand = false;
 		if (intent.getAction().matches(RoboBrainIntent.ACTION_SPEECH)
 				&& intent.hasExtra(RoboBrainIntent.EXTRA_SPEECH_RESULTS)) {
 			String[] resultArray = intent.getStringArrayExtra(RoboBrainIntent.EXTRA_SPEECH_RESULTS);
 			List<String> results = new ArrayList<String>();
-			for (String result : resultArray) {
-				results.add(result);
-			}
+			isBehaviorCommand = addResultsToListAndCheckForBehaviorCommand(resultArray, results);
 
-			for (SpeechReceiver rec : mReceivers) {
-				rec.onReceive(results);
+			if (isBehaviorCommand && mSpeechControlledBehaviorSwitcher != null) {
+				mSpeechControlledBehaviorSwitcher.onReceive(results);
+			} else {
+				for (SpeechReceiver rec : mReceivers) {
+					rec.onReceive(results);
+				}
 			}
 		}
 
+	}
+
+	/**
+	 * 
+	 * @param resultArray
+	 *            Speech results to be checked vor behavior command and to be
+	 *            filled into list
+	 * @param results
+	 *            List to be filled with results. If behavior is found in it,
+	 *            only filled with "behavior" containing lines.
+	 * @return True if results contain Behavior Command
+	 */
+	private boolean addResultsToListAndCheckForBehaviorCommand(String[] resultArray,
+			List<String> results) {
+		boolean isBehaviorCommand = false;
+		for (String result : resultArray) {
+			if (isBehaviorCommand) {
+				if (result.toLowerCase().contains("behavior")) {
+					results.add(result);
+				}
+			} else {
+				if (result.toLowerCase().contains("behavior")) {
+					results.clear();
+					isBehaviorCommand = true;
+				}
+				results.add(result);
+			}
+		}
+		return isBehaviorCommand;
 	}
 
 	public void addReceiver(SpeechReceiver rec) {
@@ -74,6 +110,11 @@ public class DistributingSpeechReceiver extends BroadcastReceiver {
 
 	public void removeReceiver(SpeechReceiver rec) {
 		mReceivers.remove(rec);
+	}
+
+	public void setSpeechControlledBehaviorSwitcher(
+			SpeechControlledBehaviorSwitcher SpeechControlledBehaviorSwitcher) {
+		this.mSpeechControlledBehaviorSwitcher = SpeechControlledBehaviorSwitcher;
 	}
 
 }

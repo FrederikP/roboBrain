@@ -28,6 +28,7 @@ import java.util.Map;
 
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.R;
+import eu.fpetersen.robobrain.behavior.BehaviorInitializer;
 import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
 import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
@@ -41,21 +42,18 @@ import eu.fpetersen.robobrain.test.mock.MockRobotService;
  */
 public class BehaviorMappingFactoryTest extends AndroidTestCase {
 
-	public void testCreatingBehaviorMappingFromXML() {
+	public void testCreatingBehaviorMappingFromXml() {
 		RobotService service = new MockRobotService(getContext());
-		InputStream mappingXML = getContext().getResources().openRawResource(
-				R.raw.behaviormapping);
-		assertNotNull(mappingXML);
-		BehaviorMappingFactory bmFac = BehaviorMappingFactory
-				.getInstance(service);
+		InputStream mappingXml = getContext().getResources().openRawResource(R.raw.behaviormapping);
+		assertNotNull(mappingXml);
+		BehaviorMappingFactory bmFac = BehaviorMappingFactory.getInstance(service);
 		assertNotNull(bmFac);
-		Map<String, List<String>> mapping = bmFac.createMappings(mappingXML);
+		Map<String, List<BehaviorInitializer>> mapping = bmFac.createMappings(mappingXml);
 		assertNotNull(mapping);
 		assertEquals(1, mapping.keySet().size());
-		String robotName = mapping.keySet().toArray(
-				new String[mapping.keySet().size()])[0];
-		List<String> behaviorNames = mapping.get(robotName);
-		assertEquals(3, behaviorNames.size());
+		String robotName = mapping.keySet().toArray(new String[mapping.keySet().size()])[0];
+		List<BehaviorInitializer> behaviorInitializers = mapping.get(robotName);
+		assertEquals(3, behaviorInitializers.size());
 	}
 
 }

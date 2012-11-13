@@ -48,6 +48,7 @@ public abstract class Behavior {
 	private Robot mRobot;
 	private String mName;
 	private UUID mId;
+	private String mSpeechName;
 	private Requirements mRequirements = new Requirements();
 
 	/**
@@ -59,10 +60,14 @@ public abstract class Behavior {
 	 *            The robot this behavior is created for.
 	 * @param name
 	 *            The name of the behavior to be displayed in the UI.
+	 * @param speechName
+	 *            The name that the behavior should react to when working with
+	 *            voice commands
 	 */
-	public void initialize(Robot robot, String name) {
+	public void initialize(Robot robot, String name, String speechName) {
 		this.mRobot = robot;
 		this.mName = name;
+		this.mSpeechName = speechName;
 	}
 
 	/**
@@ -188,6 +193,10 @@ public abstract class Behavior {
 
 	public Requirements getRequirements() {
 		return mRequirements;
+	}
+
+	public String getSpeechName() {
+		return mSpeechName;
 	}
 
 }

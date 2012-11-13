@@ -66,7 +66,7 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 	 * 
 	 * @return Mapping of robotname to behaviornames.
 	 */
-	public Map<String, List<String>> createMappings(InputStream in) {
+	public Map<String, List<BehaviorInitializer>> createMappings(InputStream in) {
 		try {
 			if (in == null) {
 				in = new FileInputStream(
@@ -105,9 +105,9 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private Map<String, List<String>> readMappings(XmlPullParser parser)
+	private Map<String, List<BehaviorInitializer>> readMappings(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
-		Map<String, List<String>> behaviorMapping = new HashMap<String, List<String>>();
+		Map<String, List<BehaviorInitializer>> behaviorMapping = new HashMap<String, List<BehaviorInitializer>>();
 		parser.require(XmlPullParser.START_TAG, NS, "behaviormapping");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -135,10 +135,11 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private void addRobotToMapping(XmlPullParser parser, Map<String, List<String>> behaviorMapping)
-			throws XmlPullParserException, IOException {
+	private void addRobotToMapping(XmlPullParser parser,
+			Map<String, List<BehaviorInitializer>> behaviorMapping) throws XmlPullParserException,
+			IOException {
 
-		List<String> behaviorNamesForRobot = new ArrayList<String>();
+		List<BehaviorInitializer> behaviorInitializersForRobot = new ArrayList<BehaviorInitializer>();
 		parser.require(XmlPullParser.START_TAG, NS, "robot");
 		String robotName = parser.getAttributeValue(NS, "name");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -147,31 +148,32 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 			}
 			String name = parser.getName();
 			if (name.equals("behavior")) {
-				addBehaviorName(behaviorNamesForRobot, parser);
+				addBehaviorInitializer(behaviorInitializersForRobot, parser);
 			} else {
 				XmlParserHelper.skip(parser);
 			}
 		}
 
-		behaviorMapping.put(robotName, behaviorNamesForRobot);
+		behaviorMapping.put(robotName, behaviorInitializersForRobot);
 
 	}
 
 	/**
 	 * Adds one behavior name to the mapping
 	 * 
-	 * @param behaviorNamesForRobot
+	 * @param behaviorInitializersForRobot
 	 *            List of names that the new name is added to
 	 * @param parser
 	 *            The parser for the behaviormapping.xml file
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private void addBehaviorName(List<String> behaviorNamesForRobot, XmlPullParser parser)
-			throws XmlPullParserException, IOException {
+	private void addBehaviorInitializer(List<BehaviorInitializer> behaviorInitializersForRobot,
+			XmlPullParser parser) throws XmlPullParserException, IOException {
 		parser.require(XmlPullParser.START_TAG, NS, "behavior");
 
-		behaviorNamesForRobot.add(parser.getAttributeValue(NS, "name"));
+		behaviorInitializersForRobot.add(new BehaviorInitializer(parser.getAttributeValue(NS,
+				"name"), parser.getAttributeValue(NS, "speechName")));
 		parser.nextTag();
 		parser.require(XmlPullParser.END_TAG, NS, "behavior");
 
