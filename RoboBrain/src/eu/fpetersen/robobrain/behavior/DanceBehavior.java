@@ -38,14 +38,14 @@ import java.util.TimerTask;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
-import eu.fpetersen.robobrain.color.RGBColor;
-import eu.fpetersen.robobrain.color.RGBColorTable;
-import eu.fpetersen.robobrain.color.RGBColorTableFactory;
+import eu.fpetersen.robobrain.color.RgbColor;
+import eu.fpetersen.robobrain.color.RgbColorTable;
+import eu.fpetersen.robobrain.color.RgbColorTableFactory;
 import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.ProximitySensor;
-import eu.fpetersen.robobrain.robot.RGBLED;
+import eu.fpetersen.robobrain.robot.RgbLed;
 import eu.fpetersen.robobrain.robot.Servo;
 import eu.fpetersen.robobrain.util.RoboLog;
 
@@ -89,14 +89,12 @@ public class DanceBehavior extends Behavior {
 		if (getRobot().getMainMotor().getState() != MotorState.STOPPED) {
 			if (getRobot().getFrontSensor().getValue() < 30
 					&& getRobot().getMainMotor().getState() != MotorState.FORWARD) {
-				RoboLog.log(getRobot().getRobotService(),
-						"Stopping due to obstacle in front");
+				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in front");
 				getRobot().getMainMotor().stop(0);
 			}
 			if (getRobot().getBackSensor().getValue() == 0
 					&& getRobot().getMainMotor().getState() != MotorState.BACKWARD) {
-				RoboLog.log(getRobot().getRobotService(),
-						"Stopping due to obstacle in back");
+				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in back");
 				getRobot().getMainMotor().stop(0);
 			}
 		}
@@ -106,18 +104,16 @@ public class DanceBehavior extends Behavior {
 	protected void onStop() {
 		stopMusic();
 		getRobot().getMainMotor().stop(0);
-		getRobot().getHeadColorLED().set(0, 0, 0);
+		getRobot().getHeadColorLed().set(0, 0, 0);
 	}
 
 	@Override
 	protected void fillRequirements(Requirements requirements) {
 		requirements.addPart("main_motor", Motor.class.getName());
 		requirements.addPart("head_servo", Servo.class.getName());
-		requirements.addPart("front_proxsensor",
-				ProximitySensor.class.getName());
-		requirements
-				.addPart("back_proxsensor", ProximitySensor.class.getName());
-		requirements.addPart("headcolor_rgbled", RGBLED.class.getName());
+		requirements.addPart("front_proxsensor", ProximitySensor.class.getName());
+		requirements.addPart("back_proxsensor", ProximitySensor.class.getName());
+		requirements.addPart("headcolor_rgbled", RgbLed.class.getName());
 	}
 
 	/**
@@ -130,8 +126,7 @@ public class DanceBehavior extends Behavior {
 
 		if (musicFile.exists()) {
 			stopMusic();
-			mPlayer = MediaPlayer.create(getRobot().getRobotService(),
-					Uri.fromFile(musicFile));
+			mPlayer = MediaPlayer.create(getRobot().getRobotService(), Uri.fromFile(musicFile));
 			mPlayer.start();
 		}
 	}
@@ -161,17 +156,16 @@ public class DanceBehavior extends Behavior {
 
 		TimerTask rgbTask = new TimerTask() {
 
-			private RGBColorTable colorTable = RGBColorTableFactory
-					.getInstance().getStandardColorTableFromTextFile(
-							getRobot().getRobotService());
+			private RgbColorTable colorTable = RgbColorTableFactory.getInstance()
+					.getStandardColorTableFromTextFile(getRobot().getRobotService());
 
 			@Override
 			public void run() {
 				if (!isTurnedOn()) {
 					timer.cancel();
 				} else {
-					RGBColor randomColor = colorTable.getRandomColor();
-					getRobot().getHeadColorLED().set(randomColor);
+					RgbColor randomColor = colorTable.getRandomColor();
+					getRobot().getHeadColorLed().set(randomColor);
 				}
 			}
 		};

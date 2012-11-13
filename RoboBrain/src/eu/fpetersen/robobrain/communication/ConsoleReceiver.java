@@ -38,18 +38,17 @@ public class ConsoleReceiver extends BroadcastReceiver {
 	/**
 	 * Console Activity this Receiver receives intents for
 	 */
-	private Console console;
+	private Console mConsole;
 
 	public ConsoleReceiver(Console console) {
-		this.console = console;
+		this.mConsole = console;
 	}
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 
 		if (intent.getAction().equals(RoboBrainIntent.ACTION_OUTPUT)) {
-			console.appendText(intent
-					.getStringExtra(RoboBrainIntent.EXTRA_OUTPUT));
+			mConsole.appendText(intent.getStringExtra(RoboBrainIntent.EXTRA_OUTPUT));
 		}
 
 	}

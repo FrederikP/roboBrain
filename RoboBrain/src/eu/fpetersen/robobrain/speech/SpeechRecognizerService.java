@@ -48,16 +48,15 @@ import eu.fpetersen.robobrain.util.RoboLog;
 public class SpeechRecognizerService extends Service {
 
 	protected static final String TAG = "RobotBrain - SpeechRecognizerService";
-	private SpeechRecognizer speechR;
-	private static SpeechRecognizerService instance;
+	private SpeechRecognizer mSpeechR;
+	private static SpeechRecognizerService sInstance;
 
 	/**
 	 * Setup the Speech Recognizer with the Android API
 	 */
 	protected void setupSpeechRecognition() {
 
-		speechR = SpeechRecognizer
-				.createSpeechRecognizer(SpeechRecognizerService.this);
+		mSpeechR = SpeechRecognizer.createSpeechRecognizer(SpeechRecognizerService.this);
 		setSpeechRecognitionListener();
 
 	}
@@ -67,7 +66,7 @@ public class SpeechRecognizerService extends Service {
 	 * {@link SpeechRecognizer}
 	 */
 	private void setSpeechRecognitionListener() {
-		speechR.setRecognitionListener(new RecognitionListener() {
+		mSpeechR.setRecognitionListener(new RecognitionListener() {
 
 			public void onReadyForSpeech(Bundle params) {
 				// Log.d(TAG, "onReadyForSpeech");
@@ -128,10 +127,9 @@ public class SpeechRecognizerService extends Service {
 
 	@Override
 	public void onCreate() {
-		instance = SpeechRecognizerService.this;
+		sInstance = SpeechRecognizerService.this;
 		if (Starter.getInstance() != null) {
-			if (SpeechRecognizer.isRecognitionAvailable(SpeechRecognizerService
-					.getInstance())) {
+			if (SpeechRecognizer.isRecognitionAvailable(SpeechRecognizerService.getInstance())) {
 				Starter.getInstance().runOnUiThread(new Runnable() {
 
 					public void run() {
@@ -139,8 +137,7 @@ public class SpeechRecognizerService extends Service {
 					}
 				});
 			} else {
-				RoboLog.alertWarning(instance,
-						"No Speech Recognition available on this device.");
+				RoboLog.alertWarning(sInstance, "No Speech Recognition available on this device.");
 				this.stopSelf();
 			}
 		}
@@ -148,13 +145,13 @@ public class SpeechRecognizerService extends Service {
 
 	@Override
 	public void onDestroy() {
-		if (speechR != null) {
+		if (mSpeechR != null) {
 			Starter.getInstance().runOnUiThread(new Runnable() {
 
 				public void run() {
-					speechR.stopListening();
-					speechR.cancel();
-					speechR.destroy();
+					mSpeechR.stopListening();
+					mSpeechR.cancel();
+					mSpeechR.destroy();
 				}
 			});
 		}
@@ -168,18 +165,16 @@ public class SpeechRecognizerService extends Service {
 	}
 
 	protected void startSpeechListening() {
-		final Intent intent = new Intent(
-				RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+		final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
 				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-		intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,
-				"voice.recognition.test");
+		intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "voice.recognition.test");
 		Starter.getInstance().runOnUiThread(new Runnable() {
 
 			public void run() {
-				if (speechR != null) {
+				if (mSpeechR != null) {
 					intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
-					speechR.startListening(intent);
+					mSpeechR.startListening(intent);
 				} else {
 					stopSelf();
 				}
@@ -194,7 +189,7 @@ public class SpeechRecognizerService extends Service {
 	}
 
 	public static SpeechRecognizerService getInstance() {
-		return instance;
+		return sInstance;
 	}
 
 }

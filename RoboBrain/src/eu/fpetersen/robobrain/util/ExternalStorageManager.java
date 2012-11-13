@@ -47,10 +47,7 @@ public class ExternalStorageManager {
 	private static void createDirIfNotExistant(Context context, File dir) {
 		if (!dir.exists()) {
 			if (!dir.mkdir()) {
-				RoboLog.log(
-						context,
-						"Directory could not be created: "
-								+ dir.getAbsolutePath());
+				RoboLog.log(context, "Directory could not be created: " + dir.getAbsolutePath());
 			}
 		}
 	}
@@ -60,10 +57,8 @@ public class ExternalStorageManager {
 	 * @return File that represents robobrains root directory in sd card.
 	 */
 	public static File getRoboBrainRoot(Context context) {
-		File roboBrainRoot = new File(Environment.getExternalStorageDirectory()
-				.getAbsolutePath()
-				+ File.separator
-				+ context.getString(R.string.sd_robobrain_root_dir));
+		File roboBrainRoot = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+				+ File.separator + context.getString(R.string.sd_robobrain_root_dir));
 		createDirIfNotExistant(context, roboBrainRoot);
 		return roboBrainRoot;
 	}
@@ -74,14 +69,12 @@ public class ExternalStorageManager {
 	 */
 	public static File getBehaviorMappingFile(Context context) {
 		File roboBrainRoot = getRoboBrainRoot(context);
-		File behaviorMappingFile = new File(roboBrainRoot,
-				"behaviormapping.xml");
+		File behaviorMappingFile = new File(roboBrainRoot, "behaviormapping.xml");
 		if (!behaviorMappingFile.exists()) {
 			try {
 				behaviorMappingFile.createNewFile();
 			} catch (IOException e) {
-				RoboLog.alertError(
-						context,
+				RoboLog.alertError(context,
 						"Something went wrong when trying to create behaviormapping file. Check sd card and log.");
 				e.printStackTrace();
 			}
@@ -95,9 +88,7 @@ public class ExternalStorageManager {
 	 *         configuration *.xml files.
 	 */
 	public static File getRobotsXmlDir(Context context) {
-		File robotsXmlDir = new File(getRoboBrainRoot(context)
-				.getAbsolutePath()
-				+ File.separator
+		File robotsXmlDir = new File(getRoboBrainRoot(context).getAbsolutePath() + File.separator
 				+ context.getString(R.string.sd_robobrain_robots_xml_dir));
 		createDirIfNotExistant(context, robotsXmlDir);
 		return robotsXmlDir;

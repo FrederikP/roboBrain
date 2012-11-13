@@ -23,12 +23,12 @@
 package eu.fpetersen.robobrain.color.test;
 
 import android.test.AndroidTestCase;
-import eu.fpetersen.robobrain.color.RGBColor;
-import eu.fpetersen.robobrain.color.RGBColorTable;
-import eu.fpetersen.robobrain.color.RGBColorTableFactory;
+import eu.fpetersen.robobrain.color.RgbColor;
+import eu.fpetersen.robobrain.color.RgbColorTable;
+import eu.fpetersen.robobrain.color.RgbColorTableFactory;
 
 /**
- * Tests the {@link RGBColorTableFactory} class
+ * Tests the {@link RgbColorTableFactory} class
  * 
  * @author Frederik Petersen
  * 
@@ -40,15 +40,15 @@ public class RGBColorTableFactoryTest extends AndroidTestCase {
 	 * resources of the app
 	 */
 	public void testColorsFromFileCreation() {
-		RGBColorTableFactory rgbFac = RGBColorTableFactory.getInstance();
+		RgbColorTableFactory rgbFac = RgbColorTableFactory.getInstance();
 		assertNotNull(rgbFac);
-		RGBColorTable table = rgbFac
+		RgbColorTable table = rgbFac
 				.getStandardColorTableFromTextFile(getContext());
 		assertNotNull(table);
 		assertTrue(table.getNames().size() > 0);
 		String newColorName = "Some Color";
-		table.addColor(newColorName, new RGBColor(newColorName, 22, 22, 22));
-		RGBColor newColor = table.getColorForName(newColorName);
+		table.addColor(newColorName, new RgbColor(newColorName, 22, 22, 22));
+		RgbColor newColor = table.getColorForName(newColorName);
 		assertNotNull(newColor);
 	}
 

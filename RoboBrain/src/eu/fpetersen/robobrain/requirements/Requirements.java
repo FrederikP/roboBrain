@@ -38,7 +38,7 @@ import eu.fpetersen.robobrain.util.RoboLog;
  */
 public class Requirements {
 
-	public Map<String, String> partsRequired = new HashMap<String, String>();
+	public Map<String, String> mPartsRequired = new HashMap<String, String>();
 
 	/**
 	 * Add a part that is required to run the behavior.
@@ -49,30 +49,23 @@ public class Requirements {
 	 *            Actual Part class
 	 */
 	public void addPart(String id, String partType) {
-		partsRequired.put(id, partType);
+		mPartsRequired.put(id, partType);
 	}
 
 	public boolean fulfillsRequirements(Robot robot) {
-		for (String id : partsRequired.keySet()) {
+		for (String id : mPartsRequired.keySet()) {
 			RobotPart part = robot.getPart(id);
 			if (part == null) {
-				RoboLog.alertError(
-						robot.getRobotService(),
-						"Robot "
-								+ robot.getName()
-								+ " does not fulfill Requirements: Part with id "
-								+ id + " could not be found");
+				RoboLog.alertError(robot.getRobotService(), "Robot " + robot.getName()
+						+ " does not fulfill Requirements: Part with id " + id
+						+ " could not be found");
 				return false;
 			}
 			String typeName = part.getClass().getName();
-			if (!typeName.matches(partsRequired.get(id))) {
-				RoboLog.alertError(
-						robot.getRobotService(),
-						"Robot "
-								+ robot.getName()
-								+ " does not fulfill Requirements: Part with id "
-								+ id + " is not of type: "
-								+ partsRequired.get(id));
+			if (!typeName.matches(mPartsRequired.get(id))) {
+				RoboLog.alertError(robot.getRobotService(), "Robot " + robot.getName()
+						+ " does not fulfill Requirements: Part with id " + id
+						+ " is not of type: " + mPartsRequired.get(id));
 				return false;
 			}
 		}

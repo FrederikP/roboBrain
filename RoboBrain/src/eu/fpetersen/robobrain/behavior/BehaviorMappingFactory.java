@@ -38,7 +38,7 @@ import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
 import eu.fpetersen.robobrain.util.RoboLog;
-import eu.fpetersen.robobrain.util.XMLParserHelper;
+import eu.fpetersen.robobrain.util.XmlParserHelper;
 
 /**
  * Singleton factory that allows creating a mapping of robots to behaviors from
@@ -49,8 +49,8 @@ import eu.fpetersen.robobrain.util.XMLParserHelper;
  */
 public class BehaviorMappingFactory extends RoboBrainFactory {
 
-	private static BehaviorMappingFactory instance;
-	private static final String ns = null;
+	private static BehaviorMappingFactory sInstance;
+	private static final String NS = null;
 
 	private BehaviorMappingFactory(RobotService service) {
 		super(service);
@@ -70,8 +70,7 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 		try {
 			if (in == null) {
 				in = new FileInputStream(
-						ExternalStorageManager
-								.getBehaviorMappingFile(getService()));
+						ExternalStorageManager.getBehaviorMappingFile(getService()));
 			}
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(in, null);
@@ -109,7 +108,7 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 	private Map<String, List<String>> readMappings(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
 		Map<String, List<String>> behaviorMapping = new HashMap<String, List<String>>();
-		parser.require(XmlPullParser.START_TAG, ns, "behaviormapping");
+		parser.require(XmlPullParser.START_TAG, NS, "behaviormapping");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -118,7 +117,7 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 			if (name.equals("robot")) {
 				addRobotToMapping(parser, behaviorMapping);
 			} else {
-				XMLParserHelper.skip(parser);
+				XmlParserHelper.skip(parser);
 			}
 		}
 
@@ -136,13 +135,12 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private void addRobotToMapping(XmlPullParser parser,
-			Map<String, List<String>> behaviorMapping)
+	private void addRobotToMapping(XmlPullParser parser, Map<String, List<String>> behaviorMapping)
 			throws XmlPullParserException, IOException {
 
 		List<String> behaviorNamesForRobot = new ArrayList<String>();
-		parser.require(XmlPullParser.START_TAG, ns, "robot");
-		String robotName = parser.getAttributeValue(ns, "name");
+		parser.require(XmlPullParser.START_TAG, NS, "robot");
+		String robotName = parser.getAttributeValue(NS, "name");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -151,7 +149,7 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 			if (name.equals("behavior")) {
 				addBehaviorName(behaviorNamesForRobot, parser);
 			} else {
-				XMLParserHelper.skip(parser);
+				XmlParserHelper.skip(parser);
 			}
 		}
 
@@ -169,23 +167,23 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private void addBehaviorName(List<String> behaviorNamesForRobot,
-			XmlPullParser parser) throws XmlPullParserException, IOException {
-		parser.require(XmlPullParser.START_TAG, ns, "behavior");
+	private void addBehaviorName(List<String> behaviorNamesForRobot, XmlPullParser parser)
+			throws XmlPullParserException, IOException {
+		parser.require(XmlPullParser.START_TAG, NS, "behavior");
 
-		behaviorNamesForRobot.add(parser.getAttributeValue(ns, "name"));
+		behaviorNamesForRobot.add(parser.getAttributeValue(NS, "name"));
 		parser.nextTag();
-		parser.require(XmlPullParser.END_TAG, ns, "behavior");
+		parser.require(XmlPullParser.END_TAG, NS, "behavior");
 
 	}
 
 	public static BehaviorMappingFactory getInstance(RobotService service) {
-		if (instance == null) {
-			instance = new BehaviorMappingFactory(service);
-		} else if (instance.getService() != service) {
-			instance.setService(service);
+		if (sInstance == null) {
+			sInstance = new BehaviorMappingFactory(service);
+		} else if (sInstance.getService() != service) {
+			sInstance.setService(service);
 		}
-		return instance;
+		return sInstance;
 	}
 
 }

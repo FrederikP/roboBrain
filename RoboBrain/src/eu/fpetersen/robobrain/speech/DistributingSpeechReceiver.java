@@ -45,24 +45,23 @@ public class DistributingSpeechReceiver extends BroadcastReceiver {
 	 * All registered SpeechReceivers that are being fed with Speech Recognition
 	 * Results
 	 */
-	private Set<SpeechReceiver> receivers;
+	private Set<SpeechReceiver> mReceivers;
 
 	public DistributingSpeechReceiver() {
-		receivers = new HashSet<SpeechReceiver>();
+		mReceivers = new HashSet<SpeechReceiver>();
 	}
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (intent.getAction().matches(RoboBrainIntent.ACTION_SPEECH)
 				&& intent.hasExtra(RoboBrainIntent.EXTRA_SPEECH_RESULTS)) {
-			String[] resultArray = intent
-					.getStringArrayExtra(RoboBrainIntent.EXTRA_SPEECH_RESULTS);
+			String[] resultArray = intent.getStringArrayExtra(RoboBrainIntent.EXTRA_SPEECH_RESULTS);
 			List<String> results = new ArrayList<String>();
 			for (String result : resultArray) {
 				results.add(result);
 			}
 
-			for (SpeechReceiver rec : receivers) {
+			for (SpeechReceiver rec : mReceivers) {
 				rec.onReceive(results);
 			}
 		}
@@ -70,11 +69,11 @@ public class DistributingSpeechReceiver extends BroadcastReceiver {
 	}
 
 	public void addReceiver(SpeechReceiver rec) {
-		receivers.add(rec);
+		mReceivers.add(rec);
 	}
 
 	public void removeReceiver(SpeechReceiver rec) {
-		receivers.remove(rec);
+		mReceivers.remove(rec);
 	}
 
 }

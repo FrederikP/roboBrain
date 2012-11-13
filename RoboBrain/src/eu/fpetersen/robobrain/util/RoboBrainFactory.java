@@ -32,18 +32,18 @@ import eu.fpetersen.robobrain.communication.RobotService;
  */
 public abstract class RoboBrainFactory {
 
-	private RobotService service;
+	private RobotService mService;
 
 	public RoboBrainFactory(RobotService service) {
-		this.service = service;
+		this.mService = service;
 	}
 
 	public RobotService getService() {
-		return service;
+		return mService;
 	}
 
 	public void setService(RobotService service) {
-		this.service = service;
+		this.mService = service;
 	}
 
 }

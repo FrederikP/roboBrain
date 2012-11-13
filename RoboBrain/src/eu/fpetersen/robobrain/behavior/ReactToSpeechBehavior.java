@@ -25,14 +25,14 @@ package eu.fpetersen.robobrain.behavior;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import eu.fpetersen.robobrain.color.RGBColor;
-import eu.fpetersen.robobrain.color.RGBColorTable;
-import eu.fpetersen.robobrain.color.RGBColorTableFactory;
+import eu.fpetersen.robobrain.color.RgbColor;
+import eu.fpetersen.robobrain.color.RgbColorTable;
+import eu.fpetersen.robobrain.color.RgbColorTableFactory;
 import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.ProximitySensor;
-import eu.fpetersen.robobrain.robot.RGBLED;
+import eu.fpetersen.robobrain.robot.RgbLed;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.Servo;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
@@ -57,16 +57,15 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	protected static final String TAG = "ReactToSpeech-Behavior";
 	private static final int SPEED = 200;
 	private static final int ANGLE = 30;
-	private RGBColorTable colorTable;
-	private List<String> colorNames;
+	private RgbColorTable mColorTable;
+	private List<String> mColorNames;
 
 	@Override
 	public void initialize(Robot robot, String name) {
 		super.initialize(robot, name);
-		colorTable = RGBColorTableFactory
-				.getInstance()
-				.getStandardColorTableFromTextFile(getRobot().getRobotService());
-		colorNames = colorTable.getNames();
+		mColorTable = RgbColorTableFactory.getInstance().getStandardColorTableFromTextFile(
+				getRobot().getRobotService());
+		mColorNames = mColorTable.getNames();
 	}
 
 	/**
@@ -80,10 +79,10 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	 *            Result String list of Speech results.
 	 */
 	private void setLED(List<String> results) {
-		RGBLED led = getRobot().getHeadColorLED();
+		RgbLed led = getRobot().getHeadColorLed();
 		boolean colorMatch = false;
 		for (String s : results) {
-			for (String colorName : colorNames) {
+			for (String colorName : mColorNames) {
 				if (colorName.contains(" ")) {
 					colorMatch = checkMultipleWordColorName(s, colorName);
 				} else {
@@ -93,9 +92,8 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 				}
 
 				if (colorMatch) {
-					RGBColor color = colorTable.getColorForName(colorName);
-					RoboLog.log(getRobot().getRobotService(),
-							"Displaying color: " + colorName);
+					RgbColor color = mColorTable.getColorForName(colorName);
+					RoboLog.log(getRobot().getRobotService(), "Displaying color: " + colorName);
 					led.set(color.getRed(), color.getGreen(), color.getBlue());
 					break;
 				}
@@ -153,14 +151,12 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 		if (getRobot().getMainMotor().getState() != MotorState.STOPPED) {
 			if (getRobot().getFrontSensor().getValue() < 30
 					&& getRobot().getMainMotor().getState() != MotorState.FORWARD) {
-				RoboLog.log(getRobot().getRobotService(),
-						"Stopping due to obstacle in front");
+				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in front");
 				getRobot().getMainMotor().stop(0);
 			}
 			if (getRobot().getBackSensor().getValue() == 0
 					&& getRobot().getMainMotor().getState() != MotorState.BACKWARD) {
-				RoboLog.log(getRobot().getRobotService(),
-						"Stopping due to obstacle in back");
+				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in back");
 				getRobot().getMainMotor().stop(0);
 			}
 		}
@@ -191,8 +187,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 		if (motor.getState() != MotorState.STOPPED) {
 			for (String resultLine : results) {
 				if (resultLine.toLowerCase().contains("stop")) {
-					RoboLog.log(getRobot().getRobotService(),
-							"Received voice command to stop");
+					RoboLog.log(getRobot().getRobotService(), "Received voice command to stop");
 					motor.stop(0);
 					break;
 				}
@@ -201,13 +196,11 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 			// If stop is not in results, do whatever is found first
 			for (String resultLine : results) {
 				if (resultLine.toLowerCase().contains("forward")) {
-					RoboLog.log(getRobot().getRobotService(),
-							"Received voice command to advance");
+					RoboLog.log(getRobot().getRobotService(), "Received voice command to advance");
 					motor.advance(SPEED);
 					break;
 				} else if (resultLine.toLowerCase().contains("backward")) {
-					RoboLog.log(getRobot().getRobotService(),
-							"Received voice command to backoff");
+					RoboLog.log(getRobot().getRobotService(), "Received voice command to backoff");
 					motor.backOff(SPEED);
 					break;
 				} else if (resultLine.toLowerCase().contains("right")) {
@@ -216,8 +209,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 					motor.turnRight(ANGLE);
 					break;
 				} else if (resultLine.toLowerCase().contains("left")) {
-					RoboLog.log(getRobot().getRobotService(),
-							"Received voice command to turn left");
+					RoboLog.log(getRobot().getRobotService(), "Received voice command to turn left");
 					motor.turnLeft(ANGLE);
 					break;
 				}
@@ -228,18 +220,16 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 	@Override
 	protected void onStop() {
-		getRobot().getHeadColorLED().set(0, 0, 0);
+		getRobot().getHeadColorLed().set(0, 0, 0);
 	}
 
 	@Override
 	protected void fillRequirements(Requirements requirements) {
 		requirements.addPart("main_motor", Motor.class.getName());
 		requirements.addPart("head_servo", Servo.class.getName());
-		requirements.addPart("front_proxsensor",
-				ProximitySensor.class.getName());
-		requirements
-				.addPart("back_proxsensor", ProximitySensor.class.getName());
-		requirements.addPart("headcolor_rgbled", RGBLED.class.getName());
+		requirements.addPart("front_proxsensor", ProximitySensor.class.getName());
+		requirements.addPart("back_proxsensor", ProximitySensor.class.getName());
+		requirements.addPart("headcolor_rgbled", RgbLed.class.getName());
 	}
 
 	@Override

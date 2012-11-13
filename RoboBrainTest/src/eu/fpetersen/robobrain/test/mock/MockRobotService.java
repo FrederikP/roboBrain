@@ -66,7 +66,7 @@ public class MockRobotService extends RobotService {
 	 *            True if service is supposed to be running, false if otherwise
 	 */
 	public void setRunning(boolean running) {
-		this.running = running;
+		this.mRunning = running;
 	}
 
 	@Override

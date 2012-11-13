@@ -34,7 +34,7 @@ package eu.fpetersen.robobrain.robot;
  * 
  */
 public abstract class RobotPart {
-	private Robot robot;
+	private Robot mRobot;
 
 	/**
 	 * This needs to be called after instantiated the RobotPart and it exists
@@ -45,14 +45,14 @@ public abstract class RobotPart {
 	 *            Robot the Part belongs to.
 	 */
 	protected void initialize(Robot robot) {
-		this.robot = robot;
+		this.mRobot = robot;
 	}
 
 	protected RobotPart() {
 	}
 
 	public Robot getRobot() {
-		return robot;
+		return mRobot;
 	}
 
 }

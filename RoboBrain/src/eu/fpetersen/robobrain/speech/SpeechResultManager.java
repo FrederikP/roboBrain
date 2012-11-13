@@ -36,17 +36,17 @@ import eu.fpetersen.robobrain.communication.RoboBrainIntent;
  */
 public class SpeechResultManager {
 
-	private List<String> latestResultList;
-	private static SpeechResultManager instance;
+	private List<String> mLatestResultList;
+	private static SpeechResultManager sInstance;
 
 	private SpeechResultManager() {
 	}
 
 	public static SpeechResultManager getInstance() {
-		if (instance == null) {
-			instance = new SpeechResultManager();
+		if (sInstance == null) {
+			sInstance = new SpeechResultManager();
 		}
-		return instance;
+		return sInstance;
 	}
 
 	/**
@@ -54,9 +54,8 @@ public class SpeechResultManager {
 	 * 
 	 * @param latestResultList
 	 */
-	public void allocateNewResults(Context context,
-			List<String> latestResultList) {
-		this.latestResultList = latestResultList;
+	public void allocateNewResults(Context context, List<String> latestResultList) {
+		this.mLatestResultList = latestResultList;
 		broadcastResults(context);
 	}
 
@@ -66,7 +65,7 @@ public class SpeechResultManager {
 	private void broadcastResults(Context context) {
 		Intent intent = new Intent(RoboBrainIntent.ACTION_SPEECH);
 		intent.putExtra(RoboBrainIntent.EXTRA_SPEECH_RESULTS,
-				latestResultList.toArray(new String[latestResultList.size()]));
+				mLatestResultList.toArray(new String[mLatestResultList.size()]));
 		context.sendBroadcast(intent);
 	}
 }

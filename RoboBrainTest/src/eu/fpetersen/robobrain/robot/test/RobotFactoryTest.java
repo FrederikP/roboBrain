@@ -46,8 +46,7 @@ public class RobotFactoryTest extends AndroidTestCase {
 	 */
 	public void testSimpleRobotCreation() {
 		String robotName = "TestBot";
-		Robot robot = RobotFactory.getInstance(
-				new MockRobotService(getContext()))
+		Robot robot = RobotFactory.getInstance(new MockRobotService(getContext()))
 				.createSimpleRobot(robotName);
 		assertNotNull(robot);
 		assertEquals(robot.getName(), robotName);
@@ -56,18 +55,16 @@ public class RobotFactoryTest extends AndroidTestCase {
 	/**
 	 * Creates robot from raw resource xml file used in integration tests
 	 */
-	public void testXMLRobotCreation() {
-		InputStream robotXml = getContext().getResources().openRawResource(
-				R.raw.testbot);
-		Robot robot = RobotFactory.getInstance(
-				new MockRobotService(getContext()))
-				.createRobotFromXML(robotXml);
+	public void testXmlRobotCreation() {
+		InputStream robotXml = getContext().getResources().openRawResource(R.raw.testbot);
+		Robot robot = RobotFactory.getInstance(new MockRobotService(getContext()))
+				.createRobotFromXml(robotXml);
 		assertNotNull(robot);
 		assertEquals("TESTBOT", robot.getName());
 		assertNotNull(robot.getMainMotor());
 		assertNotNull(robot.getBackSensor());
 		assertNotNull(robot.getFrontSensor());
-		assertNotNull(robot.getHeadColorLED());
+		assertNotNull(robot.getHeadColorLed());
 		assertNotNull(robot.getHeadServo());
 	}
 

@@ -39,10 +39,10 @@ import eu.fpetersen.robobrain.util.RoboLog;
  */
 public class RobotReceiver extends BroadcastReceiver {
 
-	private RobotService service;
+	private RobotService mService;
 
 	public RobotReceiver(RobotService service) {
-		this.service = service;
+		this.mService = service;
 	}
 
 	@Override
@@ -51,16 +51,14 @@ public class RobotReceiver extends BroadcastReceiver {
 		String data = null;
 
 		// the type of data which is added to the intent
-		final int dataType = intent.getIntExtra(AmarinoIntent.EXTRA_DATA_TYPE,
-				-1);
+		final int dataType = intent.getIntExtra(AmarinoIntent.EXTRA_DATA_TYPE, -1);
 
 		if (dataType == AmarinoIntent.STRING_EXTRA) {
 			data = intent.getStringExtra(AmarinoIntent.EXTRA_DATA);
 			data = data.replace("\r", "");
 			data = data.replace("\n", "");
-			String address = intent
-					.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
-			CommandCenter cc = service.getCCForAddress(address);
+			String address = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+			CommandCenter cc = mService.getCCForAddress(address);
 			if (cc != null) {
 				Robot robot = cc.getRobot();
 				if (robot != null) {
@@ -83,9 +81,8 @@ public class RobotReceiver extends BroadcastReceiver {
 					} else if (data.contains(stoppedAfterDelay)) {
 						robot.getMainMotor().delayActionDone();
 					} else if (data.startsWith(consolePrefix)) {
-						String substring = data.substring(consolePrefix
-								.length());
-						RoboLog.log(service, substring);
+						String substring = data.substring(consolePrefix.length());
+						RoboLog.log(mService, substring);
 					}
 
 					/*

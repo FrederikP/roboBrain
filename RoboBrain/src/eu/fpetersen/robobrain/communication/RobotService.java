@@ -66,24 +66,24 @@ public class RobotService extends Service {
 	 * Static reference to a Map of all existing CommandCenters keyed by their
 	 * Robots.
 	 */
-	private Map<Robot, CommandCenter> ccPerRobot = new HashMap<Robot, CommandCenter>();
+	private Map<Robot, CommandCenter> mCcPerRobot = new HashMap<Robot, CommandCenter>();
 
 	/**
 	 * Static reference to a Map of all existing Behaviors identified by their
 	 * UUIDs. By having this additional Map, Behaviors can easily be triggered
 	 * from other components like the UI
 	 */
-	private Map<UUID, Behavior> allBehaviors = new HashMap<UUID, Behavior>();
+	private Map<UUID, Behavior> mAllBehaviors = new HashMap<UUID, Behavior>();
 
-	protected boolean running = false;
+	protected boolean mRunning = false;
 
-	private BehaviorReceiver bReceiver;
+	private BehaviorReceiver mBehaviorReceiver;
 
-	private RobotReceiver rReceiver;
+	private RobotReceiver mRobotReceiver;
 
-	private DistributingSpeechReceiver dSpeechReceiver;
+	private DistributingSpeechReceiver mDistributingSpeechReceiver;
 
-	private BroadcastReceiver disconnectedReceiver;
+	private BroadcastReceiver mDisconnectedReceiver;
 
 	protected PowerManager.WakeLock mWakeLock;
 
@@ -92,7 +92,7 @@ public class RobotService extends Service {
 	 * @return True if service is running, false if not.
 	 */
 	public boolean isRunning() {
-		return running;
+		return mRunning;
 	}
 
 	@Override
@@ -101,23 +101,20 @@ public class RobotService extends Service {
 
 		// Make sure device stays awake
 		final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK,
-				"RoboBrain");
+		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "RoboBrain");
 		mWakeLock.acquire();
 
-		bReceiver = new BehaviorReceiver(RobotService.this);
-		rReceiver = new RobotReceiver(RobotService.this);
-		dSpeechReceiver = new DistributingSpeechReceiver();
+		mBehaviorReceiver = new BehaviorReceiver(RobotService.this);
+		mRobotReceiver = new RobotReceiver(RobotService.this);
+		mDistributingSpeechReceiver = new DistributingSpeechReceiver();
 
-		disconnectedReceiver = new BroadcastReceiver() {
+		mDisconnectedReceiver = new BroadcastReceiver() {
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				if (getAllCCs() != null) {
-					if (intent.getAction().matches(
-							AmarinoIntent.ACTION_CONNECTED)) {
-						String address = intent
-								.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+					if (intent.getAction().matches(AmarinoIntent.ACTION_CONNECTED)) {
+						String address = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
 						CommandCenter cc = getCCForAddress(address);
 						if (cc != null) {
 							String robotName = cc.getRobot().getName();
@@ -142,13 +139,11 @@ public class RobotService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		String testingEnvvar;
 		try {
-			testingEnvvar = System
-					.getProperty(getString(R.string.envvar_testing));
+			testingEnvvar = System.getProperty(getString(R.string.envvar_testing));
 		} catch (Exception e) {
 			testingEnvvar = null;
 		}
-		final boolean testing = (testingEnvvar != null && testingEnvvar
-				.matches("true"));
+		final boolean testing = (testingEnvvar != null && testingEnvvar.matches("true"));
 		Log.v(TAG, "Starting RoboBrain service");
 		if (getAllCCs().isEmpty()) {
 			if (testing) {
@@ -164,8 +159,7 @@ public class RobotService extends Service {
 		// details
 		IntentFilter amarinoConnectionFilter = new IntentFilter();
 		amarinoConnectionFilter.addAction(AmarinoIntent.ACTION_CONNECTED);
-		amarinoConnectionFilter
-				.addAction(AmarinoIntent.ACTION_CONNECTION_FAILED);
+		amarinoConnectionFilter.addAction(AmarinoIntent.ACTION_CONNECTION_FAILED);
 		final BroadcastReceiver connectionDetailReceiver = setupConnectionDetailReceiver(connectionTable);
 		registerReceiver(connectionDetailReceiver, amarinoConnectionFilter);
 
@@ -181,28 +175,25 @@ public class RobotService extends Service {
 				unregisterReceiver(connectionDetailReceiver);
 
 				IntentFilter behaviorReceiverFilter = new IntentFilter();
-				behaviorReceiverFilter
-						.addAction(RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
-				behaviorReceiverFilter
-						.addAction(RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
-				registerReceiver(bReceiver, behaviorReceiverFilter);
+				behaviorReceiverFilter.addAction(RoboBrainIntent.ACTION_BEHAVIORTRIGGER);
+				behaviorReceiverFilter.addAction(RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
+				registerReceiver(mBehaviorReceiver, behaviorReceiverFilter);
 
 				// in order to receive broadcasted intents we need to register
 				// our
 				// receiver
-				registerReceiver(rReceiver, new IntentFilter(
-						AmarinoIntent.ACTION_RECEIVED));
+				registerReceiver(mRobotReceiver, new IntentFilter(AmarinoIntent.ACTION_RECEIVED));
 
 				// Register distributing Speech Receiver to redistribute Speech
 				// input
 				// from Speech Recognition Service to all registered Speech
 				// Receivers
-				registerReceiver(dSpeechReceiver, new IntentFilter(
+				registerReceiver(mDistributingSpeechReceiver, new IntentFilter(
 						RoboBrainIntent.ACTION_SPEECH));
 
-				running = true;
+				mRunning = true;
 
-				registerReceiver(disconnectedReceiver, new IntentFilter(
+				registerReceiver(mDisconnectedReceiver, new IntentFilter(
 						AmarinoIntent.ACTION_DISCONNECTED));
 
 				updateStarterUI(RobotService.this);
@@ -233,13 +224,10 @@ public class RobotService extends Service {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				if (intent.getAction().matches(AmarinoIntent.ACTION_CONNECTED)) {
-					String mac = intent
-							.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+					String mac = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
 					connectionTable.put(mac, true);
-				} else if (intent.getAction().matches(
-						AmarinoIntent.ACTION_CONNECTION_FAILED)) {
-					String mac = intent
-							.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
+				} else if (intent.getAction().matches(AmarinoIntent.ACTION_CONNECTION_FAILED)) {
+					String mac = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
 					connectionTable.put(mac, false);
 				}
 			}
@@ -252,12 +240,10 @@ public class RobotService extends Service {
 	 * 
 	 * @param connectionTable
 	 */
-	private void checkConnectionDetails(
-			final Map<String, Boolean> connectionTable, int timeout) {
+	private void checkConnectionDetails(final Map<String, Boolean> connectionTable, int timeout) {
 
 		int waitedSeconds = 0;
-		while (connectionTable.size() < getAllCCs().size()
-				&& waitedSeconds < timeout) {
+		while (connectionTable.size() < getAllCCs().size() && waitedSeconds < timeout) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -280,16 +266,13 @@ public class RobotService extends Service {
 			}
 		}
 
-		for (Entry<String, Boolean> connectionEntry : connectionTable
-				.entrySet()) {
+		for (Entry<String, Boolean> connectionEntry : connectionTable.entrySet()) {
 			if (!connectionEntry.getValue()) {
-				String robotName = getCCForAddress(connectionEntry.getKey())
-						.getRobot().getName();
+				String robotName = getCCForAddress(connectionEntry.getKey()).getRobot().getName();
 				// Device was successfully registered with Amarino. The
 				// connection failed anyways. Turned off?
-				RoboLog.alertError(RobotService.this,
-						"Connection failed for robot: " + robotName
-								+ ". Are you sure this robot is turned on?");
+				RoboLog.alertError(RobotService.this, "Connection failed for robot: " + robotName
+						+ ". Are you sure this robot is turned on?");
 			}
 		}
 
@@ -303,17 +286,14 @@ public class RobotService extends Service {
 	private void setupCommandCentersTest() {
 		RobotFactory robotFactory = RobotFactory.getInstance(this);
 		InputStream robotFile = getResources().openRawResource(R.raw.testbot);
-		Robot robot = robotFactory.createRobotFromXML(robotFile);
+		Robot robot = robotFactory.createRobotFromXml(robotFile);
 		if (robot == null) {
-			RoboLog.alertError(RobotService.this,
-					"Setting up test robot failed. What the heck?");
+			RoboLog.alertError(RobotService.this, "Setting up test robot failed. What the heck?");
 		}
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 				.getInstance(RobotService.this);
-		InputStream mappingFile = getResources().openRawResource(
-				R.raw.behaviormapping);
-		Map<String, List<String>> behaviorMapping = behaviorFactory
-				.createMappings(mappingFile);
+		InputStream mappingFile = getResources().openRawResource(R.raw.behaviormapping);
+		Map<String, List<String>> behaviorMapping = behaviorFactory.createMappings(mappingFile);
 		BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
 
 		List<String> behaviorNames = behaviorMapping.get(robot.getName());
@@ -339,8 +319,7 @@ public class RobotService extends Service {
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 				.getInstance(RobotService.this);
 		// Enter null for standard sd location
-		Map<String, List<String>> behaviorMapping = behaviorFactory
-				.createMappings(null);
+		Map<String, List<String>> behaviorMapping = behaviorFactory.createMappings(null);
 		BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
 		for (String robotName : robots.keySet()) {
 			Robot robot = robots.get(robotName);
@@ -359,7 +338,7 @@ public class RobotService extends Service {
 	@Override
 	public boolean stopService(Intent name) {
 		Log.v(TAG, "Stopping RoboBrain service");
-		if (running) {
+		if (mRunning) {
 			stopRunningService();
 		}
 		updateStarterUI(RobotService.this);
@@ -370,7 +349,7 @@ public class RobotService extends Service {
 	@Override
 	public void onDestroy() {
 		Log.v(TAG, "Destroying RoboBrain service");
-		if (running) {
+		if (mRunning) {
 			stopRunningService();
 		}
 
@@ -403,7 +382,7 @@ public class RobotService extends Service {
 	 *         {@link SpeechReceiver}s
 	 */
 	public DistributingSpeechReceiver getDistributingSpeechReceiver() {
-		return dSpeechReceiver;
+		return mDistributingSpeechReceiver;
 	}
 
 	/**
@@ -416,12 +395,12 @@ public class RobotService extends Service {
 	 *            The behaviors of the robot above.
 	 */
 	private void createCommandCenter(Robot robot, List<Behavior> behaviors) {
-		CommandCenter cc = ccPerRobot.get(robot);
+		CommandCenter cc = mCcPerRobot.get(robot);
 		if (cc == null) {
 			cc = new CommandCenter(robot, behaviors);
-			ccPerRobot.put(robot, cc);
+			mCcPerRobot.put(robot, cc);
 			for (Behavior b : behaviors) {
-				allBehaviors.put(b.getId(), b);
+				mAllBehaviors.put(b.getId(), b);
 			}
 		}
 	}
@@ -430,7 +409,7 @@ public class RobotService extends Service {
 	 * Connect to all Arduino Devices
 	 */
 	private void connectAll() {
-		for (CommandCenter cc : ccPerRobot.values()) {
+		for (CommandCenter cc : mCcPerRobot.values()) {
 			cc.connect();
 		}
 	}
@@ -439,7 +418,7 @@ public class RobotService extends Service {
 	 * Disconnect from all Arduino Devices
 	 */
 	private void disconnectAll() {
-		for (CommandCenter cc : ccPerRobot.values()) {
+		for (CommandCenter cc : mCcPerRobot.values()) {
 			cc.disconnect();
 		}
 	}
@@ -450,7 +429,7 @@ public class RobotService extends Service {
 	 * @return All existing CommandCenters
 	 */
 	public Collection<CommandCenter> getAllCCs() {
-		return ccPerRobot.values();
+		return mCcPerRobot.values();
 	}
 
 	/**
@@ -461,13 +440,12 @@ public class RobotService extends Service {
 	 * @return CommandCenter for the specified MACAddress
 	 */
 	public CommandCenter getCCForAddress(String address) {
-		for (CommandCenter center : ccPerRobot.values()) {
+		for (CommandCenter center : mCcPerRobot.values()) {
 			if (center.getRobot().getAddress().matches(address)) {
 				return center;
 			}
 		}
-		RoboLog.alertError(RobotService.this,
-				"CommandCenter not found for MAC: " + address);
+		RoboLog.alertError(RobotService.this, "CommandCenter not found for MAC: " + address);
 		return null;
 	}
 
@@ -475,8 +453,8 @@ public class RobotService extends Service {
 	 * Remove all CommandCenters and behavior references
 	 */
 	public void removeAllCCsAndBehaviors() {
-		ccPerRobot.clear();
-		allBehaviors.clear();
+		mCcPerRobot.clear();
+		mAllBehaviors.clear();
 	}
 
 	/**
@@ -487,8 +465,8 @@ public class RobotService extends Service {
 	 * @return The behavior identified by the UUID
 	 */
 	public Behavior getBehaviorForUUID(UUID uuid) {
-		if (allBehaviors.containsKey(uuid)) {
-			return allBehaviors.get(uuid);
+		if (mAllBehaviors.containsKey(uuid)) {
+			return mAllBehaviors.get(uuid);
 		} else {
 			return null;
 		}
@@ -499,11 +477,11 @@ public class RobotService extends Service {
 	 * and service
 	 */
 	private void stopRunningService() {
-		unregisterReceiver(disconnectedReceiver);
-		running = false;
-		unregisterReceiver(rReceiver);
-		unregisterReceiver(bReceiver);
-		unregisterReceiver(dSpeechReceiver);
+		unregisterReceiver(mDisconnectedReceiver);
+		mRunning = false;
+		unregisterReceiver(mRobotReceiver);
+		unregisterReceiver(mBehaviorReceiver);
+		unregisterReceiver(mDistributingSpeechReceiver);
 
 		disconnectAll();
 		removeAllCCsAndBehaviors();

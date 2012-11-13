@@ -22,7 +22,7 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot;
 
-import eu.fpetersen.robobrain.color.RGBColor;
+import eu.fpetersen.robobrain.color.RgbColor;
 
 /**
  * Represents a RGBLED connected to the analog pins of an Arduino device. Where
@@ -31,11 +31,11 @@ import eu.fpetersen.robobrain.color.RGBColor;
  * @author Frederik Petersen
  * 
  */
-public class RGBLED extends RobotPart {
+public class RgbLed extends RobotPart {
 
-	private int green = 0;
-	private int red = 0;
-	private int blue = 0;
+	private int mGreen = 0;
+	private int mRed = 0;
+	private int mBlue = 0;
 
 	/**
 	 * Set the RGBLED color to the specified RGB color
@@ -48,12 +48,12 @@ public class RGBLED extends RobotPart {
 	 *            Blue color value 0-255
 	 */
 	public void set(int red, int green, int blue) {
-		if (this.red == red && this.green == green && this.blue == blue) {
+		if (this.mRed == red && this.mGreen == green && this.mBlue == blue) {
 			// Already set to this value no need to contact Arduino/Hardware
 		} else {
-			this.red = red;
-			this.green = green;
-			this.blue = blue;
+			this.mRed = red;
+			this.mGreen = green;
+			this.mBlue = blue;
 			int[] colors = { red * 4, green * 4, blue * 4 };
 			getRobot().sendToArduino('D', colors);
 		}
@@ -65,7 +65,7 @@ public class RGBLED extends RobotPart {
 	 * @param color
 	 *            The color the LED should be set to
 	 */
-	public void set(RGBColor color) {
+	public void set(RgbColor color) {
 		set(color.getRed(), color.getGreen(), color.getBlue());
 	}
 

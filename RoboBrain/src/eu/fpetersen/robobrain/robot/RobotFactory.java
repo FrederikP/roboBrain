@@ -37,7 +37,7 @@ import eu.fpetersen.robobrain.communication.RobotService;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
 import eu.fpetersen.robobrain.util.RoboLog;
-import eu.fpetersen.robobrain.util.XMLParserHelper;
+import eu.fpetersen.robobrain.util.XmlParserHelper;
 
 /**
  * Singleton factory to create {@link Robot}s from xml configurations
@@ -47,24 +47,24 @@ import eu.fpetersen.robobrain.util.XMLParserHelper;
  */
 public class RobotFactory extends RoboBrainFactory {
 
-	private static RobotFactory instance;
+	private static RobotFactory sInstance;
 
 	/**
 	 * Namespace for xml parser. Is null if no namespace is used.
 	 */
-	private static final String ns = null;
+	private static final String NS = null;
 
 	private RobotFactory(RobotService service) {
 		super(service);
 	}
 
 	public static RobotFactory getInstance(RobotService service) {
-		if (instance == null) {
-			instance = new RobotFactory(service);
-		} else if (instance.getService() != service) {
-			instance.setService(service);
+		if (sInstance == null) {
+			sInstance = new RobotFactory(service);
+		} else if (sInstance.getService() != service) {
+			sInstance.setService(service);
 		}
-		return instance;
+		return sInstance;
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class RobotFactory extends RoboBrainFactory {
 		InputStream in = null;
 		try {
 			in = new FileInputStream(robotXml);
-			return createRobotFromXML(in);
+			return createRobotFromXml(in);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -88,21 +88,19 @@ public class RobotFactory extends RoboBrainFactory {
 				e.printStackTrace();
 			}
 		}
-		RoboLog.alertError(
-				getService(),
+		RoboLog.alertError(getService(),
 				"Something went wrong while building Robot. Check for valid and accessable conf files.");
 		return null;
 	}
 
-	public Robot createRobotFromXML(InputStream in) {
+	public Robot createRobotFromXml(InputStream in) {
 		try {
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(in, null);
 			parser.nextTag();
 			return readRobot(parser);
 		} catch (Exception e) {
-			RoboLog.alertError(
-					getService(),
+			RoboLog.alertError(getService(),
 					"Something went wrong while building Robot. Check for valid and accessable conf files.");
 			e.printStackTrace();
 		} finally {
@@ -124,11 +122,10 @@ public class RobotFactory extends RoboBrainFactory {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private Robot readRobot(XmlPullParser parser)
-			throws XmlPullParserException, IOException {
-		parser.require(XmlPullParser.START_TAG, ns, "robot");
-		String address = parser.getAttributeValue(ns, "address");
-		String robotName = parser.getAttributeValue(ns, "name");
+	private Robot readRobot(XmlPullParser parser) throws XmlPullParserException, IOException {
+		parser.require(XmlPullParser.START_TAG, NS, "robot");
+		String address = parser.getAttributeValue(NS, "address");
+		String robotName = parser.getAttributeValue(NS, "name");
 		Robot robot = new Robot(getService(), address, robotName);
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -138,7 +135,7 @@ public class RobotFactory extends RoboBrainFactory {
 			if (name.equals("parts")) {
 				addParts(parser, robot);
 			} else {
-				XMLParserHelper.skip(parser);
+				XmlParserHelper.skip(parser);
 			}
 		}
 
@@ -155,9 +152,9 @@ public class RobotFactory extends RoboBrainFactory {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private void addParts(XmlPullParser parser, Robot robot)
-			throws XmlPullParserException, IOException {
-		parser.require(XmlPullParser.START_TAG, ns, "parts");
+	private void addParts(XmlPullParser parser, Robot robot) throws XmlPullParserException,
+			IOException {
+		parser.require(XmlPullParser.START_TAG, NS, "parts");
 		while (parser.next() != XmlPullParser.END_TAG) {
 			if (parser.getEventType() != XmlPullParser.START_TAG) {
 				continue;
@@ -167,7 +164,7 @@ public class RobotFactory extends RoboBrainFactory {
 				readInPart(parser, robot);
 
 			} else {
-				XMLParserHelper.skip(parser);
+				XmlParserHelper.skip(parser);
 			}
 		}
 	}
@@ -182,15 +179,15 @@ public class RobotFactory extends RoboBrainFactory {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	private void readInPart(XmlPullParser parser, Robot robot)
-			throws XmlPullParserException, IOException {
+	private void readInPart(XmlPullParser parser, Robot robot) throws XmlPullParserException,
+			IOException {
 		RobotPartFactory rbFac = RobotPartFactory.getInstance(getService());
-		parser.require(XmlPullParser.START_TAG, ns, "part");
-		String type = parser.getAttributeValue(ns, "type");
-		String id = parser.getAttributeValue(ns, "id");
+		parser.require(XmlPullParser.START_TAG, NS, "part");
+		String type = parser.getAttributeValue(NS, "type");
+		String id = parser.getAttributeValue(NS, "id");
 		robot.addPart(id, rbFac.createRobotPart(type, robot));
 		parser.nextTag();
-		parser.require(XmlPullParser.END_TAG, ns, "part");
+		parser.require(XmlPullParser.END_TAG, NS, "part");
 	}
 
 	/**
@@ -200,8 +197,7 @@ public class RobotFactory extends RoboBrainFactory {
 	 */
 	public Map<String, Robot> createRobots() {
 		Map<String, Robot> robots = new HashMap<String, Robot>();
-		File robotsXmlDir = ExternalStorageManager
-				.getRobotsXmlDir(getService());
+		File robotsXmlDir = ExternalStorageManager.getRobotsXmlDir(getService());
 		try {
 			if (robotsXmlDir != null) {
 				for (File robotXml : robotsXmlDir.listFiles()) {
@@ -211,8 +207,7 @@ public class RobotFactory extends RoboBrainFactory {
 					}
 				}
 			} else {
-				RoboLog.alertError(getService(),
-						"Robots XML Dir could not be accessed on sd card!");
+				RoboLog.alertError(getService(), "Robots XML Dir could not be accessed on sd card!");
 			}
 		} catch (NullPointerException e) {
 			RoboLog.alertError(getService(),

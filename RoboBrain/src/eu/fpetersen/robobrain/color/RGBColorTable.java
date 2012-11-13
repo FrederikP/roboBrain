@@ -32,15 +32,15 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Maps RGBColor to a color Name.
+ * Maps {@link RgbColor}s to names.
  * 
  * @author Frederik Petersen
  * 
  */
-public class RGBColorTable {
-	private Map<String, RGBColor> colors = new HashMap<String, RGBColor>();
+public class RgbColorTable {
+	private Map<String, RgbColor> mColors = new HashMap<String, RgbColor>();
 
-	protected RGBColorTable() {
+	protected RgbColorTable() {
 
 	}
 
@@ -53,8 +53,8 @@ public class RGBColorTable {
 	 * @param color
 	 *            RGB color to be added
 	 */
-	public void addColor(String name, RGBColor color) {
-		colors.put(name, color);
+	public void addColor(String name, RgbColor color) {
+		mColors.put(name, color);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class RGBColorTable {
 	 * @return List of names of all colors in the color table
 	 */
 	public List<String> getNames() {
-		Set<String> keys = colors.keySet();
+		Set<String> keys = mColors.keySet();
 		List<String> keysSortedByWordCount = new ArrayList<String>();
 		for (String oneName : keys) {
 			keysSortedByWordCount.add(oneName);
@@ -96,9 +96,9 @@ public class RGBColorTable {
 	 *            Identifying name of the color
 	 * @return RGB color representation
 	 */
-	public RGBColor getColorForName(String name) {
-		if (colors.containsKey(name)) {
-			return colors.get(name);
+	public RgbColor getColorForName(String name) {
+		if (mColors.containsKey(name)) {
+			return mColors.get(name);
 		} else {
 			return null;
 		}
@@ -108,11 +108,11 @@ public class RGBColorTable {
 	 * 
 	 * @return a random color from the table
 	 */
-	public RGBColor getRandomColor() {
-		int size = colors.size();
-		Collection<RGBColor> rgbColors = colors.values();
+	public RgbColor getRandomColor() {
+		int size = mColors.size();
+		Collection<RgbColor> rgbColors = mColors.values();
 		int random = (int) (Math.random() * size);
-		return rgbColors.toArray(new RGBColor[rgbColors.size()])[random];
+		return rgbColors.toArray(new RgbColor[rgbColors.size()])[random];
 	}
 
 }

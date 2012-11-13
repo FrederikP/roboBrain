@@ -41,10 +41,10 @@ import eu.fpetersen.robobrain.util.RoboLog;
  * 
  */
 public class Robot {
-	private String name;
-	private Map<String, RobotPart> parts;
-	private String address;
-	private RobotService service;
+	private String mName;
+	private Map<String, RobotPart> mParts;
+	private String mAddress;
+	private RobotService mService;
 
 	/**
 	 * Create robot with given address and name. Empty Part map is initialized.
@@ -55,10 +55,10 @@ public class Robot {
 	 *            Name of the robot.
 	 */
 	public Robot(RobotService service, String address, String name) {
-		this.service = service;
-		this.name = name;
-		this.address = address;
-		parts = new HashMap<String, RobotPart>();
+		this.mService = service;
+		this.mName = name;
+		this.mAddress = address;
+		mParts = new HashMap<String, RobotPart>();
 	}
 
 	/**
@@ -80,9 +80,8 @@ public class Robot {
 	 */
 	public void sendToArduino(char flag, String data) {
 
-		RoboLog.log(service, "Send data to Robot " + name + ": Flag: " + flag
-				+ " Data: " + data);
-		Amarino.sendDataToArduino(service, address, flag, data);
+		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: " + data);
+		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
 	/**
@@ -103,9 +102,9 @@ public class Robot {
 				dataString = dataString + ",";
 			}
 		}
-		RoboLog.log(service, "Send data to Robot " + name + ": Flag: " + flag
-				+ " Data: " + dataString);
-		Amarino.sendDataToArduino(service, address, flag, data);
+		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: "
+				+ dataString);
+		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
 	/**
@@ -118,9 +117,9 @@ public class Robot {
 	 *            device.
 	 */
 	public void sendToArduino(char flag, int data) {
-		RoboLog.log(service, "Send data to Robot " + name + ": Flag: " + flag
-				+ " Data: " + Integer.toString(data));
-		Amarino.sendDataToArduino(service, address, flag, data);
+		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: "
+				+ Integer.toString(data));
+		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
 	/**
@@ -140,17 +139,17 @@ public class Robot {
 				dataString = dataString + ",";
 			}
 		}
-		RoboLog.log(service, "Send data to Robot " + name + ": Flag: " + flag
-				+ " Data: " + dataString);
-		Amarino.sendDataToArduino(service, address, flag, data);
+		RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " + flag + " Data: "
+				+ dataString);
+		Amarino.sendDataToArduino(mService, mAddress, flag, data);
 	}
 
 	public String getName() {
-		return name;
+		return mName;
 	}
 
 	public String getAddress() {
-		return address;
+		return mAddress;
 	}
 
 	/**
@@ -163,7 +162,7 @@ public class Robot {
 	 *            The part that is to be added.
 	 */
 	public void addPart(String id, RobotPart part) {
-		parts.put(id, part);
+		mParts.put(id, part);
 	}
 
 	/**
@@ -173,8 +172,8 @@ public class Robot {
 	 * @return RobotPart identified by ID
 	 */
 	public RobotPart getPart(String id) {
-		if (parts.containsKey(id)) {
-			return parts.get(id);
+		if (mParts.containsKey(id)) {
+			return mParts.get(id);
 		}
 		return null;
 	}
@@ -215,8 +214,8 @@ public class Robot {
 	 * 
 	 * @return Standard head color LED
 	 */
-	public RGBLED getHeadColorLED() {
-		return (RGBLED) getPart("headcolor_rgbled");
+	public RgbLed getHeadColorLed() {
+		return (RgbLed) getPart("headcolor_rgbled");
 	}
 
 	/**
@@ -224,7 +223,7 @@ public class Robot {
 	 * @return Service this Robot is created in
 	 */
 	public RobotService getRobotService() {
-		return service;
+		return mService;
 	}
 
 }

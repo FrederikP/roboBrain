@@ -33,7 +33,7 @@ public class Motor extends RobotPart {
 	/**
 	 * Represents in which state the Motor is.
 	 */
-	private MotorState state = MotorState.STOPPED;
+	private MotorState mState = MotorState.STOPPED;
 
 	/**
 	 * Back off at given speed
@@ -66,7 +66,7 @@ public class Motor extends RobotPart {
 	 */
 	public void stop(int delay) {
 		getRobot().sendToArduino('S', delay);
-		if (delay <= 0 && state != MotorState.STOPPED) {
+		if (delay <= 0 && mState != MotorState.STOPPED) {
 			setState(MotorState.STOPPED);
 		} else {
 			setState(MotorState.STOPPINGWITHDELAY);
@@ -96,11 +96,11 @@ public class Motor extends RobotPart {
 	}
 
 	public MotorState getState() {
-		return state;
+		return mState;
 	}
 
 	private void setState(MotorState state) {
-		this.state = state;
+		this.mState = state;
 	}
 
 	/**

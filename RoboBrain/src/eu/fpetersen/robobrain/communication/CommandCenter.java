@@ -39,8 +39,8 @@ import eu.fpetersen.robobrain.robot.Robot;
  */
 public class CommandCenter {
 
-	private Robot robot;
-	private List<Behavior> behaviors = new ArrayList<Behavior>();
+	private Robot mRobot;
+	private List<Behavior> mBehaviors = new ArrayList<Behavior>();
 
 	/**
 	 * Creates a new CommandCenter for the given robot and it's behaviors.
@@ -51,7 +51,7 @@ public class CommandCenter {
 	 *            The behaviors of the robot above.
 	 */
 	public CommandCenter(Robot robot, List<Behavior> behaviors) {
-		this.robot = robot;
+		this.mRobot = robot;
 
 		addBehaviors(behaviors);
 	}
@@ -64,7 +64,7 @@ public class CommandCenter {
 	 */
 	private void addBehaviors(List<Behavior> behaviors) {
 		for (Behavior b : behaviors) {
-			this.behaviors.add(b);
+			this.mBehaviors.add(b);
 		}
 	}
 
@@ -72,9 +72,9 @@ public class CommandCenter {
 	 * Connect to the Arduino device of this CommandCenters Robot.
 	 */
 	public void connect() {
-		RobotService rService = robot.getRobotService();
+		RobotService rService = mRobot.getRobotService();
 
-		Amarino.connect(rService, robot.getAddress());
+		Amarino.connect(rService, mRobot.getAddress());
 	}
 
 	/**
@@ -82,9 +82,9 @@ public class CommandCenter {
 	 */
 	public void disconnect() {
 
-		RobotService rService = robot.getRobotService();
+		RobotService rService = mRobot.getRobotService();
 
-		Amarino.disconnect(rService, robot.getAddress());
+		Amarino.disconnect(rService, mRobot.getAddress());
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class CommandCenter {
 	 * @return The robot of this CommandCenter
 	 */
 	public Robot getRobot() {
-		return robot;
+		return mRobot;
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class CommandCenter {
 	 * @return The behaviors of this CommandCenters robot.
 	 */
 	public List<Behavior> getBehaviors() {
-		return behaviors;
+		return mBehaviors;
 	}
 
 }

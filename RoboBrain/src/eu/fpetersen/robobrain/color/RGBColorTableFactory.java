@@ -32,25 +32,25 @@ import android.content.Context;
 import eu.fpetersen.robobrain.R;
 
 /**
- * Singleton factory for creating RGB Color Tables for example from a whitespace
- * separated list of color names and RGB values
+ * Singleton factory for creating {@link RgbColorTable}s for example from a
+ * whitespace separated list of color names and RGB values
  * 
  * @author Frederik Petersen
  * 
  */
-public class RGBColorTableFactory {
+public class RgbColorTableFactory {
 
-	private static RGBColorTableFactory instance;
+	private static RgbColorTableFactory sInstance;
 
-	private RGBColorTableFactory() {
+	private RgbColorTableFactory() {
 
 	}
 
-	public static RGBColorTableFactory getInstance() {
-		if (instance == null) {
-			instance = new RGBColorTableFactory();
+	public static RgbColorTableFactory getInstance() {
+		if (sInstance == null) {
+			sInstance = new RgbColorTableFactory();
 		}
-		return instance;
+		return sInstance;
 	}
 
 	/**
@@ -60,8 +60,8 @@ public class RGBColorTableFactory {
 	 * @return RGBColorTable filled with colors that don't include numbers in
 	 *         the names.
 	 */
-	public RGBColorTable getStandardColorTableFromTextFile(Context context) {
-		RGBColorTable table = new RGBColorTable();
+	public RgbColorTable getStandardColorTableFromTextFile(Context context) {
+		RgbColorTable table = new RgbColorTable();
 
 		// The InputStream opens the resourceId and sends it to the buffer
 		InputStream is = context.getResources().openRawResource(R.raw.rgb);
@@ -97,7 +97,7 @@ public class RGBColorTableFactory {
 	 *            Set true if you want to include colors which names include
 	 *            numbers
 	 */
-	private void addColorFromTextLine(RGBColorTable table, String readLine,
+	private void addColorFromTextLine(RgbColorTable table, String readLine,
 			boolean includeNumberNames) {
 		readLine = readLine.trim();
 		StringTokenizer tokenizer = new StringTokenizer(readLine);
@@ -109,11 +109,10 @@ public class RGBColorTableFactory {
 			name = name + " " + tokenizer.nextToken();
 		}
 		if (includeNumberNames
-				|| (!name.contains("0") && !name.contains("1")
-						&& !name.contains("2") && !name.contains("3")
-						&& !name.contains("4") && !name.contains("5")
-						&& !name.contains("6") && !name.contains("7")
-						&& !name.contains("8") && !name.contains("9"))) {
+				|| (!name.contains("0") && !name.contains("1") && !name.contains("2")
+						&& !name.contains("3") && !name.contains("4") && !name.contains("5")
+						&& !name.contains("6") && !name.contains("7") && !name.contains("8") && !name
+							.contains("9"))) {
 			addColor(table, r, g, b, name.toLowerCase());
 		}
 
@@ -133,8 +132,8 @@ public class RGBColorTableFactory {
 	 * @param name
 	 *            The name of the color
 	 */
-	private void addColor(RGBColorTable table, int r, int g, int b, String name) {
-		table.addColor(name, new RGBColor(name, r, g, b));
+	private void addColor(RgbColorTable table, int r, int g, int b, String name) {
+		table.addColor(name, new RgbColor(name, r, g, b));
 	}
 
 }

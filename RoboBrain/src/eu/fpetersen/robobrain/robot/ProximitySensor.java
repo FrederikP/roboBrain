@@ -36,14 +36,14 @@ public class ProximitySensor extends Sensor {
 	/**
 	 * Represents the value as set by the sensor.
 	 */
-	private int value = 0;
+	private int mValue = 0;
 
 	public void setValue(int proxValue) {
-		value = proxValue;
+		mValue = proxValue;
 	}
 
 	public int getValue() {
-		return value;
+		return mValue;
 	}
 
 }

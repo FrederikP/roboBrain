@@ -34,7 +34,7 @@ import org.xmlpull.v1.XmlPullParserException;
  * @author Frederik Petersen
  * 
  */
-public class XMLParserHelper {
+public class XmlParserHelper {
 
 	/**
 	 * Skip the current tag
@@ -44,8 +44,7 @@ public class XMLParserHelper {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	public static void skip(XmlPullParser parser)
-			throws XmlPullParserException, IOException {
+	public static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
 		if (parser.getEventType() != XmlPullParser.START_TAG) {
 			throw new IllegalStateException();
 		}

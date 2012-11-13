@@ -43,8 +43,7 @@ public class BackAndForthBehavior extends Behavior {
 	protected void behaviorLoop() {
 		Robot robot = getRobot();
 		if (robot.getMainMotor().getState().equals(MotorState.STOPPED)) {
-			if (robot.getFrontSensor().getValue() < 20
-					&& robot.getBackSensor().getValue() == 1) {
+			if (robot.getFrontSensor().getValue() < 20 && robot.getBackSensor().getValue() == 1) {
 				robot.getMainMotor().backOff(240);
 				toConsole("STOPPED -> BACKWARD");
 			} else if (robot.getFrontSensor().getValue() >= 20) {
@@ -52,8 +51,7 @@ public class BackAndForthBehavior extends Behavior {
 				toConsole("STOPPED -> FORWARD");
 			}
 		} else if (robot.getMainMotor().getState().equals(MotorState.FORWARD)) {
-			if (robot.getFrontSensor().getValue() < 20
-					&& robot.getBackSensor().getValue() == 1) {
+			if (robot.getFrontSensor().getValue() < 20 && robot.getBackSensor().getValue() == 1) {
 				robot.getMainMotor().backOff(240);
 				toConsole("FORWARD -> BACKWARD");
 				toConsole("Frontsensor=" + robot.getFrontSensor().getValue());
@@ -63,8 +61,7 @@ public class BackAndForthBehavior extends Behavior {
 				toConsole("FORWARD -> STOPPED");
 			}
 		} else if (robot.getMainMotor().getState().equals(MotorState.BACKWARD)) {
-			if (robot.getFrontSensor().getValue() >= 20
-					&& robot.getBackSensor().getValue() == 0) {
+			if (robot.getFrontSensor().getValue() >= 20 && robot.getBackSensor().getValue() == 0) {
 				robot.getMainMotor().advance(240);
 				toConsole("BACKWARD-> FORWARD");
 			} else if (robot.getFrontSensor().getValue() < 20
@@ -89,10 +86,8 @@ public class BackAndForthBehavior extends Behavior {
 	protected void fillRequirements(Requirements requirements) {
 		requirements.addPart("main_motor", Motor.class.getName());
 		requirements.addPart("head_servo", Servo.class.getName());
-		requirements.addPart("front_proxsensor",
-				ProximitySensor.class.getName());
-		requirements
-				.addPart("back_proxsensor", ProximitySensor.class.getName());
+		requirements.addPart("front_proxsensor", ProximitySensor.class.getName());
+		requirements.addPart("back_proxsensor", ProximitySensor.class.getName());
 
 	}
 

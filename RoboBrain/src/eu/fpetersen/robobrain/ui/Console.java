@@ -51,11 +51,11 @@ import eu.fpetersen.robobrain.communication.RoboBrainIntent;
  */
 public class Console extends Activity {
 
-	private TextView consoleTV;
+	private TextView mConsoleTV;
 
-	private ScrollView consoleScroller;
+	private ScrollView mConsoleScroller;
 
-	private ConsoleReceiver cReceiver;
+	private ConsoleReceiver mConsoleReceiver;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -65,20 +65,19 @@ public class Console extends Activity {
 		setContentView(R.layout.activity_console);
 
 		// get handles to Views defined in our layout file
-		consoleTV = (TextView) findViewById(R.id.consoleTextView);
-		consoleScroller = (ScrollView) findViewById(R.id.consoleScroller);
+		mConsoleTV = (TextView) findViewById(R.id.consoleTextView);
+		mConsoleScroller = (ScrollView) findViewById(R.id.consoleScroller);
 
-		cReceiver = new ConsoleReceiver(this);
-		IntentFilter intentFilter = new IntentFilter(
-				RoboBrainIntent.ACTION_OUTPUT);
-		registerReceiver(cReceiver, intentFilter);
+		mConsoleReceiver = new ConsoleReceiver(this);
+		IntentFilter intentFilter = new IntentFilter(RoboBrainIntent.ACTION_OUTPUT);
+		registerReceiver(mConsoleReceiver, intentFilter);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (cReceiver != null)
-			unregisterReceiver(cReceiver);
+		if (mConsoleReceiver != null)
+			unregisterReceiver(mConsoleReceiver);
 	}
 
 	/**
@@ -98,9 +97,9 @@ public class Console extends Activity {
 	 * Scroll to the bottom of the console text view.
 	 */
 	private void scrollToBottom() {
-		consoleScroller.post(new Runnable() {
+		mConsoleScroller.post(new Runnable() {
 			public void run() {
-				consoleScroller.smoothScrollTo(0, consoleTV.getBottom());
+				mConsoleScroller.smoothScrollTo(0, mConsoleTV.getBottom());
 			}
 		});
 	}
@@ -113,9 +112,9 @@ public class Console extends Activity {
 	 */
 	public void appendText(String text) {
 		if (text != null) {
-			String consoleText = consoleTV.getText().toString();
-			final String consoleTextToAppend = consoleText + "\n"
-					+ getFormattedCurrentTimestamp() + text;
+			String consoleText = mConsoleTV.getText().toString();
+			final String consoleTextToAppend = consoleText + "\n" + getFormattedCurrentTimestamp()
+					+ text;
 			runOnUiThread(new Runnable() {
 				public void run() {
 
@@ -125,7 +124,7 @@ public class Console extends Activity {
 					// completely before adding new line
 					boolean scrollDownAfterAppend = isScrolledDown();
 
-					consoleTV.setText(consoleTextToAppend);
+					mConsoleTV.setText(consoleTextToAppend);
 
 					if (scrollDownAfterAppend)
 						scrollToBottom();
@@ -160,9 +159,8 @@ public class Console extends Activity {
 	 */
 	public boolean isScrolledDown() {
 		boolean scrollDownAfterAppend = true;
-		int scrollY = consoleScroller.getScrollY()
-				+ consoleScroller.getHeight() + 20;
-		int cBottom = consoleTV.getBottom();
+		int scrollY = mConsoleScroller.getScrollY() + mConsoleScroller.getHeight() + 20;
+		int cBottom = mConsoleTV.getBottom();
 		if (scrollY + 20 < cBottom)
 			scrollDownAfterAppend = false;
 		return scrollDownAfterAppend;

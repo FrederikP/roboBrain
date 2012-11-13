@@ -73,43 +73,43 @@ import eu.fpetersen.robobrain.util.RoboLog;
  */
 public class Starter extends Activity {
 
-	private TextView statusTV;
-	private ToggleButton toggleStatusB;
-	private TableLayout robotBehaviorTable;
+	private TextView mStatusTV;
+	private ToggleButton mToggleStatusB;
+	private TableLayout mRobotBehaviorTable;
 
 	// For displaying progress circle stuff
-	private ProgressDialog progressDialog;
+	private ProgressDialog mProgressDialog;
 
-	private RobotService robotService;
-	private Set<Dialog> allOpenDialogs;
+	private RobotService mRobotService;
+	private Set<Dialog> mAllOpenDialogs;
 
-	private Map<Robot, LinearLayout> behaviorLayoutPerRobot;
+	private Map<Robot, LinearLayout> mBehaviorLayoutPerRobot;
 
-	private static Starter instance;
+	private static Starter sInstance;
 
 	public static Starter getInstance() {
-		return instance;
+		return sInstance;
 	}
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		instance = this;
+		sInstance = this;
 		setContentView(R.layout.activity_starter);
 
-		allOpenDialogs = new HashSet<Dialog>();
+		mAllOpenDialogs = new HashSet<Dialog>();
 
 		// get handles to Views defined in our layout file
-		statusTV = (TextView) findViewById(R.id.status_textview);
-		toggleStatusB = (ToggleButton) findViewById(R.id.togglestatus_button);
-		robotBehaviorTable = (TableLayout) findViewById(R.id.robot_behavior_table);
-		progressDialog = new ProgressDialog(Starter.this);
+		mStatusTV = (TextView) findViewById(R.id.status_textview);
+		mToggleStatusB = (ToggleButton) findViewById(R.id.togglestatus_button);
+		mRobotBehaviorTable = (TableLayout) findViewById(R.id.robot_behavior_table);
+		mProgressDialog = new ProgressDialog(Starter.this);
 
-		toggleStatusB.setOnClickListener(new OnClickListener() {
+		mToggleStatusB.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				boolean isChecked = toggleStatusB.isChecked();
+				boolean isChecked = mToggleStatusB.isChecked();
 				handleStatusToggle(isChecked);
 			}
 		});
@@ -164,13 +164,13 @@ public class Starter extends Activity {
 	 */
 	protected void handleStatusToggle(boolean isChecked) {
 		if (isChecked) {
-			progressDialog.setMessage("Starting Robobrain Service");
-			progressDialog.setTitle("Service Starting");
-			progressDialog.show();
+			mProgressDialog.setMessage("Starting Robobrain Service");
+			mProgressDialog.setTitle("Service Starting");
+			mProgressDialog.show();
 
-			behaviorLayoutPerRobot = new HashMap<Robot, LinearLayout>();
+			mBehaviorLayoutPerRobot = new HashMap<Robot, LinearLayout>();
 
-			toggleStatusB.post(new Runnable() {
+			mToggleStatusB.post(new Runnable() {
 				public void run() {
 					startService(new Intent(getApplicationContext(),
 							SpeechRecognizerService.class));
@@ -180,22 +180,22 @@ public class Starter extends Activity {
 			});
 
 		} else {
-			progressDialog.setMessage("Stopping Robobrain Service");
-			progressDialog.setTitle("Service Stopping");
-			progressDialog.show();
+			mProgressDialog.setMessage("Stopping Robobrain Service");
+			mProgressDialog.setTitle("Service Stopping");
+			mProgressDialog.show();
 
-			behaviorLayoutPerRobot = null;
+			mBehaviorLayoutPerRobot = null;
 
-			toggleStatusB.post(new Runnable() {
+			mToggleStatusB.post(new Runnable() {
 				public void run() {
-					progressDialog.setMessage("Sending stop behavior signal");
+					mProgressDialog.setMessage("Sending stop behavior signal");
 					Intent intent = new Intent(
 							RoboBrainIntent.ACTION_STOPALLBEHAVIORS);
 					Starter.this.sendBroadcast(intent);
 					Handler handler = new Handler();
 					handler.postDelayed(new Runnable() {
 						public void run() {
-							progressDialog
+							mProgressDialog
 									.setMessage("Sending service stop signals");
 							stopService(new Intent(getApplicationContext(),
 									RobotService.class));
@@ -226,17 +226,17 @@ public class Starter extends Activity {
 	 * information about robots and their behaviors
 	 */
 	private void updateStatus() {
-		if (robotService == null || !robotService.isRunning()) {
+		if (mRobotService == null || !mRobotService.isRunning()) {
 			runOnUiThread(new Runnable() {
 
 				public void run() {
-					if (progressDialog.isShowing()) {
-						progressDialog.dismiss();
+					if (mProgressDialog.isShowing()) {
+						mProgressDialog.dismiss();
 					}
-					statusTV.setText("Stopped!");
-					statusTV.setTextColor(Color.RED);
-					toggleStatusB.setChecked(false);
-					robotBehaviorTable.setVisibility(View.INVISIBLE);
+					mStatusTV.setText("Stopped!");
+					mStatusTV.setTextColor(Color.RED);
+					mToggleStatusB.setChecked(false);
+					mRobotBehaviorTable.setVisibility(View.INVISIBLE);
 					cleanupRobotBehaviorTable();
 				}
 			});
@@ -245,14 +245,14 @@ public class Starter extends Activity {
 			runOnUiThread(new Runnable() {
 
 				public void run() {
-					if (progressDialog.isShowing()) {
-						progressDialog.dismiss();
+					if (mProgressDialog.isShowing()) {
+						mProgressDialog.dismiss();
 					}
-					statusTV.setText("Started!");
-					statusTV.setTextColor(Color.GREEN);
-					toggleStatusB.setChecked(true);
-					if (robotBehaviorTable.getVisibility() == View.INVISIBLE) {
-						robotBehaviorTable.setVisibility(View.VISIBLE);
+					mStatusTV.setText("Started!");
+					mStatusTV.setTextColor(Color.GREEN);
+					mToggleStatusB.setChecked(true);
+					if (mRobotBehaviorTable.getVisibility() == View.INVISIBLE) {
+						mRobotBehaviorTable.setVisibility(View.VISIBLE);
 					}
 					cleanupRobotBehaviorTable();
 					setupRobotBehaviorTable();
@@ -266,8 +266,8 @@ public class Starter extends Activity {
 	 * Removes all robots and behavior information from the UI.
 	 */
 	protected void cleanupRobotBehaviorTable() {
-		for (int i = 1; i < robotBehaviorTable.getChildCount(); i++) {
-			robotBehaviorTable.removeViewAt(i);
+		for (int i = 1; i < mRobotBehaviorTable.getChildCount(); i++) {
+			mRobotBehaviorTable.removeViewAt(i);
 		}
 
 	}
@@ -278,27 +278,27 @@ public class Starter extends Activity {
 	 * @return table that holds robots and behaviors
 	 */
 	public TableLayout getRobotBehaviorTable() {
-		return robotBehaviorTable;
+		return mRobotBehaviorTable;
 	}
 
 	/**
 	 * Sets up Robot and Behavior information table
 	 */
 	protected void setupRobotBehaviorTable() {
-		Collection<CommandCenter> ccs = robotService.getAllCCs();
+		Collection<CommandCenter> ccs = mRobotService.getAllCCs();
 		for (CommandCenter cc : ccs) {
 			TableRow row = new TableRow(this);
 			TextView nameView = new TextView(this);
 			nameView.setText(cc.getRobot().getName());
 			nameView.setPadding(5, 5, 5, 5);
 			LinearLayout behaviorLayout = new LinearLayout(this);
-			behaviorLayoutPerRobot.put(cc.getRobot(), behaviorLayout);
+			mBehaviorLayoutPerRobot.put(cc.getRobot(), behaviorLayout);
 			behaviorLayout.setOrientation(LinearLayout.VERTICAL);
 			addBehaviorButtons(behaviorLayout, cc);
 			row.addView(nameView);
 			row.addView(behaviorLayout);
 
-			robotBehaviorTable.addView(row);
+			mRobotBehaviorTable.addView(row);
 		}
 	}
 
@@ -320,9 +320,9 @@ public class Starter extends Activity {
 		button.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				progressDialog.setMessage("Sending Behavior start signal");
-				progressDialog.setTitle("Behavior Starting");
-				progressDialog.show();
+				mProgressDialog.setMessage("Sending Behavior start signal");
+				mProgressDialog.setTitle("Behavior Starting");
+				mProgressDialog.show();
 				Runnable behavior = new Runnable() {
 					public void run() {
 						Intent intent = new Intent(
@@ -359,9 +359,9 @@ public class Starter extends Activity {
 		stopBehaviorButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				progressDialog.setMessage("Sending Behavior stop signal");
-				progressDialog.setTitle("Behavior Stopping");
-				progressDialog.show();
+				mProgressDialog.setMessage("Sending Behavior stop signal");
+				mProgressDialog.setTitle("Behavior Stopping");
+				mProgressDialog.show();
 				Runnable behaviorStopper = new Runnable() {
 					public void run() {
 						Intent intent = new Intent(
@@ -461,7 +461,7 @@ public class Starter extends Activity {
 	 *            Service is destroyed.
 	 */
 	public void setRobotService(RobotService service) {
-		this.robotService = service;
+		this.mRobotService = service;
 		updateStatus();
 	}
 
@@ -495,7 +495,7 @@ public class Starter extends Activity {
 				// 3. Get the AlertDialog from create()
 				AlertDialog dialog = builder.create();
 
-				allOpenDialogs.add(dialog);
+				mAllOpenDialogs.add(dialog);
 
 				dialog.show();
 			}
@@ -506,10 +506,10 @@ public class Starter extends Activity {
 		runOnUiThread(new Runnable() {
 
 			public void run() {
-				for (Dialog d : allOpenDialogs) {
+				for (Dialog d : mAllOpenDialogs) {
 					d.dismiss();
 				}
-				allOpenDialogs.clear();
+				mAllOpenDialogs.clear();
 			}
 		});
 
@@ -517,16 +517,16 @@ public class Starter extends Activity {
 
 	public RobotService getRobotService() {
 
-		return robotService;
+		return mRobotService;
 	}
 
 	public void updateUIDueToBehaviorStateSwitch(Robot robot) {
-		if (robotService != null && behaviorLayoutPerRobot != null) {
-			CommandCenter cc = robotService.getCCForAddress(robot.getAddress());
-			LinearLayout bLayout = behaviorLayoutPerRobot.get(robot);
+		if (mRobotService != null && mBehaviorLayoutPerRobot != null) {
+			CommandCenter cc = mRobotService.getCCForAddress(robot.getAddress());
+			LinearLayout bLayout = mBehaviorLayoutPerRobot.get(robot);
 			if (bLayout != null) {
 				addBehaviorButtons(bLayout, cc);
-				progressDialog.dismiss();
+				mProgressDialog.dismiss();
 			}
 		}
 	}

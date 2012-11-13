@@ -41,32 +41,27 @@ public class ObstAvoidanceBehavior extends Behavior {
 
 	private static final String TAG = "ObstAvoidanceBehavior";
 
-	private final int speed = 240;
+	private static final int SPEED = 240;
 
-	private long backWardTime = 0;
+	private long mBackWardTime = 0;
 
 	@Override
 	public void startBehavior() {
-		backWardTime = 0;
+		mBackWardTime = 0;
 		super.startBehavior();
 	}
 
 	@Override
 	protected void behaviorLoop() {
 		Robot robot = getRobot();
-		if (!robot.getMainMotor().getState()
-				.equals(MotorState.STOPPINGWITHDELAY)
-				&& !robot.getMainMotor().getState()
-						.equals(MotorState.TURNING_LEFT)
-				&& !robot.getMainMotor().getState()
-						.equals(MotorState.TURNING_RIGHT)) {
+		if (!robot.getMainMotor().getState().equals(MotorState.STOPPINGWITHDELAY)
+				&& !robot.getMainMotor().getState().equals(MotorState.TURNING_LEFT)
+				&& !robot.getMainMotor().getState().equals(MotorState.TURNING_RIGHT)) {
 			if (robot.getMainMotor().getState().equals(MotorState.FORWARD)) {
 				goingForward();
-			} else if (robot.getMainMotor().getState()
-					.equals(MotorState.BACKWARD)) {
+			} else if (robot.getMainMotor().getState().equals(MotorState.BACKWARD)) {
 				goingBackward();
-			} else if (robot.getMainMotor().getState()
-					.equals(MotorState.STOPPED)) {
+			} else if (robot.getMainMotor().getState().equals(MotorState.STOPPED)) {
 				startGoingForward();
 			}
 		}
@@ -76,7 +71,7 @@ public class ObstAvoidanceBehavior extends Behavior {
 	 * Makes robot go forward.
 	 */
 	private void startGoingForward() {
-		getRobot().getMainMotor().advance(speed);
+		getRobot().getMainMotor().advance(SPEED);
 	}
 
 	/**
@@ -85,9 +80,8 @@ public class ObstAvoidanceBehavior extends Behavior {
 	 */
 	private void goingBackward() {
 		Robot robot = getRobot();
-		if (backWardTime < System.currentTimeMillis()
-				|| robot.getBackSensor().getValue() == 0) {
-			backWardTime = 0;
+		if (mBackWardTime < System.currentTimeMillis() || robot.getBackSensor().getValue() == 0) {
+			mBackWardTime = 0;
 			checkForBestRouteAndTurn();
 		}
 	}
@@ -123,8 +117,8 @@ public class ObstAvoidanceBehavior extends Behavior {
 	private void goingForward() {
 		Robot robot = getRobot();
 		if (robot.getFrontSensor().getValue() < 30) {
-			robot.getMainMotor().backOff(speed);
-			backWardTime = System.currentTimeMillis() + 1000;
+			robot.getMainMotor().backOff(SPEED);
+			mBackWardTime = System.currentTimeMillis() + 1000;
 		}
 
 	}
@@ -138,10 +132,8 @@ public class ObstAvoidanceBehavior extends Behavior {
 	protected void fillRequirements(Requirements requirements) {
 		requirements.addPart("main_motor", Motor.class.getName());
 		requirements.addPart("head_servo", Servo.class.getName());
-		requirements.addPart("front_proxsensor",
-				ProximitySensor.class.getName());
-		requirements
-				.addPart("back_proxsensor", ProximitySensor.class.getName());
+		requirements.addPart("front_proxsensor", ProximitySensor.class.getName());
+		requirements.addPart("back_proxsensor", ProximitySensor.class.getName());
 	}
 
 	@Override

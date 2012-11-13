@@ -29,8 +29,6 @@ import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.ui.Starter;
 import eu.fpetersen.robobrain.util.RoboLog;
 
-//TODO: Requirement-Management for behaviors and robots.
-
 /**
  * The Behavior class should be extended for implementing a specific new Robot
  * Behavior. For now the Robot is able to run one behavior at a time. N
@@ -46,11 +44,11 @@ import eu.fpetersen.robobrain.util.RoboLog;
  */
 public abstract class Behavior {
 
-	private boolean turnedOn = false;
-	private Robot robot;
-	private String name;
-	private UUID id;
-	private Requirements requirements = new Requirements();
+	private boolean mTurnedOn = false;
+	private Robot mRobot;
+	private String mName;
+	private UUID mId;
+	private Requirements mRequirements = new Requirements();
 
 	/**
 	 * Is to be called right after creating a new instance of this class. It
@@ -63,8 +61,8 @@ public abstract class Behavior {
 	 *            The name of the behavior to be displayed in the UI.
 	 */
 	public void initialize(Robot robot, String name) {
-		this.robot = robot;
-		this.name = name;
+		this.mRobot = robot;
+		this.mName = name;
 	}
 
 	/**
@@ -73,23 +71,23 @@ public abstract class Behavior {
 	 * the UI. If you overwrite this constructor, make sure calling super();
 	 */
 	protected Behavior() {
-		id = UUID.randomUUID();
-		fillRequirements(requirements);
+		mId = UUID.randomUUID();
+		fillRequirements(mRequirements);
 	}
 
 	/**
 	 * Starts the behavior, starting it's main loop.
 	 */
 	public void startBehavior() {
-		if (turnedOn == false) {
+		if (mTurnedOn == false) {
 
-			turnedOn = true;
+			mTurnedOn = true;
 
 			onStart();
 
 			updateBehaviorStatusInUI();
 
-			while (turnedOn) {
+			while (mTurnedOn) {
 				behaviorLoop();
 			}
 
@@ -113,7 +111,7 @@ public abstract class Behavior {
 	 * Turns the behavior off, stopping it's main loop.
 	 */
 	public void stopBehavior() {
-		this.turnedOn = false;
+		this.mTurnedOn = false;
 		updateBehaviorStatusInUI();
 	}
 
@@ -122,7 +120,7 @@ public abstract class Behavior {
 	 * @return Name to be displayed by UI, as given in xml config
 	 */
 	public String getName() {
-		return name;
+		return mName;
 	}
 
 	/**
@@ -130,7 +128,7 @@ public abstract class Behavior {
 	 * @return The identifying id of this behavior
 	 */
 	public UUID getId() {
-		return id;
+		return mId;
 	}
 
 	/**
@@ -138,7 +136,7 @@ public abstract class Behavior {
 	 * @return True if beahvior is turned on, else false
 	 */
 	public boolean isTurnedOn() {
-		return turnedOn;
+		return mTurnedOn;
 	}
 
 	/**
@@ -157,7 +155,7 @@ public abstract class Behavior {
 	 * @return The robot that owns this behavior
 	 */
 	public Robot getRobot() {
-		return robot;
+		return mRobot;
 	}
 
 	/**
@@ -189,7 +187,7 @@ public abstract class Behavior {
 	protected abstract void fillRequirements(Requirements requirements);
 
 	public Requirements getRequirements() {
-		return requirements;
+		return mRequirements;
 	}
 
 }

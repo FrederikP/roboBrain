@@ -5,6 +5,6 @@
 		<part type="ProximitySensor" id="front_proxsensor" />
 		<part type="ProximitySensor" id="back_proxsensor" />
 		<part type="Servo" id="head_servo" />
-		<part type="RGBLED" id="headcolor_rgbled" />	
+		<part type="RgbLed" id="headcolor_rgbled" />	
 	</parts>
 </robot>

@@ -28,29 +28,29 @@ package eu.fpetersen.robobrain.color;
  * @author Frederik Petersen
  * 
  */
-public class RGBColor {
+public class RgbColor {
 
-	private int red;
-	private int green;
-	private int blue;
+	private int mRed;
+	private int mGreen;
+	private int mBlue;
 
-	public RGBColor(String name, int red, int green, int blue) {
+	public RgbColor(String name, int red, int green, int blue) {
 		super();
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
+		this.mRed = red;
+		this.mGreen = green;
+		this.mBlue = blue;
 	}
 
 	public int getRed() {
-		return red;
+		return mRed;
 	}
 
 	public int getGreen() {
-		return green;
+		return mGreen;
 	}
 
 	public int getBlue() {
-		return blue;
+		return mBlue;
 	}
 
 }

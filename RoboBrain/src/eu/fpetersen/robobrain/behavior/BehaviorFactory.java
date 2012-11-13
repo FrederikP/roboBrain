@@ -39,7 +39,7 @@ import eu.fpetersen.robobrain.util.RoboLog;
  */
 public class BehaviorFactory extends RoboBrainFactory {
 
-	private static BehaviorFactory instance;
+	private static BehaviorFactory sInstance;
 
 	private BehaviorFactory(RobotService service) {
 		super(service);
@@ -50,12 +50,12 @@ public class BehaviorFactory extends RoboBrainFactory {
 	 * @return Singleton instance of BehaviorFactory
 	 */
 	public static BehaviorFactory getInstance(RobotService service) {
-		if (instance == null) {
-			instance = new BehaviorFactory(service);
-		} else if (instance.getService() != service) {
-			instance.setService(service);
+		if (sInstance == null) {
+			sInstance = new BehaviorFactory(service);
+		} else if (sInstance.getService() != service) {
+			sInstance.setService(service);
 		}
-		return instance;
+		return sInstance;
 	}
 
 	/**
@@ -86,17 +86,12 @@ public class BehaviorFactory extends RoboBrainFactory {
 
 			behavior.initialize(robot, shortName);
 		} catch (InstantiationException e) {
-			RoboLog.log(getService(), "Behavior class " + name
-					+ " could not be instantiated");
+			RoboLog.log(getService(), "Behavior class " + name + " could not be instantiated");
 		} catch (IllegalAccessException e) {
-			RoboLog.log(
-					getService(),
-					"Behavior class "
-							+ name
-							+ " could not be instantiated due to the constructor having restricted access");
-		} catch (ClassNotFoundException e) {
 			RoboLog.log(getService(), "Behavior class " + name
-					+ " could not be found");
+					+ " could not be instantiated due to the constructor having restricted access");
+		} catch (ClassNotFoundException e) {
+			RoboLog.log(getService(), "Behavior class " + name + " could not be found");
 		}
 		return behavior;
 	}
