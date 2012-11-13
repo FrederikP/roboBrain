@@ -376,7 +376,7 @@ public class RobotService extends Service {
 
 		updateStarterUI(null);
 
-		if (mWakeLock != null) {
+		if (mWakeLock != null && mWakeLock.isHeld()) {
 			mWakeLock.release();
 		}
 
