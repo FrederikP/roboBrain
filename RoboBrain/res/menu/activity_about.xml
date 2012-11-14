@@ -23,6 +23,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:id="@+id/other_screens">
         <item android:id="@+id/console_menu_item" android:visible="true" android:title="@string/console_menu_item"></item>
-        <item android:id="@+id/about_menu_item" android:visible="true" android:title="@string/about_menu_item"></item>
+        <item android:id="@+id/starter_menu_item" android:visible="true" android:title="@string/starter_menu_item"></item>
     </group>
 </menu>

@@ -42,8 +42,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -370,17 +368,8 @@ public class Starter extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.activity_starter, menu);
 
-		MenuItem console = menu.findItem(R.id.console_menu_item);
-		final Intent cIntent = new Intent(this, Console.class);
-		cIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		console.setIntent(cIntent);
-		console.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-			public boolean onMenuItemClick(MenuItem item) {
-				Starter.this.startActivity(cIntent);
-				return true;
-			}
-		});
+		MenuHelper.addConsoleMenuClickListener(menu, Starter.this);
+		MenuHelper.addAboutMenuClickListener(menu, Starter.this);
 		return super.onCreateOptionsMenu(menu);
 	}
 

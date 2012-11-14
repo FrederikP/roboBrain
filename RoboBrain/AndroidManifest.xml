@@ -51,6 +51,11 @@
             android:label="@string/title_activity_console">
         </activity>
         
+         <activity
+            android:name="eu.fpetersen.robobrain.ui.About"
+            android:label="@string/title_activity_about">
+        </activity>
+        
          <service android:name=".services.RobotService" android:label="@string/title_service" android:enabled="true">             
          </service>
          <service android:name=".services.SpeechRecognizerService" android:label="@string/title_serviceSpeech" android:enabled="true"></service>

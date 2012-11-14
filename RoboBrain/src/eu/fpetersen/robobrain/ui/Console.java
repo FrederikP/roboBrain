@@ -27,13 +27,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.R;
@@ -57,7 +54,6 @@ public class Console extends Activity {
 
 	private ConsoleReceiver mConsoleReceiver;
 
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -139,17 +135,8 @@ public class Console extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.activity_console, menu);
 
-		MenuItem starter = menu.findItem(R.id.starter_menu_item);
-		final Intent cIntent = new Intent(this, Starter.class);
-		cIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		starter.setIntent(cIntent);
-		starter.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-			public boolean onMenuItemClick(MenuItem item) {
-				Console.this.startActivity(cIntent);
-				return true;
-			}
-		});
+		MenuHelper.addStarterMenuClickListener(menu, Console.this);
+		MenuHelper.addAboutMenuClickListener(menu, Console.this);
 		return super.onCreateOptionsMenu(menu);
 	}
 
