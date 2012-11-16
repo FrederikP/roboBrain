@@ -56,15 +56,41 @@ public class RobotPartTest extends AndroidTestCase {
 		flags.put("left", 'L');
 		flags.put("right", 'R');
 
-		RobotPartInitializer initializer = new RobotPartInitializer(mockRobot, flags);
+		RobotPartInitializer initializer = new RobotPartInitializer("Motor", mockRobot, flags);
 		Motor motor = (Motor) RobotPartFactory.getInstance(service).createRobotPart("Motor",
 				initializer);
 
 		assertNotNull(motor);
 
+		assertTrue(initializer.areRequirementsMet());
+
 		assertEquals('A', motor.getFlag("advance"));
 
 		assertEquals(' ', motor.getFlag("notexistant"));
+
+	}
+
+	/**
+	 * Test creating a motor, including flags
+	 */
+	public void testMotorWithMissingFlags() {
+		RobotService service = new MockRobotService(getContext());
+		Robot mockRobot = RobotFactory.getInstance(service).createSimpleRobot("TestBot");
+		Map<String, Character> flags = new HashMap<String, Character>();
+		flags.put("advance", 'A');
+		flags.put("stop", 'S');
+
+		RobotPartInitializer initializer = new RobotPartInitializer("Motor", mockRobot, flags);
+		Motor motor = (Motor) RobotPartFactory.getInstance(service).createRobotPart("Motor",
+				initializer);
+
+		assertNotNull(motor);
+
+		assertFalse(initializer.areRequirementsMet());
+
+		assertEquals('A', motor.getFlag("advance"));
+
+		assertEquals(' ', motor.getFlag("backoff"));
 
 	}
 

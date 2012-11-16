@@ -197,7 +197,7 @@ public class RobotFactory extends RoboBrainFactory {
 				XmlParserHelper.skip(parser);
 			}
 		}
-		RobotPartInitializer initializer = new RobotPartInitializer(robot, flags);
+		RobotPartInitializer initializer = new RobotPartInitializer(id, robot, flags);
 		robot.addPart(id, rbFac.createRobotPart(type, initializer));
 		try {
 			parser.require(XmlPullParser.END_TAG, NS, "part");

@@ -20,34 +20,27 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.robot;
+package eu.fpetersen.robobrain.util.exceptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Representation of a servo connected to an Arduino device.
- * 
  * @author Frederik Petersen
  * 
  */
-public class Servo extends RobotPart {
+public class RequiredFlagsNotSetException extends Exception {
 
-	/**
-	 * Set servo to specified angle
-	 * 
-	 * @param angle
-	 *            Angle in degrees
-	 */
-	public void setToAngle(int angle) {
-		getRobot().sendToArduino(getFlag("toAngle"), angle);
+	private static final long serialVersionUID = 1L;
+	private List<String> mMissingFlagIds = new ArrayList<String>();
+
+	public RequiredFlagsNotSetException(List<String> missingFlagIds) {
+		super("One or more required flags are not set!");
+		mMissingFlagIds = missingFlagIds;
 	}
 
-	@Override
-	protected List<String> getRequiredFlagIds() {
-		List<String> requiredFlagIds = new ArrayList<String>();
-		requiredFlagIds.add("toAngle");
-		return requiredFlagIds;
+	public List<String> getMissingFlagIds() {
+		return mMissingFlagIds;
 	}
 
 }

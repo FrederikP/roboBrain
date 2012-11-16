@@ -60,7 +60,7 @@ public class RobotTest extends AndroidTestCase {
 		flags.put("left", 'L');
 		flags.put("right", 'R');
 
-		RobotPartInitializer initializer = new RobotPartInitializer(robot, flags);
+		RobotPartInitializer initializer = new RobotPartInitializer("Motor", robot, flags);
 
 		RobotPart motorPart = RobotPartFactory.getInstance(service).createRobotPart("Motor",
 				initializer);

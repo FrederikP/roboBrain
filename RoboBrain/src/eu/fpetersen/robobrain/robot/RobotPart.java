@@ -22,9 +22,12 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import eu.fpetersen.robobrain.util.RoboLog;
+import eu.fpetersen.robobrain.util.exceptions.RequiredFlagsNotSetException;
 
 /**
  * @author Frederik Petersen
@@ -40,19 +43,63 @@ import eu.fpetersen.robobrain.util.RoboLog;
 public abstract class RobotPart {
 	private Robot mRobot;
 	private Map<String, Character> mFlags;
+	private String mId;
 
 	/**
 	 * This needs to be called after instantiated the RobotPart and it exists
 	 * because the default constructor is needed to dynamically decide which
-	 * subclass is to be created
+	 * subclass is to be created. Also runs the flag-id requirement check
 	 * 
 	 * @param robot
 	 *            Robot the Part belongs to.
+	 * @return true if flag requirements are met, false if not
 	 */
-	protected void initialize(Robot robot, Map<String, Character> flags) {
+	protected boolean initialize(String id, Robot robot, Map<String, Character> flags) {
+		this.mId = id;
 		this.mRobot = robot;
 		this.mFlags = flags;
+		try {
+			checkForRequiredFlags();
+		} catch (RequiredFlagsNotSetException e) {
+			for (String flagId : e.getMissingFlagIds()) {
+				RoboLog.alertError(robot.getRobotService(), "Required flag with the id \"" + flagId
+						+ "\" missing for robot \"" + robot.getName() + "\" and it's part \"" + mId
+						+ "\"");
+			}
+			return false;
+		}
+
+		return true;
 	}
+
+	/**
+	 * Checks if all required Flags are set in xml
+	 * 
+	 * @throws RequiredFlagsNotSetException
+	 *             if a required flag is not set
+	 */
+	private void checkForRequiredFlags() throws RequiredFlagsNotSetException {
+		List<String> requiredFlagIds = getRequiredFlagIds();
+		if (requiredFlagIds == null) {
+			return;
+		}
+		List<String> missingFlagIds = new ArrayList<String>();
+		for (String reqFlag : requiredFlagIds) {
+			if (!mFlags.containsKey(reqFlag)) {
+				missingFlagIds.add(reqFlag);
+			}
+		}
+
+		if (missingFlagIds.size() > 0) {
+			throw new RequiredFlagsNotSetException(missingFlagIds);
+		}
+
+	}
+
+	/**
+	 * @return a List of Ids of required Flags that need to be set in robots xml
+	 */
+	protected abstract List<String> getRequiredFlagIds();
 
 	protected RobotPart() {
 	}

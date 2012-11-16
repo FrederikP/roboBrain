@@ -22,6 +22,8 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot;
 
+import java.util.List;
+
 //TODO: Find a way to differ between digital and analog value ranges 
 //(i.e. binary infrared sensor and a cm value ranged ultrasonix sensor)
 
@@ -44,6 +46,11 @@ public class ProximitySensor extends Sensor {
 
 	public int getValue() {
 		return mValue;
+	}
+
+	@Override
+	protected List<String> getRequiredFlagIds() {
+		return null;
 	}
 
 }

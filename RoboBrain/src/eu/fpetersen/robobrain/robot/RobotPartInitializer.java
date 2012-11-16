@@ -35,11 +35,16 @@ public class RobotPartInitializer {
 
 	private Robot mRobot;
 
-	Map<String, Character> mFlags;
+	private Map<String, Character> mFlags;
 
-	public RobotPartInitializer(Robot robot, Map<String, Character> flags) {
+	private String mId;
+
+	private boolean requirementsMet = false;
+
+	public RobotPartInitializer(String id, Robot robot, Map<String, Character> flags) {
 		this.mRobot = robot;
 		this.mFlags = flags;
+		this.mId = id;
 	}
 
 	/**
@@ -50,7 +55,11 @@ public class RobotPartInitializer {
 	 *            {@link RobotPart} to initialize
 	 */
 	public void initialize(RobotPart part) {
-		part.initialize(mRobot, mFlags);
+		requirementsMet = part.initialize(mId, mRobot, mFlags);
+	}
+
+	public boolean areRequirementsMet() {
+		return requirementsMet;
 	}
 
 }

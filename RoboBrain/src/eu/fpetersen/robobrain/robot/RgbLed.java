@@ -22,6 +22,9 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import eu.fpetersen.robobrain.color.RgbColor;
 
 /**
@@ -67,6 +70,13 @@ public class RgbLed extends RobotPart {
 	 */
 	public void set(RgbColor color) {
 		set(color.getRed(), color.getGreen(), color.getBlue());
+	}
+
+	@Override
+	protected List<String> getRequiredFlagIds() {
+		List<String> requiredFlagIds = new ArrayList<String>();
+		requiredFlagIds.add("toColor");
+		return requiredFlagIds;
 	}
 
 }

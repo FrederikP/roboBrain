@@ -22,6 +22,9 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents Arduino controlled motor unit of the robot.
  * 
@@ -120,6 +123,22 @@ public class Motor extends RobotPart {
 	 */
 	public enum MotorState {
 		STOPPED, FORWARD, BACKWARD, TURNING_RIGHT, TURNING_LEFT, STOPPINGWITHDELAY
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see eu.fpetersen.robobrain.robot.RobotPart#getRequiredFlagIds()
+	 */
+	@Override
+	protected List<String> getRequiredFlagIds() {
+		List<String> requiredFlagIds = new ArrayList<String>();
+		requiredFlagIds.add("advance");
+		requiredFlagIds.add("backoff");
+		requiredFlagIds.add("stop");
+		requiredFlagIds.add("left");
+		requiredFlagIds.add("right");
+		return requiredFlagIds;
 	}
 
 }
