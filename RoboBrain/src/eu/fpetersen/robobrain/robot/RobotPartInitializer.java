@@ -22,51 +22,35 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot;
 
-import eu.fpetersen.robobrain.color.RgbColor;
+import java.util.Map;
 
 /**
- * Represents a RGBLED connected to the analog pins of an Arduino device. Where
- * the range of pin values goes from 0 to 1023
+ * Takes care of managing the parameters that are needed for initializing the
+ * RobotPart
  * 
  * @author Frederik Petersen
  * 
  */
-public class RgbLed extends RobotPart {
+public class RobotPartInitializer {
 
-	private int mGreen = 0;
-	private int mRed = 0;
-	private int mBlue = 0;
+	private Robot mRobot;
 
-	/**
-	 * Set the RGBLED color to the specified RGB color
-	 * 
-	 * @param red
-	 *            Red color value 0-255
-	 * @param green
-	 *            Green color value 0-255
-	 * @param blue
-	 *            Blue color value 0-255
-	 */
-	public void set(int red, int green, int blue) {
-		if (this.mRed == red && this.mGreen == green && this.mBlue == blue) {
-			// Already set to this value no need to contact Arduino/Hardware
-		} else {
-			this.mRed = red;
-			this.mGreen = green;
-			this.mBlue = blue;
-			int[] colors = { red * 4, green * 4, blue * 4 };
-			getRobot().sendToArduino(getFlag("toColor"), colors);
-		}
+	Map<String, Character> mFlags;
+
+	public RobotPartInitializer(Robot robot, Map<String, Character> flags) {
+		this.mRobot = robot;
+		this.mFlags = flags;
 	}
 
 	/**
+	 * Initialize the {@link RobotPart} with the parameters stored in this
+	 * {@link RobotPartInitializer}
 	 * 
-	 * 
-	 * @param color
-	 *            The color the LED should be set to
+	 * @param part
+	 *            {@link RobotPart} to initialize
 	 */
-	public void set(RgbColor color) {
-		set(color.getRed(), color.getGreen(), color.getBlue());
+	public void initialize(RobotPart part) {
+		part.initialize(mRobot, mFlags);
 	}
 
 }

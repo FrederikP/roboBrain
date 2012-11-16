@@ -37,7 +37,7 @@ public class Servo extends RobotPart {
 	 *            Angle in degrees
 	 */
 	public void setToAngle(int angle) {
-		getRobot().sendToArduino('C', angle);
+		getRobot().sendToArduino(getFlag("toAngle"), angle);
 	}
 
 }

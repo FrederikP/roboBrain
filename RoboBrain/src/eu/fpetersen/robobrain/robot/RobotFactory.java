@@ -185,9 +185,77 @@ public class RobotFactory extends RoboBrainFactory {
 		parser.require(XmlPullParser.START_TAG, NS, "part");
 		String type = parser.getAttributeValue(NS, "type");
 		String id = parser.getAttributeValue(NS, "id");
-		robot.addPart(id, rbFac.createRobotPart(type, robot));
+		Map<String, Character> flags = null;
+		while (parser.next() != XmlPullParser.END_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG) {
+				continue;
+			}
+			String name = parser.getName();
+			if (name.equals("flags")) {
+				flags = readInFlags(parser);
+			} else {
+				XmlParserHelper.skip(parser);
+			}
+		}
+		RobotPartInitializer initializer = new RobotPartInitializer(robot, flags);
+		robot.addPart(id, rbFac.createRobotPart(type, initializer));
+		try {
+			parser.require(XmlPullParser.END_TAG, NS, "part");
+		} catch (XmlPullParserException e) {
+			// parser still on last Flag tag -> jump to next
+			parser.nextTag();
+			parser.require(XmlPullParser.END_TAG, NS, "part");
+		}
+
+	}
+
+	/**
+	 * Read in flags with their ids
+	 * 
+	 * @param parser
+	 * @return
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
+	private Map<String, Character> readInFlags(XmlPullParser parser) throws XmlPullParserException,
+			IOException {
+		parser.require(XmlPullParser.START_TAG, NS, "flags");
+		Map<String, Character> flags = new HashMap<String, Character>();
+		try {
+			while (parser.next() != XmlPullParser.END_TAG) {
+				if (parser.getEventType() != XmlPullParser.START_TAG) {
+					continue;
+				}
+				String name = parser.getName();
+				if (name.equals("flag")) {
+					readInFlag(flags, parser);
+				} else {
+					XmlParserHelper.skip(parser);
+				}
+			}
+			parser.require(XmlPullParser.END_TAG, NS, "flags");
+		} catch (XmlPullParserException e) {
+			e.printStackTrace();
+		}
+
+		return flags;
+
+	}
+
+	/**
+	 * @param flags
+	 * @param parser
+	 * @throws IOException
+	 * @throws XmlPullParserException
+	 */
+	private void readInFlag(Map<String, Character> flags, XmlPullParser parser)
+			throws XmlPullParserException, IOException {
+		parser.require(XmlPullParser.START_TAG, NS, "flag");
+		String id = parser.getAttributeValue(NS, "id");
+		char flag = parser.getAttributeValue(NS, "flag").charAt(0);
+		flags.put(id, flag);
 		parser.nextTag();
-		parser.require(XmlPullParser.END_TAG, NS, "part");
+		parser.require(XmlPullParser.END_TAG, NS, "flag");
 	}
 
 	/**

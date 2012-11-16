@@ -27,7 +27,6 @@ import java.util.Map;
 
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.robot.Motor;
-import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.robot.RobotPart;
@@ -37,22 +36,19 @@ import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**
- * Tests {@link Robot}
+ * Tests {@link RobotPart} class.
  * 
  * @author Frederik Petersen
  * 
  */
-public class RobotTest extends AndroidTestCase {
+public class RobotPartTest extends AndroidTestCase {
 
 	/**
-	 * Test adding the standard Motor, setting its speed and stopping the robot.
+	 * Test creating a motor, including flags
 	 */
-	public void testPartAddingWithMainMotor() {
+	public void testMotorCreation() {
 		RobotService service = new MockRobotService(getContext());
-		Robot robot = RobotFactory.getInstance(service).createSimpleRobot("TestBot");
-
-		assertNotNull(robot);
-
+		Robot mockRobot = RobotFactory.getInstance(service).createSimpleRobot("TestBot");
 		Map<String, Character> flags = new HashMap<String, Character>();
 		flags.put("advance", 'A');
 		flags.put("backoff", 'B');
@@ -60,26 +56,15 @@ public class RobotTest extends AndroidTestCase {
 		flags.put("left", 'L');
 		flags.put("right", 'R');
 
-		RobotPartInitializer initializer = new RobotPartInitializer(robot, flags);
-
-		RobotPart motorPart = RobotPartFactory.getInstance(service).createRobotPart("Motor",
+		RobotPartInitializer initializer = new RobotPartInitializer(mockRobot, flags);
+		Motor motor = (Motor) RobotPartFactory.getInstance(service).createRobotPart("Motor",
 				initializer);
-
-		assertNotNull(motorPart);
-
-		robot.addPart("main_motor", motorPart);
-
-		Motor motor = robot.getMainMotor();
 
 		assertNotNull(motor);
 
-		motor.advance(200);
+		assertEquals('A', motor.getFlag("advance"));
 
-		assertEquals(MotorState.FORWARD, motor.getState());
-
-		robot.stop();
-
-		assertEquals(MotorState.STOPPED, motor.getState());
+		assertEquals(' ', motor.getFlag("notexistant"));
 
 	}
 

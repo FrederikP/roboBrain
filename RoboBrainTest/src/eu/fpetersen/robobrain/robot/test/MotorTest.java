@@ -22,12 +22,16 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot.test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
+import eu.fpetersen.robobrain.robot.RobotPartInitializer;
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
@@ -46,10 +50,17 @@ public class MotorTest extends AndroidTestCase {
 		RobotService service = new MockRobotService(getContext());
 		int speed = 200;
 		int angle = 90;
-		Robot mockRobot = RobotFactory.getInstance(service).createSimpleRobot(
-				"TestBot");
-		Motor motor = (Motor) RobotPartFactory.getInstance(service)
-				.createRobotPart("Motor", mockRobot);
+		Robot mockRobot = RobotFactory.getInstance(service).createSimpleRobot("TestBot");
+		Map<String, Character> flags = new HashMap<String, Character>();
+		flags.put("advance", 'A');
+		flags.put("backoff", 'B');
+		flags.put("stop", 'S');
+		flags.put("left", 'L');
+		flags.put("right", 'R');
+
+		RobotPartInitializer initializer = new RobotPartInitializer(mockRobot, flags);
+		Motor motor = (Motor) RobotPartFactory.getInstance(service).createRobotPart("Motor",
+				initializer);
 
 		motor.advance(speed);
 		assertEquals(MotorState.FORWARD, motor.getState());

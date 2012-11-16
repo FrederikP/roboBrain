@@ -22,6 +22,10 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot;
 
+import java.util.Map;
+
+import eu.fpetersen.robobrain.util.RoboLog;
+
 /**
  * @author Frederik Petersen
  * 
@@ -35,6 +39,7 @@ package eu.fpetersen.robobrain.robot;
  */
 public abstract class RobotPart {
 	private Robot mRobot;
+	private Map<String, Character> mFlags;
 
 	/**
 	 * This needs to be called after instantiated the RobotPart and it exists
@@ -44,8 +49,9 @@ public abstract class RobotPart {
 	 * @param robot
 	 *            Robot the Part belongs to.
 	 */
-	protected void initialize(Robot robot) {
+	protected void initialize(Robot robot, Map<String, Character> flags) {
 		this.mRobot = robot;
+		this.mFlags = flags;
 	}
 
 	protected RobotPart() {
@@ -53,6 +59,55 @@ public abstract class RobotPart {
 
 	public Robot getRobot() {
 		return mRobot;
+	}
+
+	/**
+	 * Returns the flag dientified by the id. If flag does not exist, returns
+	 * the following char: ' ' And displays error. Flags are defined in robots
+	 * xml like this:
+	 * 
+	 * <pre>
+	 * {@code
+	 * <?xml version="1.0" encoding="utf-8"?>
+	 * 	<robot name="TESTBOT" address="TESTADDRESS">
+	 * 		<parts>
+	 * 			<part type="Motor" id="main_motor">
+	 * 		    	<flags>
+	 * 		    		<flag id="advance" flag="A"/>
+	 * 		    		<flag id="backoff" flag="B"/>
+	 * 		    		<flag id="left" flag="L"/>
+	 * 		    		<flag id="right" flag="R"/>
+	 * 		    		<flag id="stop" flag="S"/>
+	 * 		    	</flags>
+	 * 			</part>
+	 * 			<part type="ProximitySensor" id="front_proxsensor" />
+	 * 			<part type="ProximitySensor" id="back_proxsensor" />
+	 * 			<part type="Servo" id="head_servo">
+	 * 		    	<flags>
+	 * 		    		<flag id="toAngle" flag="C"/>
+	 * 		    	</flags>
+	 * 			</part>
+	 * 			<part type="RgbLed" id="headcolor_rgbled">
+	 * 		    	<flags>
+	 * 		    		<flag id="toColor" flag="D"/>
+	 * 		    	</flags>
+	 * 			</part>	
+	 * 		</parts>
+	 * 	</robot>
+	 * }
+	 * </pre>
+	 * 
+	 * @param id
+	 *            Identifies the flag to be returned
+	 * @return The flag if it exists or ' ' if not
+	 */
+	public char getFlag(String id) {
+		if (!mFlags.containsKey(id)) {
+			RoboLog.alertError(mRobot.getRobotService(), "Flag with id \"" + id
+					+ "\" was not defined in xml");
+			return ' ';
+		}
+		return mFlags.get(id);
 	}
 
 }

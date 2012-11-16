@@ -58,17 +58,17 @@ public class RobotPartFactory extends RoboBrainFactory {
 	 * 
 	 * @param type
 	 *            Name of the RobotPart implementation.
-	 * @param robot
-	 *            The robot this part is supposed to be created for.
+	 * @param initializer
+	 *            In charge of correctly initializing the RobotPart
 	 * @return RobotPart instance or null if something went wrong. If something
 	 *         is amiss, check log.
 	 */
-	public RobotPart createRobotPart(String type, Robot robot) {
+	public RobotPart createRobotPart(String type, RobotPartInitializer initializer) {
 		String partClassName = "eu.fpetersen.robobrain.robot." + type;
 		RobotPart part = null;
 		try {
 			part = (RobotPart) Class.forName(partClassName).newInstance();
-			part.initialize(robot);
+			initializer.initialize(part);
 		} catch (InstantiationException e) {
 			RoboLog.alertWarning(getService(), "RobotPart class " + type
 					+ " could not be instantiated");

@@ -42,7 +42,7 @@ public class Motor extends RobotPart {
 	 *            The speed the robot is supposed to back off with.
 	 */
 	public void backOff(int speed) {
-		getRobot().sendToArduino('B', speed);
+		getRobot().sendToArduino(getFlag("backoff"), speed);
 		setState(MotorState.BACKWARD);
 
 	}
@@ -54,7 +54,7 @@ public class Motor extends RobotPart {
 	 *            The speed the robot is supposed to advance with.
 	 */
 	public void advance(int speed) {
-		getRobot().sendToArduino('A', speed);
+		getRobot().sendToArduino(getFlag("advance"), speed);
 		setState(MotorState.FORWARD);
 	}
 
@@ -65,7 +65,7 @@ public class Motor extends RobotPart {
 	 *            Delay the robot is supposed to stop with.
 	 */
 	public void stop(int delay) {
-		getRobot().sendToArduino('S', delay);
+		getRobot().sendToArduino(getFlag("stop"), delay);
 		if (delay <= 0 && mState != MotorState.STOPPED) {
 			setState(MotorState.STOPPED);
 		} else {
@@ -80,7 +80,7 @@ public class Motor extends RobotPart {
 	 *            Angle to turn with in degrees
 	 */
 	public void turnRight(int angle) {
-		getRobot().sendToArduino('R', angle);
+		getRobot().sendToArduino(getFlag("right"), angle);
 		setState(MotorState.TURNING_RIGHT);
 	}
 
@@ -91,7 +91,7 @@ public class Motor extends RobotPart {
 	 *            Angle to turn with in degrees
 	 */
 	public void turnLeft(int angle) {
-		getRobot().sendToArduino('L', angle);
+		getRobot().sendToArduino(getFlag("left"), angle);
 		setState(MotorState.TURNING_LEFT);
 	}
 
