@@ -6,3 +6,5 @@ target/
 .settings/
 Release/
 bin/
+ant.properties
+local.properties
