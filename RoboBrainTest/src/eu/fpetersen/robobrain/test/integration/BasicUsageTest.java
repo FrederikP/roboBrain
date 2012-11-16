@@ -274,6 +274,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 	@Override
 	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
 		RobotService service = starterActivity.getRobotService();
 		if (service != null) {
 			service.stopSelf();

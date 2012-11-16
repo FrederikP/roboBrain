@@ -65,4 +65,10 @@ public class ExternalStorageManagerTest extends AndroidTestCase {
 		assertTrue(file.exists());
 	}
 
+	@Override
+	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
+		super.tearDown();
+	}
+
 }

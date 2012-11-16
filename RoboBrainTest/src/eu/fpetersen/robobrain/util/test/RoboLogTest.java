@@ -67,4 +67,10 @@ public class RoboLogTest extends ActivityInstrumentationTestCase2 {
 		assertTrue(allText.contains(findThis));
 	}
 
+	@Override
+	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
+		super.tearDown();
+	}
+
 }

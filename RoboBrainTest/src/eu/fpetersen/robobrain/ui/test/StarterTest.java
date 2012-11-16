@@ -52,8 +52,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	protected void setUp() throws Exception {
 		starterActivity = getActivity();
 		robotService = new MockRobotService(starterActivity);
-		System.setProperty(starterActivity.getString(R.string.envvar_testing),
-				"true");
+		System.setProperty(starterActivity.getString(R.string.envvar_testing), "true");
 		super.setUp();
 	}
 
@@ -62,8 +61,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 */
 	public void testStatusToggle() {
 		assertFalse(robotService.isRunning());
-		final TextView statusTV = (TextView) starterActivity
-				.findViewById(R.id.status_textview);
+		final TextView statusTV = (TextView) starterActivity.findViewById(R.id.status_textview);
 		final ToggleButton toggleButton = (ToggleButton) starterActivity
 				.findViewById(R.id.togglestatus_button);
 		assertFalse(toggleButton.isChecked());
@@ -78,8 +76,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		});
 		// Wait a while to make sure any real service can be started
 		int waitedSecs = 0;
-		while (!statusTV.getText().toString().matches("Started!")
-				&& waitedSecs < 5) {
+		while (!statusTV.getText().toString().matches("Started!") && waitedSecs < 5) {
 			Helper.sleepMillis(1000);
 			waitedSecs++;
 		}
@@ -96,8 +93,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		TextView robotNameView = getRobotNameTextView();
 		int seconds = 0;
-		while ((robotNameView == null || robotNameView.getText().toString()
-				.matches("TESTBOT"))
+		while ((robotNameView == null || robotNameView.getText().toString().matches("TESTBOT"))
 				&& seconds < 20) {
 			Helper.sleepMillis(1000);
 			seconds++;
@@ -109,13 +105,12 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		assertTrue(robotService.isRunning());
 		assertEquals("Started!", statusTV.getText());
 
-		int tableChilds = starterActivity.getRobotBehaviorTable()
-				.getChildCount();
+		int tableChilds = starterActivity.getRobotBehaviorTable().getChildCount();
 
 		assertSame(2, tableChilds);
 
-		robotNameView = (TextView) ((TableRow) starterActivity
-				.getRobotBehaviorTable().getChildAt(1)).getChildAt(0);
+		robotNameView = (TextView) ((TableRow) starterActivity.getRobotBehaviorTable()
+				.getChildAt(1)).getChildAt(0);
 		assertSame("TestBot", robotNameView.getText());
 
 		// ----Turn off service----
@@ -127,8 +122,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		});
 		// Wait a while to make sure any real service can be stopped
 		waitedSecs = 0;
-		while (!statusTV.getText().toString().matches("Stopped!")
-				&& waitedSecs < 5) {
+		while (!statusTV.getText().toString().matches("Stopped!") && waitedSecs < 5) {
 			Helper.sleepMillis(1000);
 			waitedSecs++;
 		}
@@ -171,6 +165,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 	@Override
 	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
 		starterActivity.finish();
 		super.tearDown();
 	}

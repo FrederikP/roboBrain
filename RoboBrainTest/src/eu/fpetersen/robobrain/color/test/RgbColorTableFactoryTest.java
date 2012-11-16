@@ -42,14 +42,19 @@ public class RgbColorTableFactoryTest extends AndroidTestCase {
 	public void testColorsFromFileCreation() {
 		RgbColorTableFactory rgbFac = RgbColorTableFactory.getInstance();
 		assertNotNull(rgbFac);
-		RgbColorTable table = rgbFac
-				.getStandardColorTableFromTextFile(getContext());
+		RgbColorTable table = rgbFac.getStandardColorTableFromTextFile(getContext());
 		assertNotNull(table);
 		assertTrue(table.getNames().size() > 0);
 		String newColorName = "Some Color";
 		table.addColor(newColorName, new RgbColor(newColorName, 22, 22, 22));
 		RgbColor newColor = table.getColorForName(newColorName);
 		assertNotNull(newColor);
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
+		super.tearDown();
 	}
 
 }

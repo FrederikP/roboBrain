@@ -49,8 +49,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	protected void setUp() throws Exception {
 		super.setUp();
 		consoleActivity = getActivity();
-		System.setProperty(consoleActivity.getString(R.string.envvar_testing),
-				"true");
+		System.setProperty(consoleActivity.getString(R.string.envvar_testing), "true");
 	}
 
 	/**
@@ -59,8 +58,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	public void testFormattedTimeStamp() {
 		String date = consoleActivity.getFormattedCurrentTimestamp();
 		assertNotNull(date);
-		String pattern = consoleActivity
-				.getString(R.string.console_timestamp_format);
+		String pattern = consoleActivity.getString(R.string.console_timestamp_format);
 		pattern = pattern.replaceAll("(\\w)", "\\\\\\d");
 		pattern = pattern.replaceAll("(\\s)", "\\\\\\s");
 		MoreAsserts.assertMatchesRegex(pattern, date);
@@ -71,8 +69,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	 * works.
 	 */
 	public void testTextAppendWithoutIntent() {
-		TextView consoleTextView = (TextView) consoleActivity
-				.findViewById(R.id.consoleTextView);
+		TextView consoleTextView = (TextView) consoleActivity.findViewById(R.id.consoleTextView);
 		String findThis = "INTHEMIDDLE";
 		for (int i = 0; i < 30; i++) {
 			Helper.sleepMillis(200);
@@ -92,8 +89,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	 * intent, and if scrolling down works.
 	 */
 	public void testTextAppendWithIntent() {
-		TextView consoleTextView = (TextView) consoleActivity
-				.findViewById(R.id.consoleTextView);
+		TextView consoleTextView = (TextView) consoleActivity.findViewById(R.id.consoleTextView);
 		String appendMe = "AppendMe";
 		Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
 		cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, appendMe);
@@ -107,6 +103,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 
 	@Override
 	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
 		consoleActivity.finish();
 		super.tearDown();
 	}

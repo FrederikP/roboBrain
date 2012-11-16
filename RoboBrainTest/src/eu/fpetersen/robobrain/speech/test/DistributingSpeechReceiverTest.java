@@ -48,8 +48,7 @@ public class DistributingSpeechReceiverTest extends AndroidTestCase {
 	@Override
 	protected void setUp() throws Exception {
 		distSR = new DistributingSpeechReceiver();
-		getContext().registerReceiver(distSR,
-				new IntentFilter(RoboBrainIntent.ACTION_SPEECH));
+		getContext().registerReceiver(distSR, new IntentFilter(RoboBrainIntent.ACTION_SPEECH));
 		super.setUp();
 	}
 
@@ -106,6 +105,12 @@ public class DistributingSpeechReceiverTest extends AndroidTestCase {
 		getContext().sendBroadcast(intent);
 
 		Helper.sleepMillis(400);
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
+		super.tearDown();
 	}
 
 }

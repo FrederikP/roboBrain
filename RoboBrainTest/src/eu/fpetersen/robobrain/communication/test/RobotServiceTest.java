@@ -81,4 +81,10 @@ public class RobotServiceTest extends ServiceTestCase<RobotService> {
 
 	}
 
+	@Override
+	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
+		super.tearDown();
+	}
+
 }

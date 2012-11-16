@@ -83,4 +83,10 @@ public class RobotTest extends AndroidTestCase {
 
 	}
 
+	@Override
+	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
+		super.tearDown();
+	}
+
 }

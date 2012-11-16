@@ -56,4 +56,10 @@ public class BehaviorMappingFactoryTest extends AndroidTestCase {
 		assertEquals(3, behaviorInitializers.size());
 	}
 
+	@Override
+	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
+		super.tearDown();
+	}
+
 }

@@ -57,8 +57,7 @@ public class SpeechResultManagerTest extends AndroidTestCase {
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				String[] results = intent
-						.getStringArrayExtra(RoboBrainIntent.EXTRA_SPEECH_RESULTS);
+				String[] results = intent.getStringArrayExtra(RoboBrainIntent.EXTRA_SPEECH_RESULTS);
 				assertNotNull(results);
 				checkFunctionalitySet.add(results[0]);
 			}
@@ -66,8 +65,8 @@ public class SpeechResultManagerTest extends AndroidTestCase {
 
 		String testString = UUID.randomUUID().toString();
 
-		getContext().registerReceiver(mockReceiver,
-				new IntentFilter(RoboBrainIntent.ACTION_SPEECH));
+		getContext()
+				.registerReceiver(mockReceiver, new IntentFilter(RoboBrainIntent.ACTION_SPEECH));
 		List<String> mockData = new ArrayList<String>();
 		mockData.add(testString);
 		resultManager.allocateNewResults(getContext(), mockData);
@@ -76,6 +75,12 @@ public class SpeechResultManagerTest extends AndroidTestCase {
 
 		assertTrue(checkFunctionalitySet.contains(testString));
 
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
+		super.tearDown();
 	}
 
 }

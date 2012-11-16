@@ -68,4 +68,10 @@ public class RobotFactoryTest extends AndroidTestCase {
 		assertNotNull(robot.getHeadServo());
 	}
 
+	@Override
+	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
+		super.tearDown();
+	}
+
 }

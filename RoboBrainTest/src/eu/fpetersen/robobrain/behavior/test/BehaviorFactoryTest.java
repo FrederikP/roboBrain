@@ -56,4 +56,10 @@ public class BehaviorFactoryTest extends AndroidTestCase {
 		assertEquals(robot, behavior.getRobot());
 		assertFalse(behavior.isTurnedOn());
 	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		// ///CLOVER:FLUSH
+		super.tearDown();
+	}
 }
