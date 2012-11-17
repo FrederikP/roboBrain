@@ -59,6 +59,8 @@ public class RoboLogTest extends ActivityInstrumentationTestCase2 {
 		TextView consoleTextView = (TextView) consoleActivity.findViewById(R.id.consoleTextView);
 		String findThis = "Logged!";
 
+		Helper.sleepMillis(2000);
+
 		RoboLog.log(consoleActivity, findThis, true);
 
 		Helper.sleepMillis(2000);
