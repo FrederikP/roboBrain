@@ -28,8 +28,8 @@ import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.behavior.BehaviorFactory;
 import eu.fpetersen.robobrain.behavior.BehaviorInitializer;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.services.RobotService;
+import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**
@@ -46,7 +46,8 @@ public class BehaviorFactoryTest extends AndroidTestCase {
 	 */
 	public void testBehaviorCreation() {
 		RobotService service = new MockRobotService(getContext());
-		Robot robot = RobotFactory.getInstance(service).createSimpleRobot("TESTBOT");
+		MockRobotFactory factory = new MockRobotFactory(getContext());
+		Robot robot = factory.createSimpleRobot("TESTBOT");
 		BehaviorFactory bFac = BehaviorFactory.getInstance(service);
 		Behavior behavior = bFac.createBehavior(
 				new BehaviorInitializer(BackAndForthBehavior.class.getName(), "speech"), robot);

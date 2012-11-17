@@ -22,17 +22,16 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.test.mock;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import eu.fpetersen.robobrain.behavior.BackAndForthBehavior;
+import android.content.IntentFilter;
 import eu.fpetersen.robobrain.behavior.Behavior;
-import eu.fpetersen.robobrain.communication.CommandCenter;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.services.RobotService;
+import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
 
 /**
  * Simple mock for the {@link RobotService} class, so that tests for activities
@@ -43,20 +42,23 @@ import eu.fpetersen.robobrain.services.RobotService;
  */
 public class MockRobotService extends RobotService {
 
-	private Context testContext;
+	private Context mTestContext;
+
+	private DistributingSpeechReceiver distSpeechRec;
 
 	public MockRobotService(Context context) {
-		testContext = context;
+		mTestContext = context;
+		distSpeechRec = new DistributingSpeechReceiver();
 	}
 
 	@Override
 	public void sendBroadcast(Intent intent) {
-		testContext.sendBroadcast(intent);
+		mTestContext.sendBroadcast(intent);
 	}
 
 	@Override
 	public void sendBroadcast(Intent intent, String receiverPermission) {
-		testContext.sendBroadcast(intent, receiverPermission);
+		mTestContext.sendBroadcast(intent, receiverPermission);
 	}
 
 	/**
@@ -69,16 +71,23 @@ public class MockRobotService extends RobotService {
 		this.mRunning = running;
 	}
 
+	public void addCC(Robot robot, List<Behavior> behaviors) {
+		createCommandCenter(robot, behaviors);
+	}
+
 	@Override
-	public Collection<CommandCenter> getAllCCs() {
-		Collection<CommandCenter> ccs = new ArrayList<CommandCenter>();
-		Robot robot = RobotFactory.getInstance(MockRobotService.this).createSimpleRobot("TestBot");
-		Behavior b1 = new BackAndForthBehavior();
-		b1.initialize(robot, "BackAndForth", "TestSpeechName");
-		ArrayList<Behavior> behaviors = new ArrayList<Behavior>();
-		behaviors.add(b1);
-		ccs.add(new CommandCenter(robot, behaviors));
-		return ccs;
+	public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+		return mTestContext.registerReceiver(receiver, filter);
+	}
+
+	@Override
+	public void unregisterReceiver(BroadcastReceiver receiver) {
+		mTestContext.unregisterReceiver(receiver);
+	}
+
+	@Override
+	public DistributingSpeechReceiver getDistributingSpeechReceiver() {
+		return distSpeechRec;
 	}
 
 }

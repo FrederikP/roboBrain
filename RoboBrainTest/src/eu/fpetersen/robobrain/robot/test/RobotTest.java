@@ -29,11 +29,11 @@ import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.robot.RobotPart;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
 import eu.fpetersen.robobrain.robot.RobotPartInitializer;
 import eu.fpetersen.robobrain.services.RobotService;
+import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**
@@ -49,7 +49,8 @@ public class RobotTest extends AndroidTestCase {
 	 */
 	public void testPartAddingWithMainMotor() {
 		RobotService service = new MockRobotService(getContext());
-		Robot robot = RobotFactory.getInstance(service).createSimpleRobot("TestBot");
+		MockRobotFactory factory = new MockRobotFactory(getContext());
+		Robot robot = factory.createSimpleRobot("TestBot");
 
 		assertNotNull(robot);
 

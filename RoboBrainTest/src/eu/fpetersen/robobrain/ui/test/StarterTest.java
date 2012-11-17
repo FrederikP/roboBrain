@@ -22,12 +22,18 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.ui.test;
 
+import java.util.ArrayList;
+
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import eu.fpetersen.robobrain.R;
+import eu.fpetersen.robobrain.behavior.BackAndForthBehavior;
+import eu.fpetersen.robobrain.behavior.Behavior;
+import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 import eu.fpetersen.robobrain.test.util.Helper;
 import eu.fpetersen.robobrain.ui.Starter;
@@ -52,6 +58,13 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	protected void setUp() throws Exception {
 		starterActivity = getActivity();
 		robotService = new MockRobotService(starterActivity);
+		MockRobotFactory factory = new MockRobotFactory(starterActivity);
+		Robot robot = factory.createSimpleRobot("TestBot");
+		Behavior b1 = new BackAndForthBehavior();
+		b1.initialize(robot, "BackAndForth", "TestSpeechName");
+		ArrayList<Behavior> behaviors = new ArrayList<Behavior>();
+		behaviors.add(b1);
+		robotService.addCC(robot, behaviors);
 		System.setProperty(starterActivity.getString(R.string.envvar_testing), "true");
 		super.setUp();
 	}
@@ -85,7 +98,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		robotService.setRunning(true);
 		assertTrue(robotService.isRunning());
 
-		Helper.sleepMillis(5000);
+		Helper.sleepMillis(7000);
 
 		// Overwrite real Service with Mock, because we only want to check this
 		// Activity
@@ -93,7 +106,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		TextView robotNameView = getRobotNameTextView();
 		int seconds = 0;
-		while ((robotNameView == null || robotNameView.getText().toString().matches("TESTBOT"))
+		while ((robotNameView == null || !robotNameView.getText().toString().matches("TestBot"))
 				&& seconds < 20) {
 			Helper.sleepMillis(1000);
 			seconds++;
@@ -134,7 +147,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		// Activity
 		starterActivity.setRobotService(robotService);
 
-		Helper.sleepMillis(2000);
+		Helper.sleepMillis(3000);
 
 		assertEquals("Stopped!", statusTV.getText());
 		assertFalse(robotService.isRunning());

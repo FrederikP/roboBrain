@@ -29,8 +29,7 @@ import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.robot.RobotFactory;
-import eu.fpetersen.robobrain.test.mock.MockRobotService;
+import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.util.Helper;
 
 public class BehaviorTest extends AndroidTestCase {
@@ -46,8 +45,8 @@ public class BehaviorTest extends AndroidTestCase {
 
 			@Override
 			public Robot getRobot() {
-				RobotFactory factory = RobotFactory.getInstance(new MockRobotService(getContext()));
-				Robot robot = factory.createSimpleRobot("TESTBOT");
+				MockRobotFactory factory = new MockRobotFactory(getContext());
+				Robot robot = factory.createSimpleRobot("TestBot");
 				return robot;
 			}
 

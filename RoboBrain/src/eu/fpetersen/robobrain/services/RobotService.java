@@ -399,7 +399,7 @@ public class RobotService extends Service {
 	 * @param behaviors
 	 *            The behaviors of the robot above.
 	 */
-	private void createCommandCenter(Robot robot, List<Behavior> behaviors) {
+	protected void createCommandCenter(Robot robot, List<Behavior> behaviors) {
 		CommandCenter cc = mCcPerRobot.get(robot);
 		if (cc == null) {
 			cc = new CommandCenter(robot, behaviors);

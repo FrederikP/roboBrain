@@ -71,7 +71,7 @@ public class SpeechResultManagerTest extends AndroidTestCase {
 		mockData.add(testString);
 		resultManager.allocateNewResults(getContext(), mockData);
 
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(300);
 
 		assertTrue(checkFunctionalitySet.contains(testString));
 

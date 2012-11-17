@@ -29,6 +29,7 @@ import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
+import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**
@@ -42,12 +43,13 @@ import eu.fpetersen.robobrain.test.mock.MockRobotService;
 public class RobotFactoryTest extends AndroidTestCase {
 
 	/**
-	 * Creates really simple robot, no parts, no file
+	 * Creates really simple robot, no parts, no file This tests a class in the
+	 * Test Project. Just to make sure, nothing goes wrong there
 	 */
 	public void testSimpleRobotCreation() {
 		String robotName = "TestBot";
-		Robot robot = RobotFactory.getInstance(new MockRobotService(getContext()))
-				.createSimpleRobot(robotName);
+		MockRobotFactory factory = new MockRobotFactory(getContext());
+		Robot robot = factory.createSimpleRobot("TestBot");
 		assertNotNull(robot);
 		assertEquals(robot.getName(), robotName);
 	}

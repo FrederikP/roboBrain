@@ -40,6 +40,7 @@ import eu.fpetersen.robobrain.communication.CommandCenter;
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.speech.SpeechResultManager;
 import eu.fpetersen.robobrain.test.util.Helper;
+import eu.fpetersen.robobrain.ui.About;
 import eu.fpetersen.robobrain.ui.Console;
 import eu.fpetersen.robobrain.ui.Starter;
 
@@ -184,6 +185,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		// ----Turn on one behavior per mocked voice
 		SpeechResultManager speechResultManager = SpeechResultManager.getInstance();
 		List<String> mockedSpeechResults = new ArrayList<String>();
+		mockedSpeechResults.add("bart robtacle behavior");
 		mockedSpeechResults.add("start obstacle behavior");
 		speechResultManager.allocateNewResults(consoleActivity, mockedSpeechResults);
 
@@ -270,6 +272,33 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		console.finish();
 
+	}
+
+	public void testSwitchingToAboutActivityAndBack() {
+
+		starterActivity.removeAllOpenDialogs();
+
+		// ----Open Console activity-----
+		ActivityMonitor amAbout = getInstrumentation().addMonitor(About.class.getName(), null,
+				false);
+
+		getInstrumentation().invokeMenuActionSync(starterActivity, R.id.about_menu_item, 0);
+
+		Activity aboutActivity = getInstrumentation().waitForMonitorWithTimeout(amAbout, 1000);
+		assertEquals(true, getInstrumentation().checkMonitorHit(amAbout, 1));
+
+		// ----Go back to Starter activity-----
+		ActivityMonitor amStarter = getInstrumentation().addMonitor(Starter.class.getName(), null,
+				false);
+
+		getInstrumentation().invokeMenuActionSync(aboutActivity, R.id.starter_menu_item, 0);
+
+		Activity starterActivity2 = getInstrumentation().waitForMonitorWithTimeout(amStarter, 1000);
+		assertEquals(true, getInstrumentation().checkMonitorHit(amStarter, 1));
+
+		assertEquals(starterActivity, starterActivity2);
+
+		aboutActivity.finish();
 	}
 
 	@Override

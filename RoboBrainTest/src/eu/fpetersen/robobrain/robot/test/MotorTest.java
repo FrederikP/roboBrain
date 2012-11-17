@@ -29,10 +29,10 @@ import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
 import eu.fpetersen.robobrain.robot.RobotPartInitializer;
 import eu.fpetersen.robobrain.services.RobotService;
+import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**
@@ -50,7 +50,8 @@ public class MotorTest extends AndroidTestCase {
 		RobotService service = new MockRobotService(getContext());
 		int speed = 200;
 		int angle = 90;
-		Robot mockRobot = RobotFactory.getInstance(service).createSimpleRobot("TestBot");
+		MockRobotFactory factory = new MockRobotFactory(getContext());
+		Robot mockRobot = factory.createSimpleRobot("TestBot");
 		Map<String, Character> flags = new HashMap<String, Character>();
 		flags.put("advance", 'A');
 		flags.put("backoff", 'B');

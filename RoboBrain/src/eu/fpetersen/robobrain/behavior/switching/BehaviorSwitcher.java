@@ -98,6 +98,10 @@ public class BehaviorSwitcher {
 	 */
 	public void startBehavior(UUID uuid) {
 		final Behavior b = mService.getBehaviorForUUID(uuid);
+		if (b == null || b.getRobot() == null) {
+			RoboLog.alertError(getRobotService(), "No CC for Behavior UUID: " + uuid);
+			return;
+		}
 		CommandCenter cc = mService.getCCForAddress(b.getRobot().getAddress());
 
 		stopRunningBehavior(cc);
@@ -135,6 +139,10 @@ public class BehaviorSwitcher {
 	 */
 	public void stopBehavior(UUID uuid) {
 		final Behavior b = mService.getBehaviorForUUID(uuid);
+		if (b == null) {
+			RoboLog.alertError(getRobotService(), "Could not find behavior for UUID: " + uuid);
+			return;
+		}
 		Runnable behaviorStopper = new Runnable() {
 			public void run() {
 				b.stopBehavior();

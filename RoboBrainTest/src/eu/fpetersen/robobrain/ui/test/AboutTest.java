@@ -20,57 +20,56 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.util.test;
+package eu.fpetersen.robobrain.ui.test;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.R;
-import eu.fpetersen.robobrain.test.util.Helper;
-import eu.fpetersen.robobrain.ui.Console;
+import eu.fpetersen.robobrain.ui.About;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
- * Unit Testing for the {@link RoboLog} Helper class. This is also using the
- * Console acitivity to check for the output
+ * tests the {@link About} activity
  * 
  * @author Frederik Petersen
  * 
  */
-@SuppressWarnings("rawtypes")
-public class RoboLogTest extends ActivityInstrumentationTestCase2 {
+public class AboutTest extends ActivityInstrumentationTestCase2<About> {
 
-	private Console consoleActivity;
+	About mAboutActivity;
 
-	@SuppressWarnings("unchecked")
-	public RoboLogTest() {
-		super(Console.class);
+	public AboutTest() {
+		super(About.class);
 	}
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		consoleActivity = (Console) getActivity();
+		mAboutActivity = getActivity();
 	}
 
 	/**
-	 * Test if RoboLog message is correctly logged to Console UI activity
+	 * Test if version number is correctly displayed
 	 */
-	public void testRoboLogLogging() {
-		TextView consoleTextView = (TextView) consoleActivity.findViewById(R.id.consoleTextView);
-		String findThis = "Logged!";
+	public void testVersionCode() {
+		// Set version
+		PackageInfo pInfo = null;
+		String version = "";
+		try {
+			pInfo = mAboutActivity.getPackageManager().getPackageInfo(
+					mAboutActivity.getPackageName(), 0);
+			version = pInfo.versionName;
+		} catch (NameNotFoundException e) {
+			RoboLog.alertError(mAboutActivity, "Version could not be set");
+		}
 
-		RoboLog.log(consoleActivity, findThis, true);
+		assertFalse(version.matches(""));
 
-		Helper.sleepMillis(2000);
-
-		String allText = consoleTextView.getText().toString();
-		assertTrue(allText.contains(findThis));
-	}
-
-	@Override
-	protected void tearDown() throws Exception {
-		// ///CLOVER:FLUSH
-		super.tearDown();
+		TextView versionView = (TextView) mAboutActivity.findViewById(R.id.versionText);
+		assertNotNull(versionView);
+		assertEquals(version, versionView.getText());
 	}
 
 }

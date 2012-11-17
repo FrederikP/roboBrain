@@ -25,6 +25,7 @@ package eu.fpetersen.robobrain.ui.test;
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.MoreAsserts;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
@@ -82,6 +83,43 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 		assertTrue(allText.contains(findThis));
 
 		assertTrue(consoleActivity.isScrolledDown());
+	}
+
+	/**
+	 * Test if text is correctly appended to the console, and if scrolling down
+	 * works.
+	 */
+	public void testTextScrolling() {
+		for (int i = 0; i < 40; i++) {
+			Helper.sleepMillis(300);
+			consoleActivity.appendText("Test " + i);
+		}
+
+		Helper.sleepMillis(300);
+
+		assertTrue(consoleActivity.isScrolledDown());
+
+		Helper.sleepMillis(1000);
+
+		final ScrollView textScroll = (ScrollView) consoleActivity
+				.findViewById(R.id.consoleScroller);
+		consoleActivity.runOnUiThread(new Runnable() {
+
+			public void run() {
+				textScroll.smoothScrollTo(0, textScroll.getTop());
+			}
+		});
+
+		Helper.sleepMillis(1000);
+
+		assertFalse(consoleActivity.isScrolledDown());
+
+		for (int i = 0; i < 40; i++) {
+			Helper.sleepMillis(200);
+			consoleActivity.appendText("Test " + i);
+		}
+
+		assertFalse(consoleActivity.isScrolledDown());
 	}
 
 	/**
