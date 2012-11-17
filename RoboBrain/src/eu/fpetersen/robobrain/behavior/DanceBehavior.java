@@ -32,6 +32,7 @@ package eu.fpetersen.robobrain.behavior;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -224,7 +225,8 @@ public class DanceBehavior extends Behavior {
 				if (!isTurnedOn()) {
 					timer.cancel();
 				} else {
-					int randomMotorMovement = (int) (Math.random() * 5);
+					Random random = new Random();
+					int randomMotorMovement = (int) (random.nextInt(5));
 					if (randomMotorMovement == 0) {
 						getRobot().getMainMotor().advance(SPEED);
 					} else if (randomMotorMovement == 1) {
@@ -237,7 +239,7 @@ public class DanceBehavior extends Behavior {
 						getRobot().getMainMotor().stop(0);
 					}
 
-					int randomSensorMovement = (int) (Math.random() * 3);
+					int randomSensorMovement = (int) (random.nextInt(3));
 					if (randomSensorMovement == 0) {
 						getRobot().getHeadServo().setToAngle(95);
 					} else if (randomSensorMovement == 1) {
