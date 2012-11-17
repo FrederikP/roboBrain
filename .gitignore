@@ -8,3 +8,4 @@ Release/
 bin/
 ant.properties
 local.properties
+*.java.d
