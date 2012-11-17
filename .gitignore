@@ -9,3 +9,4 @@ bin/
 ant.properties
 local.properties
 *.java.d
+*.clover/
