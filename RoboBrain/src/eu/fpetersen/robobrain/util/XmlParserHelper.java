@@ -57,6 +57,8 @@ public class XmlParserHelper {
 			case XmlPullParser.START_TAG:
 				depth++;
 				break;
+			default:
+				break;
 			}
 		}
 	}

@@ -202,8 +202,9 @@ public class DanceBehavior extends Behavior {
 				RoboLog.alertError(getRobot().getRobotService(),
 						"No music in directory /robobrain/music");
 			} else {
-				int random = (int) (Math.random() * numberOfFiles);
-				startMusic(new File(musicDir, musicFiles[random]));
+				Random random = new Random();
+				int rand = random.nextInt(numberOfFiles);
+				startMusic(new File(musicDir, musicFiles[rand]));
 			}
 		}
 
@@ -226,7 +227,7 @@ public class DanceBehavior extends Behavior {
 					timer.cancel();
 				} else {
 					Random random = new Random();
-					int randomMotorMovement = (int) (random.nextInt(5));
+					int randomMotorMovement = random.nextInt(5);
 					if (randomMotorMovement == 0) {
 						getRobot().getMainMotor().advance(SPEED);
 					} else if (randomMotorMovement == 1) {
@@ -239,7 +240,7 @@ public class DanceBehavior extends Behavior {
 						getRobot().getMainMotor().stop(0);
 					}
 
-					int randomSensorMovement = (int) (random.nextInt(3));
+					int randomSensorMovement = random.nextInt(3);
 					if (randomSensorMovement == 0) {
 						getRobot().getHeadServo().setToAngle(95);
 					} else if (randomSensorMovement == 1) {

@@ -29,6 +29,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -111,8 +112,9 @@ public class RgbColorTable {
 	public RgbColor getRandomColor() {
 		int size = mColors.size();
 		Collection<RgbColor> rgbColors = mColors.values();
-		int random = (int) (Math.random() * size);
-		return rgbColors.toArray(new RgbColor[rgbColors.size()])[random];
+		Random random = new Random();
+		int rand = random.nextInt(size);
+		return rgbColors.toArray(new RgbColor[rgbColors.size()])[rand];
 	}
 
 }

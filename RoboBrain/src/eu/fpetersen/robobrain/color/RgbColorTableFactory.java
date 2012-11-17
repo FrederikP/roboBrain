@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import android.content.Context;
@@ -104,16 +105,17 @@ public class RgbColorTableFactory {
 		int r = Integer.parseInt(tokenizer.nextToken());
 		int g = Integer.parseInt(tokenizer.nextToken());
 		int b = Integer.parseInt(tokenizer.nextToken());
-		String name = new String(tokenizer.nextToken());
+		StringBuffer nameBuffer = new StringBuffer(tokenizer.nextToken());
 		while (tokenizer.hasMoreTokens()) {
-			name = name + " " + tokenizer.nextToken();
+			nameBuffer.append(" " + tokenizer.nextToken());
 		}
+		String name = nameBuffer.toString();
 		if (includeNumberNames
 				|| (!name.contains("0") && !name.contains("1") && !name.contains("2")
 						&& !name.contains("3") && !name.contains("4") && !name.contains("5")
 						&& !name.contains("6") && !name.contains("7") && !name.contains("8") && !name
 							.contains("9"))) {
-			addColor(table, r, g, b, name.toLowerCase());
+			addColor(table, r, g, b, name.toLowerCase(Locale.US));
 		}
 
 	}
