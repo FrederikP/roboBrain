@@ -24,6 +24,7 @@ package eu.fpetersen.robobrain.test.integration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.Instrumentation.ActivityMonitor;
@@ -194,14 +195,14 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		assertNotNull(cc);
 		waitedSecs = 0;
 		while ((cc.getRunningBehavior() == null || !cc.getRunningBehavior().getSpeechName()
-				.toLowerCase().contains("obstacle"))
+				.toLowerCase(Locale.US).contains("obstacle"))
 				&& waitedSecs < 20) {
 			Helper.sleepMillis(1000);
 			waitedSecs++;
 		}
 		Behavior runningBehavior = cc.getRunningBehavior();
 		assertNotNull(runningBehavior);
-		assertTrue(runningBehavior.getSpeechName().toLowerCase().contains("obstacle"));
+		assertTrue(runningBehavior.getSpeechName().toLowerCase(Locale.US).contains("obstacle"));
 
 		assertEquals(1, behaviorList.getChildCount());
 

@@ -23,8 +23,10 @@
 package eu.fpetersen.robobrain.behavior;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
+import android.speech.SpeechRecognizer;
 import eu.fpetersen.robobrain.color.RgbColor;
 import eu.fpetersen.robobrain.color.RgbColorTable;
 import eu.fpetersen.robobrain.color.RgbColorTableFactory;
@@ -35,7 +37,6 @@ import eu.fpetersen.robobrain.robot.ProximitySensor;
 import eu.fpetersen.robobrain.robot.RgbLed;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.Servo;
-import eu.fpetersen.robobrain.services.SpeechRecognizerService;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
 import eu.fpetersen.robobrain.util.RoboLog;
 
@@ -137,7 +138,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 		getRobot().getRobotService().getDistributingSpeechReceiver()
 				.addReceiver(ReactToSpeechBehavior.this);
-		if (SpeechRecognizerService.getInstance() != null) {
+		if (SpeechRecognizer.isRecognitionAvailable(getRobot().getRobotService())) {
 			super.startBehavior();
 		} else {
 			RoboLog.alertWarning(getRobot().getRobotService(),
@@ -187,7 +188,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 		Motor motor = getRobot().getMainMotor();
 		if (motor.getState() != MotorState.STOPPED) {
 			for (String resultLine : results) {
-				if (resultLine.toLowerCase().contains("stop")) {
+				if (resultLine.toLowerCase(Locale.US).contains("stop")) {
 					RoboLog.log(getRobot().getRobotService(), "Received voice command to stop",
 							true);
 					motor.stop(0);
@@ -197,22 +198,22 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 		} else {
 			// If stop is not in results, do whatever is found first
 			for (String resultLine : results) {
-				if (resultLine.toLowerCase().contains("forward")) {
+				if (resultLine.toLowerCase(Locale.US).contains("forward")) {
 					RoboLog.log(getRobot().getRobotService(), "Received voice command to advance",
 							true);
 					motor.advance(SPEED);
 					break;
-				} else if (resultLine.toLowerCase().contains("backward")) {
+				} else if (resultLine.toLowerCase(Locale.US).contains("backward")) {
 					RoboLog.log(getRobot().getRobotService(), "Received voice command to backoff",
 							true);
 					motor.backOff(SPEED);
 					break;
-				} else if (resultLine.toLowerCase().contains("right")) {
+				} else if (resultLine.toLowerCase(Locale.US).contains("right")) {
 					RoboLog.log(getRobot().getRobotService(),
 							"Received voice command to turn right", true);
 					motor.turnRight(ANGLE);
 					break;
-				} else if (resultLine.toLowerCase().contains("left")) {
+				} else if (resultLine.toLowerCase(Locale.US).contains("left")) {
 					RoboLog.log(getRobot().getRobotService(),
 							"Received voice command to turn left", true);
 					motor.turnLeft(ANGLE);

@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
@@ -66,7 +67,7 @@ public class RgbColorTableFactory {
 
 		// The InputStream opens the resourceId and sends it to the buffer
 		InputStream is = context.getResources().openRawResource(R.raw.rgb);
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.defaultCharset()));
 		String readLine = null;
 
 		try {

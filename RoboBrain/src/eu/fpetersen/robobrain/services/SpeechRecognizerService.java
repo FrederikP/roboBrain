@@ -23,6 +23,7 @@
 package eu.fpetersen.robobrain.services;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.app.Service;
 import android.content.Intent;
@@ -50,7 +51,6 @@ public class SpeechRecognizerService extends Service {
 
 	protected static final String TAG = "RobotBrain - SpeechRecognizerService";
 	private SpeechRecognizer mSpeechR;
-	private static SpeechRecognizerService sInstance;
 
 	/**
 	 * Setup the Speech Recognizer with the Android API
@@ -100,7 +100,7 @@ public class SpeechRecognizerService extends Service {
 				final ArrayList<String> data = results
 						.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 				for (int i = 0; i < data.size(); i++) {
-					data.set(i, data.get(i).toLowerCase());
+					data.set(i, data.get(i).toLowerCase(Locale.US));
 					Log.d(TAG, "result " + data.get(i));
 				}
 				Runnable interpretTask = new Runnable() {
@@ -128,9 +128,8 @@ public class SpeechRecognizerService extends Service {
 
 	@Override
 	public void onCreate() {
-		sInstance = SpeechRecognizerService.this;
 		if (Starter.getInstance() != null) {
-			if (SpeechRecognizer.isRecognitionAvailable(SpeechRecognizerService.getInstance())) {
+			if (SpeechRecognizer.isRecognitionAvailable(SpeechRecognizerService.this)) {
 				Starter.getInstance().runOnUiThread(new Runnable() {
 
 					public void run() {
@@ -138,7 +137,8 @@ public class SpeechRecognizerService extends Service {
 					}
 				});
 			} else {
-				RoboLog.alertWarning(sInstance, "No Speech Recognition available on this device.");
+				RoboLog.alertWarning(SpeechRecognizerService.this,
+						"No Speech Recognition available on this device.");
 				this.stopSelf();
 			}
 		}
@@ -187,10 +187,6 @@ public class SpeechRecognizerService extends Service {
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
-	}
-
-	public static SpeechRecognizerService getInstance() {
-		return sInstance;
 	}
 
 }

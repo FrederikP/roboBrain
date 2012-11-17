@@ -22,9 +22,11 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.ui;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,6 +57,7 @@ import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.services.SpeechRecognizerService;
 import eu.fpetersen.robobrain.util.AppRequirementsChecker;
+import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.exceptions.AppRequirementNotMetException;
 
 /**
@@ -81,17 +84,23 @@ public class Starter extends Activity {
 
 	private Map<Robot, LinearLayout> mBehaviorLayoutPerRobot;
 
-	private static Starter sInstance;
+	private static final List<Starter> sInstances = new ArrayList<Starter>();
 
 	public static Starter getInstance() {
-		return sInstance;
+		if (sInstances.size() > 1) {
+			RoboLog.alertWarning(sInstances.get(0),
+					"More than one Starter activity found. Not cool...");
+		} else if (sInstances.size() == 0) {
+			return null;
+		}
+		return sInstances.get(0);
 	}
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		sInstance = this;
+		sInstances.add(this);
 		setContentView(R.layout.activity_starter);
 
 		mAllOpenDialogs = new HashSet<Dialog>();
@@ -487,6 +496,7 @@ public class Starter extends Activity {
 
 	@Override
 	protected void onDestroy() {
+		sInstances.remove(Starter.this);
 		removeAllOpenDialogs();
 		super.onDestroy();
 	}
