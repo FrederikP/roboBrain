@@ -6,7 +6,6 @@ target/
 .settings/
 Release/
 bin/
-ant.properties
 local.properties
 *.java.d
 *.clover/
