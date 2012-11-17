@@ -95,15 +95,14 @@ public class Robot {
 	 *            device.
 	 */
 	public void sendToArduino(char flag, String[] data) {
-
-		String dataString = new String("");
-		for (int i = 0; i < data.length; i++) {
-			dataString = dataString + data[i];
-			if (i < data.length - 1) {
-				dataString = dataString + ",";
-			}
-		}
 		// Uncomment for logging
+		// StringBuffer dataString = new StringBuffer();
+		// for (int i = 0; i < data.length; i++) {
+		// dataString.append(data[i]);
+		// if (i < data.length - 1) {
+		// dataString = dataString.append(",");
+		// }
+		// }
 		// RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " +
 		// flag + " Data: "
 		// + dataString, false);
@@ -137,14 +136,14 @@ public class Robot {
 	 *            device.
 	 */
 	public void sendToArduino(char flag, int[] data) {
-		String dataString = new String("");
-		for (int i = 0; i < data.length; i++) {
-			dataString = dataString + Integer.toString(data[i]);
-			if (i < data.length - 1) {
-				dataString = dataString + ",";
-			}
-		}
 		// Uncomment for logging
+		// StringBuffer dataString = new StringBuffer();
+		// for (int i = 0; i < data.length; i++) {
+		// dataString.append(Integer.toString(data[i]));
+		// if (i < data.length - 1) {
+		// dataString.append(",");
+		// }
+		// }
 		// RoboLog.log(mService, "Send data to Robot " + mName + ": Flag: " +
 		// flag + " Data: "
 		// + dataString, false);

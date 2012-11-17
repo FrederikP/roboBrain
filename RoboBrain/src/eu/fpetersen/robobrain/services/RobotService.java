@@ -325,9 +325,10 @@ public class RobotService extends Service {
 				.createMappings(null);
 		if (behaviorMapping != null) {
 			BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
-			for (String robotName : robots.keySet()) {
-				Robot robot = robots.get(robotName);
-				List<BehaviorInitializer> behaviorInitializers = behaviorMapping.get(robotName);
+			for (Entry<String, Robot> robotEntry : robots.entrySet()) {
+				Robot robot = robotEntry.getValue();
+				List<BehaviorInitializer> behaviorInitializers = behaviorMapping.get(robotEntry
+						.getKey());
 				List<Behavior> behaviors = new ArrayList<Behavior>();
 				for (BehaviorInitializer initializer : behaviorInitializers) {
 					Behavior behavior = bFac.createBehavior(initializer, robot);

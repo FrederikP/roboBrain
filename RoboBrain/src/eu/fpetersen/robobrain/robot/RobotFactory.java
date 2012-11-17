@@ -267,15 +267,11 @@ public class RobotFactory extends RoboBrainFactory {
 		Map<String, Robot> robots = new HashMap<String, Robot>();
 		File robotsXmlDir = ExternalStorageManager.getRobotsXmlDir(getService());
 		try {
-			if (robotsXmlDir != null) {
-				for (File robotXml : robotsXmlDir.listFiles()) {
-					if (robotXml.getAbsolutePath().endsWith(".xml")) {
-						Robot newRobot = createRobotFromXML(robotXml);
-						robots.put(newRobot.getName(), newRobot);
-					}
+			for (File robotXml : robotsXmlDir.listFiles()) {
+				if (robotXml.getAbsolutePath().endsWith(".xml")) {
+					Robot newRobot = createRobotFromXML(robotXml);
+					robots.put(newRobot.getName(), newRobot);
 				}
-			} else {
-				RoboLog.alertError(getService(), "Robots XML Dir could not be accessed on sd card!");
 			}
 		} catch (NullPointerException e) {
 			RoboLog.alertError(getService(),
