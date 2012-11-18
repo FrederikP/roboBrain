@@ -24,9 +24,10 @@ package eu.fpetersen.robobrain.behavior;
 
 import java.util.UUID;
 
+import android.content.Intent;
+import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.ui.Starter;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
@@ -84,22 +85,30 @@ public abstract class Behavior {
 	 * Starts the behavior, starting it's main loop.
 	 */
 	public void startBehavior() {
-		RoboLog.log(getRobot().getRobotService(), "Started behavior: " + mName + " for robot: "
-				+ getRobot().getName(), true);
-		if (mTurnedOn == false) {
+		Runnable startTask = new Runnable() {
 
-			mTurnedOn = true;
+			public void run() {
+				RoboLog.log(getRobot().getRobotService(), "Started behavior: " + mName
+						+ " for robot: " + getRobot().getName(), true);
+				if (mTurnedOn == false) {
 
-			onStart();
+					mTurnedOn = true;
 
-			updateBehaviorStatusInUI();
+					onStart();
 
-			while (mTurnedOn) {
-				behaviorLoop();
+					updateBehaviorStatusInUI();
+
+					while (mTurnedOn) {
+						behaviorLoop();
+					}
+
+					onStop();
+				}
 			}
+		};
+		Thread thread = new Thread(startTask);
+		thread.start();
 
-			onStop();
-		}
 	}
 
 	/**
@@ -108,10 +117,9 @@ public abstract class Behavior {
 	 */
 	private void updateBehaviorStatusInUI() {
 		// Try updating UI here
-		Starter starter = Starter.getInstance();
-		if (starter != null) {
-			starter.updateUIDueToBehaviorStateSwitch(getRobot());
-		}
+		Intent intent = new Intent(RoboBrainIntent.ACTION_BEHAVIORUPDATE);
+		intent.putExtra(RoboBrainIntent.EXTRA_ROBOTADDRESS, getRobot().getAddress());
+		getRobot().getRobotService().sendBroadcast(intent);
 	}
 
 	/**

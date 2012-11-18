@@ -52,6 +52,7 @@ import eu.fpetersen.robobrain.ui.Starter;
 public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 	private Starter starterActivity;
+	private Activity consoleActivity;
 
 	/**
 	 * Sets test up to use {@link Starter} activity
@@ -79,7 +80,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		getInstrumentation().invokeMenuActionSync(starterActivity, R.id.console_menu_item, 0);
 
-		Activity consoleActivity = getInstrumentation().waitForMonitorWithTimeout(amConsole, 1000);
+		consoleActivity = getInstrumentation().waitForMonitorWithTimeout(amConsole, 1000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amConsole, 1));
 
 		// ----Go back to Starter activity-----
@@ -271,8 +272,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		// Check if stuff was written to console
 		assertTrue(consoleTextView.getText().toString().contains("Started behavior: "));
 
-		console.finish();
-
 	}
 
 	public void testSwitchingToAboutActivityAndBack() {
@@ -310,6 +309,8 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 			service.stopSelf();
 		}
 		starterActivity.finish();
+		if (consoleActivity != null && !consoleActivity.isFinishing())
+			consoleActivity.finish();
 		super.tearDown();
 	}
 

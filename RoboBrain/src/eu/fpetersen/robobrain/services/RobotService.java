@@ -89,6 +89,8 @@ public class RobotService extends Service {
 
 	protected PowerManager.WakeLock mWakeLock;
 
+	private UUID id;
+
 	/**
 	 * 
 	 * @return True if service is running, false if not.
@@ -100,6 +102,8 @@ public class RobotService extends Service {
 	@Override
 	public void onCreate() {
 		RoboLog.log(RobotService.this, "Creating RoboBrain service", true);
+
+		id = RobotServiceContainer.addRobotService(RobotService.this);
 
 		// Make sure device stays awake
 		final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -194,7 +198,7 @@ public class RobotService extends Service {
 				registerReceiver(mDisconnectedReceiver, new IntentFilter(
 						AmarinoIntent.ACTION_DISCONNECTED));
 
-				updateStarterUI(RobotService.this);
+				updateStarterUI(false);
 
 			}
 		};
@@ -347,7 +351,7 @@ public class RobotService extends Service {
 		if (mRunning) {
 			stopRunningService();
 		}
-		updateStarterUI(RobotService.this);
+		updateStarterUI(false);
 
 		return super.stopService(name);
 	}
@@ -359,11 +363,13 @@ public class RobotService extends Service {
 			stopRunningService();
 		}
 
-		updateStarterUI(null);
+		updateStarterUI(true);
 
 		if (mWakeLock != null && mWakeLock.isHeld()) {
 			mWakeLock.release();
 		}
+
+		RobotServiceContainer.removeRobotService(id);
 
 		super.onDestroy();
 	}
@@ -371,14 +377,12 @@ public class RobotService extends Service {
 	/**
 	 * Try updating status information in UI
 	 */
-	private void updateStarterUI(RobotService service) {
-		Starter starter = Starter.getInstance();
-		if (starter != null) {
-			Starter.getInstance().setRobotService(service);
-		} else {
-			RoboLog.log(RobotService.this,
-					"Status couldn't be updated in UI as Starter activity was not found", true);
+	private void updateStarterUI(boolean removeReference) {
+		Intent intent = new Intent(RoboBrainIntent.ACTION_STARTERUIUPDATE);
+		if (!removeReference) {
+			intent.putExtra(RoboBrainIntent.EXTRA_SERVICEID, id);
 		}
+		sendBroadcast(intent);
 	}
 
 	/**

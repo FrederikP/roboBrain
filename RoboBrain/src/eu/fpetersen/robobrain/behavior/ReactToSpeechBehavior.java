@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.StringTokenizer;
 
 import android.speech.SpeechRecognizer;
+import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.color.RgbColor;
 import eu.fpetersen.robobrain.color.RgbColorTable;
 import eu.fpetersen.robobrain.color.RgbColorTableFactory;
@@ -138,7 +139,9 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 		getRobot().getRobotService().getDistributingSpeechReceiver()
 				.addReceiver(ReactToSpeechBehavior.this);
-		if (SpeechRecognizer.isRecognitionAvailable(getRobot().getRobotService())) {
+		if (System.getProperty((getRobot().getRobotService().getString(R.string.envvar_testing)))
+				.matches("true")
+				|| SpeechRecognizer.isRecognitionAvailable(getRobot().getRobotService())) {
 			super.startBehavior();
 		} else {
 			RoboLog.alertWarning(getRobot().getRobotService(),

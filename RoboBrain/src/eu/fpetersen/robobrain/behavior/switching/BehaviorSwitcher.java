@@ -106,13 +106,8 @@ public class BehaviorSwitcher {
 
 		stopRunningBehavior(cc);
 
-		Runnable behaviorStarter = new Runnable() {
-			public void run() {
-				b.startBehavior();
-			}
-		};
-		Thread thread = new Thread(behaviorStarter);
-		thread.start();
+		b.startBehavior();
+
 	}
 
 	/**
@@ -143,13 +138,7 @@ public class BehaviorSwitcher {
 			RoboLog.alertError(getRobotService(), "Could not find behavior for UUID: " + uuid);
 			return;
 		}
-		Runnable behaviorStopper = new Runnable() {
-			public void run() {
-				b.stopBehavior();
-			}
-		};
-		Thread thread = new Thread(behaviorStopper);
-		thread.start();
+		b.stopBehavior();
 	}
 
 	/**

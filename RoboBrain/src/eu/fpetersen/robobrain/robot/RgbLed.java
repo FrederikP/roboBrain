@@ -79,4 +79,13 @@ public class RgbLed extends RobotPart {
 		return requiredFlagIds;
 	}
 
+	/**
+	 * Currently set color. Name is always: CurrentColor
+	 * 
+	 * @return
+	 */
+	public RgbColor getColor() {
+		return new RgbColor("CurrentColor", mRed, mGreen, mBlue);
+	}
+
 }

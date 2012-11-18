@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
-import eu.fpetersen.robobrain.ui.Starter;
 
 /**
  * Allows logging to android logging system and robobrains console at the same
@@ -68,10 +67,8 @@ public class RoboLog {
 	public static void alertError(Context context, String message) {
 		String errorTag = "[ERROR]";
 		log(context, message + errorTag, true);
-		Starter starter = Starter.getInstance();
-		if (starter != null) {
-			starter.showAlertDialog(errorTag, message);
-		}
+		broadcastAlertIntent(message, errorTag, context);
+
 	}
 
 	/**
@@ -85,10 +82,15 @@ public class RoboLog {
 	public static void alertWarning(Context context, String message) {
 		String errorTag = "[WARNING]";
 		log(context, message + errorTag, true);
-		Starter starter = Starter.getInstance();
-		if (starter != null) {
-			starter.showAlertDialog(errorTag, message);
-		}
+		broadcastAlertIntent(message, errorTag, context);
+	}
+
+	private static void broadcastAlertIntent(String message, String errorTag, Context context) {
+		Intent intent = new Intent(RoboBrainIntent.ACTION_SHOWALERT);
+		intent.putExtra(RoboBrainIntent.EXTRA_ALERTMESSAGE, message);
+		intent.putExtra(RoboBrainIntent.EXTRA_ERRORTAG, errorTag);
+		context.sendBroadcast(intent);
+
 	}
 
 }

@@ -23,14 +23,18 @@
 package eu.fpetersen.robobrain.test.mock;
 
 import java.util.List;
+import java.util.UUID;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources;
 import eu.fpetersen.robobrain.behavior.Behavior;
+import eu.fpetersen.robobrain.communication.RoboBrainIntent;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.services.RobotService;
+import eu.fpetersen.robobrain.services.RobotServiceContainer;
 import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
 
 /**
@@ -46,9 +50,12 @@ public class MockRobotService extends RobotService {
 
 	private DistributingSpeechReceiver distSpeechRec;
 
+	private UUID id;
+
 	public MockRobotService(Context context) {
 		mTestContext = context;
 		distSpeechRec = new DistributingSpeechReceiver();
+		id = RobotServiceContainer.addRobotService(MockRobotService.this);
 	}
 
 	@Override
@@ -88,6 +95,25 @@ public class MockRobotService extends RobotService {
 	@Override
 	public DistributingSpeechReceiver getDistributingSpeechReceiver() {
 		return distSpeechRec;
+	}
+
+	@Override
+	public Resources getResources() {
+		return mTestContext.getResources();
+	}
+
+	/**
+	 * Call this to broadcast intent receivable by STarter activity to update
+	 * it's RobotService reference and Update UI
+	 */
+	public void broadcastUIUpdateIntent(boolean setToNull) {
+		Intent intent = new Intent(RoboBrainIntent.ACTION_STARTERUIUPDATE);
+		if (!setToNull) {
+			intent.putExtra(RoboBrainIntent.EXTRA_SERVICEID, id);
+		} else {
+			RobotServiceContainer.removeRobotService(id);
+		}
+		sendBroadcast(intent);
 	}
 
 }

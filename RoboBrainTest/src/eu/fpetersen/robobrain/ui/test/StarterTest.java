@@ -89,7 +89,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		});
 		// Wait a while to make sure any real service can be started
 		int waitedSecs = 0;
-		while (!statusTV.getText().toString().matches("Started!") && waitedSecs < 5) {
+		while (!statusTV.getText().toString().matches("Started!") && waitedSecs < 20) {
 			Helper.sleepMillis(1000);
 			waitedSecs++;
 		}
@@ -98,11 +98,11 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		robotService.setRunning(true);
 		assertTrue(robotService.isRunning());
 
-		Helper.sleepMillis(7000);
+		Helper.sleepMillis(3000);
 
 		// Overwrite real Service with Mock, because we only want to check this
 		// Activity
-		starterActivity.setRobotService(robotService);
+		robotService.broadcastUIUpdateIntent(false);
 
 		TextView robotNameView = getRobotNameTextView();
 		int seconds = 0;
@@ -145,7 +145,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		// Overwrite real Service with Mock, because we only want to check this
 		// Activity
-		starterActivity.setRobotService(robotService);
+		robotService.broadcastUIUpdateIntent(true);
 
 		Helper.sleepMillis(3000);
 

@@ -28,7 +28,9 @@ import java.util.Locale;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
@@ -128,33 +130,36 @@ public class SpeechRecognizerService extends Service {
 
 	@Override
 	public void onCreate() {
-		if (Starter.getInstance() != null) {
-			if (SpeechRecognizer.isRecognitionAvailable(SpeechRecognizerService.this)) {
-				Starter.getInstance().runOnUiThread(new Runnable() {
+		if (SpeechRecognizer.isRecognitionAvailable(SpeechRecognizerService.this)) {
+			Runnable startVoiceRTask = new Runnable() {
 
-					public void run() {
-						setupSpeechRecognition();
-					}
-				});
-			} else {
-				RoboLog.alertWarning(SpeechRecognizerService.this,
-						"No Speech Recognition available on this device.");
-				this.stopSelf();
-			}
+				public void run() {
+					setupSpeechRecognition();
+				}
+			};
+			Handler loopHandler = new Handler(Looper.getMainLooper());
+			loopHandler.post(startVoiceRTask);
+		} else {
+			RoboLog.alertWarning(SpeechRecognizerService.this,
+					"No Speech Recognition available on this device.");
+			this.stopSelf();
 		}
+
 	}
 
 	@Override
 	public void onDestroy() {
 		if (mSpeechR != null) {
-			Starter.getInstance().runOnUiThread(new Runnable() {
+			Runnable stopVoiceRTask = new Runnable() {
 
 				public void run() {
 					mSpeechR.stopListening();
 					mSpeechR.cancel();
 					mSpeechR.destroy();
 				}
-			});
+			};
+			Handler loopHandler = new Handler(Looper.getMainLooper());
+			loopHandler.post(stopVoiceRTask);
 		}
 		super.onDestroy();
 	}
@@ -170,7 +175,7 @@ public class SpeechRecognizerService extends Service {
 		intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
 				RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
 		intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "voice.recognition.test");
-		Starter.getInstance().runOnUiThread(new Runnable() {
+		Runnable listenVoiceRTask = new Runnable() {
 
 			public void run() {
 				if (mSpeechR != null) {
@@ -181,7 +186,9 @@ public class SpeechRecognizerService extends Service {
 				}
 
 			}
-		});
+		};
+		Handler loopHandler = new Handler(Looper.getMainLooper());
+		loopHandler.post(listenVoiceRTask);
 	}
 
 	@Override

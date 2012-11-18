@@ -23,6 +23,8 @@
 package eu.fpetersen.robobrain.communication;
 
 import android.content.Intent;
+import eu.fpetersen.robobrain.services.RobotService;
+import eu.fpetersen.robobrain.services.RobotServiceContainer;
 import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
 
 /**
@@ -55,6 +57,21 @@ public class RoboBrainIntent extends Intent {
 	 */
 	public static final String ACTION_SPEECH = "eu.fpetersen.robobrain.console.intent.actions.SPEECH";
 
+	/**
+	 * For updating the Starter activity UI
+	 */
+	public static final String ACTION_STARTERUIUPDATE = "eu.fpetersen.robobrain.starter.intent.actions.STARTERUIUPDATE";
+
+	/**
+	 * Use when Behavior state changes, add RobotAddress extra
+	 */
+	public static final String ACTION_BEHAVIORUPDATE = "eu.fpetersen.robobrain.starter.intent.actions.BEHAVIORUPDATE";
+
+	/**
+	 * Show alert in Starter activity
+	 */
+	public static final String ACTION_SHOWALERT = "eu.fpetersen.robobrain.starter.intent.actions.SHOWALERT";
+
 	// -----EXTRAS-----//
 	/**
 	 * Fill this with message to display in console activity, when sending
@@ -80,4 +97,26 @@ public class RoboBrainIntent extends Intent {
 	 * {@link RoboBrainIntent#ACTION_SPEECH}
 	 */
 	public static final String EXTRA_SPEECH_RESULTS = "eu.fpetersen.robobrain.console.intent.extra.SPEECHRESULTS";
+
+	/**
+	 * For sharing the UUID of the {@link RobotService} to access it from
+	 * activities per {@link RobotServiceContainer}.
+	 */
+	public static final String EXTRA_SERVICEID = "eu.fpetersen.robobrain.services.robotservice.extra.SERVICEID";
+
+	/**
+	 * The MAC address of the robot
+	 */
+	public static final String EXTRA_ROBOTADDRESS = "eu.fpetersen.robobrain.robot.ROBOTADDRESS";
+
+	/**
+	 * Message to display in Alert
+	 */
+	public static final String EXTRA_ALERTMESSAGE = "eu.fpetersen.robobrain.starter.intent.actions.ALERTMESSAGE";
+
+	/**
+	 * Error tag to display in Alert
+	 */
+	public static final String EXTRA_ERRORTAG = "eu.fpetersen.robobrain.starter.intent.actions.ERRORTAG";
+
 }

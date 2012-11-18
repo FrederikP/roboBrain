@@ -22,27 +22,31 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.ui;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.BadTokenException;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -53,11 +57,10 @@ import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.CommandCenter;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
-import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.services.RobotService;
+import eu.fpetersen.robobrain.services.RobotServiceContainer;
 import eu.fpetersen.robobrain.services.SpeechRecognizerService;
 import eu.fpetersen.robobrain.util.AppRequirementsChecker;
-import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.exceptions.AppRequirementNotMetException;
 
 /**
@@ -82,25 +85,14 @@ public class Starter extends Activity {
 	private RobotService mRobotService;
 	private Set<Dialog> mAllOpenDialogs;
 
-	private Map<Robot, LinearLayout> mBehaviorLayoutPerRobot;
+	private Map<String, LinearLayout> mBehaviorLayoutPerRobot;
 
-	private static final List<Starter> sInstances = new ArrayList<Starter>();
-
-	public static Starter getInstance() {
-		if (sInstances.size() > 1) {
-			RoboLog.alertWarning(sInstances.get(0),
-					"More than one Starter activity found. Not cool...");
-		} else if (sInstances.size() == 0) {
-			return null;
-		}
-		return sInstances.get(0);
-	}
+	private BroadcastReceiver starterReceiver;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		sInstances.add(this);
 		setContentView(R.layout.activity_starter);
 
 		mAllOpenDialogs = new HashSet<Dialog>();
@@ -128,6 +120,48 @@ public class Starter extends Activity {
 
 		checkForInstalledAmarino();
 
+		setupStarterReceiver();
+
+	}
+
+	/**
+	 * Set up and register a Receiver that handles intents sent from services,
+	 * to update UI
+	 */
+	private void setupStarterReceiver() {
+		starterReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction().matches(RoboBrainIntent.ACTION_STARTERUIUPDATE)) {
+					UUID id = (UUID) intent.getSerializableExtra(RoboBrainIntent.EXTRA_SERVICEID);
+					if (id != null) {
+						setRobotService(RobotServiceContainer.getRobotService(id));
+					} else {
+						setRobotService(null);
+					}
+
+				} else if (intent.getAction().matches(RoboBrainIntent.ACTION_BEHAVIORUPDATE)) {
+					String address = intent.getStringExtra(RoboBrainIntent.EXTRA_ROBOTADDRESS);
+					if (address != null) {
+						updateUIDueToBehaviorStateSwitch(address);
+					}
+
+				} else if (intent.getAction().matches(RoboBrainIntent.ACTION_SHOWALERT)) {
+					String message = intent.getStringExtra(RoboBrainIntent.EXTRA_ALERTMESSAGE);
+					String errorTag = intent.getStringExtra(RoboBrainIntent.EXTRA_ERRORTAG);
+					if (message != null && errorTag != null) {
+						showAlertDialog(errorTag, message);
+					}
+
+				}
+			}
+		};
+
+		IntentFilter filter = new IntentFilter(RoboBrainIntent.ACTION_STARTERUIUPDATE);
+		filter.addAction(RoboBrainIntent.ACTION_BEHAVIORUPDATE);
+		filter.addAction(RoboBrainIntent.ACTION_SHOWALERT);
+		registerReceiver(starterReceiver, filter);
 	}
 
 	/**
@@ -154,7 +188,7 @@ public class Starter extends Activity {
 			mProgressDialog.setTitle("Service Starting");
 			mProgressDialog.show();
 
-			mBehaviorLayoutPerRobot = new HashMap<Robot, LinearLayout>();
+			mBehaviorLayoutPerRobot = new HashMap<String, LinearLayout>();
 
 			mToggleStatusB.post(new Runnable() {
 				public void run() {
@@ -273,7 +307,7 @@ public class Starter extends Activity {
 			nameView.setText(cc.getRobot().getName());
 			nameView.setPadding(5, 5, 5, 5);
 			LinearLayout behaviorLayout = new LinearLayout(this);
-			mBehaviorLayoutPerRobot.put(cc.getRobot(), behaviorLayout);
+			mBehaviorLayoutPerRobot.put(cc.getRobot().getAddress(), behaviorLayout);
 			behaviorLayout.setOrientation(LinearLayout.VERTICAL);
 			addBehaviorButtons(behaviorLayout, cc);
 			row.addView(nameView);
@@ -425,7 +459,7 @@ public class Starter extends Activity {
 	 *            RobotService the Starter is controlling. Set to null if
 	 *            Service is destroyed.
 	 */
-	public void setRobotService(RobotService service) {
+	private void setRobotService(RobotService service) {
 		this.mRobotService = service;
 		updateStatus();
 	}
@@ -459,8 +493,15 @@ public class Starter extends Activity {
 				AlertDialog dialog = builder.create();
 
 				mAllOpenDialogs.add(dialog);
-
-				dialog.show();
+				try {
+					dialog.show();
+				} catch (BadTokenException e) {
+					// THis happens when activity is not running anymore.
+					// Just log for now
+					Log.w("StarterActivity",
+							"Alert wasn't shown due to activity being shutdown. Message: "
+									+ message);
+				}
 			}
 		});
 	}
@@ -483,10 +524,10 @@ public class Starter extends Activity {
 		return mRobotService;
 	}
 
-	public void updateUIDueToBehaviorStateSwitch(Robot robot) {
+	private void updateUIDueToBehaviorStateSwitch(String address) {
 		if (mRobotService != null && mBehaviorLayoutPerRobot != null) {
-			CommandCenter cc = mRobotService.getCCForAddress(robot.getAddress());
-			LinearLayout bLayout = mBehaviorLayoutPerRobot.get(robot);
+			CommandCenter cc = mRobotService.getCCForAddress(address);
+			LinearLayout bLayout = mBehaviorLayoutPerRobot.get(address);
 			if (bLayout != null) {
 				addBehaviorButtons(bLayout, cc);
 				mProgressDialog.dismiss();
@@ -496,7 +537,7 @@ public class Starter extends Activity {
 
 	@Override
 	protected void onDestroy() {
-		sInstances.remove(Starter.this);
+		unregisterReceiver(starterReceiver);
 		removeAllOpenDialogs();
 		super.onDestroy();
 	}
