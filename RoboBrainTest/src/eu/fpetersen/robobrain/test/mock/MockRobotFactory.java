@@ -88,7 +88,7 @@ public class MockRobotFactory {
 
 	private Servo createStandardServo(Robot robot, String id) {
 		Map<String, Character> flags = new HashMap<String, Character>();
-		flags.put("toColor", 'C');
+		flags.put("toAngle", 'C');
 
 		RobotPartInitializer initializer = new RobotPartInitializer(id, robot, flags);
 		Servo servo = (Servo) RobotPartFactory.getInstance(mService).createRobotPart("Servo",
