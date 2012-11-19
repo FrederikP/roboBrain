@@ -26,7 +26,6 @@ import android.content.pm.PackageInfo;
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.test.mock.MockRoboBrainPackageManager;
 import eu.fpetersen.robobrain.util.AppRequirementsChecker;
-import eu.fpetersen.robobrain.util.exceptions.AppRequirementNotMetException;
 
 /**
  * @author Frederik Petersen
@@ -46,17 +45,9 @@ public class AppRequirementsCheckerTest extends AndroidTestCase {
 
 		manager.addPackageInfo(amarinoOld);
 
-		boolean warned = false;
+		boolean success = AppRequirementsChecker.checkForRequirements(getContext(), manager);
 
-		try {
-			AppRequirementsChecker.checkForAmarino(manager);
-		} catch (AppRequirementNotMetException e) {
-			assertTrue(e.getMessage().contains("only tested with"));
-			warned = true;
-			e.showAlert(getContext());
-		}
-
-		assertTrue(warned);
+		assertFalse(success);
 	}
 
 	/**
@@ -69,16 +60,26 @@ public class AppRequirementsCheckerTest extends AndroidTestCase {
 
 		manager.addPackageInfo(amarinoOld);
 
-		boolean errord = false;
+		boolean success = AppRequirementsChecker.checkForRequirements(getContext(), manager);
 
-		try {
-			AppRequirementsChecker.checkForAmarino(manager);
-		} catch (AppRequirementNotMetException e) {
-			assertTrue(e.getMessage().contains("not installed"));
-			errord = true;
-			e.showAlert(getContext());
-		}
-
-		assertTrue(errord);
+		assertFalse(success);
 	}
+
+	/**
+	 * Emulate needed Amarino Version
+	 */
+	public void testAmarinoExists() {
+		MockRoboBrainPackageManager manager = new MockRoboBrainPackageManager();
+		PackageInfo amarinoOld = new PackageInfo();
+		amarinoOld.packageName = "at.abraxas.amarino";
+		amarinoOld.versionCode = 13;
+		amarinoOld.versionName = "0.55";
+
+		manager.addPackageInfo(amarinoOld);
+
+		boolean success = AppRequirementsChecker.checkForRequirements(getContext(), manager);
+
+		assertTrue(success);
+	}
+
 }

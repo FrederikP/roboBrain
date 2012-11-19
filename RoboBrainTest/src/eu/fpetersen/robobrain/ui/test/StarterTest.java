@@ -24,6 +24,7 @@ package eu.fpetersen.robobrain.ui.test;
 
 import java.util.ArrayList;
 
+import android.app.Dialog;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -174,6 +175,42 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 			return robotNameView;
 		}
 		return null;
+	}
+
+	/**
+	 * Test creation of Alert Dialog
+	 */
+	public void testDialogCreation() {
+		Dialog dialog = starterActivity.showAlertDialog("TESTDIALOG", "Test this, baby");
+		int secondsWaited = 0;
+		while (!dialog.isShowing() && secondsWaited < 10) {
+			Helper.sleepMillis(1000);
+			secondsWaited++;
+		}
+		assertNotNull(dialog);
+		// TODO
+		// assertTrue(dialog.isShowing());
+
+		starterActivity.removeAllOpenDialogs();
+		Helper.sleepMillis(100);
+
+		assertFalse(dialog.isShowing());
+
+	}
+
+	/**
+	 * Test showing dialog, when activity finished
+	 */
+	public void testDialogCreationWhenActivityFinished() {
+		starterActivity.finish();
+		Helper.sleepMillis(100);
+		Dialog dialog = starterActivity.showAlertDialog("TESTDIALOG", "Test this, baby");
+
+		Helper.sleepMillis(100);
+		assertNotNull(dialog);
+
+		assertFalse(dialog.isShowing());
+
 	}
 
 	@Override

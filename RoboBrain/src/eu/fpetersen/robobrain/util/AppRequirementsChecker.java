@@ -24,6 +24,7 @@ package eu.fpetersen.robobrain.util;
 
 import java.util.List;
 
+import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import eu.fpetersen.robobrain.util.exceptions.AppRequirementNotMetException;
@@ -37,13 +38,31 @@ import eu.fpetersen.robobrain.util.exceptions.AppRequirementNotMetException;
 public class AppRequirementsChecker {
 
 	/**
+	 * Checks for all required packages that RoboBrain needs
+	 * 
+	 * @param context
+	 * @param packageManager
+	 * @return True if all packages installed with required version, false if
+	 *         not
+	 */
+	public static boolean checkForRequirements(Context context, PackageManager packageManager) {
+		try {
+			AppRequirementsChecker.checkForAmarino(packageManager);
+		} catch (AppRequirementNotMetException e) {
+			e.showAlert(context);
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Amarino is necessary for the Bluetooth connection Android <-> Arduino
 	 * 
 	 * @param packageManager
 	 * @throws AppRequirementNotMetException
 	 *             when requirement is not met
 	 */
-	public static void checkForAmarino(PackageManager packageManager)
+	private static void checkForAmarino(PackageManager packageManager)
 			throws AppRequirementNotMetException {
 		List<PackageInfo> listOfAllApps = packageManager.getInstalledPackages(0);
 		Integer versionCode = null;

@@ -61,7 +61,6 @@ import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.services.RobotServiceContainer;
 import eu.fpetersen.robobrain.services.SpeechRecognizerService;
 import eu.fpetersen.robobrain.util.AppRequirementsChecker;
-import eu.fpetersen.robobrain.util.exceptions.AppRequirementNotMetException;
 
 /**
  * Gives the user the option to turn the RoboBrain services on and off. When
@@ -118,7 +117,7 @@ public class Starter extends Activity {
 		 * @Override public void run() { updateStatus(); } }, 2000, 2000);
 		 */
 
-		checkForInstalledAmarino();
+		checkForInstalledPackages();
 
 		setupStarterReceiver();
 
@@ -165,14 +164,10 @@ public class Starter extends Activity {
 	}
 
 	/**
-	 * Checks if required Amarino apk is installed. If not, alert is displayed.
+	 * Checks for all required App packages.
 	 */
-	private void checkForInstalledAmarino() {
-		try {
-			AppRequirementsChecker.checkForAmarino(getPackageManager());
-		} catch (AppRequirementNotMetException e) {
-			e.showAlert(Starter.this);
-		}
+	private void checkForInstalledPackages() {
+		AppRequirementsChecker.checkForRequirements(Starter.this, getPackageManager());
 	}
 
 	/**
@@ -472,31 +467,33 @@ public class Starter extends Activity {
 	 *            Title of the dialog message
 	 * @param message
 	 *            Message to display
+	 * @return The created Dialog
 	 */
-	public void showAlertDialog(final String title, final String message) {
+	public Dialog showAlertDialog(final String title, final String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(Starter.this);
+
+		// 2. Chain together various setter methods to set the dialog
+		// characteristics
+		builder.setMessage(message).setTitle(title);
+
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.dismiss();
+			}
+		});
+
+		// 3. Get the AlertDialog from create()
+		final Dialog dialog = builder.create();
+
+		mAllOpenDialogs.add(dialog);
 		runOnUiThread(new Runnable() {
 
 			public void run() {
-				AlertDialog.Builder builder = new AlertDialog.Builder(Starter.this);
 
-				// 2. Chain together various setter methods to set the dialog
-				// characteristics
-				builder.setMessage(message).setTitle(title);
-
-				builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.dismiss();
-					}
-				});
-
-				// 3. Get the AlertDialog from create()
-				AlertDialog dialog = builder.create();
-
-				mAllOpenDialogs.add(dialog);
 				try {
 					dialog.show();
 				} catch (BadTokenException e) {
-					// THis happens when activity is not running anymore.
+					// This happens when activity is not running anymore.
 					// Just log for now
 					Log.w("StarterActivity",
 							"Alert wasn't shown due to activity being shutdown. Message: "
@@ -504,6 +501,8 @@ public class Starter extends Activity {
 				}
 			}
 		});
+
+		return dialog;
 	}
 
 	public void removeAllOpenDialogs() {
