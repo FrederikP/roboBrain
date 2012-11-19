@@ -40,6 +40,19 @@ import eu.fpetersen.robobrain.ui.Console;
  */
 public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 
+	private static final String TESTFILL = "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
+			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n";
+
 	private Console consoleActivity;
 
 	public ConsoleTest() {
@@ -72,13 +85,11 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	public void testTextAppendWithoutIntent() {
 		TextView consoleTextView = (TextView) consoleActivity.findViewById(R.id.consoleTextView);
 		String findThis = "INTHEMIDDLE";
-		for (int i = 0; i < 30; i++) {
-			Helper.sleepMillis(200);
-			consoleActivity.appendText("Test " + i);
-			if (i == 15) {
-				consoleActivity.appendText(findThis);
-			}
-		}
+		consoleActivity.appendText(TESTFILL);
+		Helper.sleepMillis(200);
+		consoleActivity.appendText(findThis);
+		Helper.sleepMillis(200);
+		consoleActivity.appendText(TESTFILL);
 		String allText = consoleTextView.getText().toString();
 		assertTrue(allText.contains(findThis));
 
@@ -90,11 +101,11 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	 * works.
 	 */
 	public void testTextScrolling() {
-		for (int i = 0; i < 40; i++) {
-			Helper.sleepMillis(300);
-			consoleActivity.appendText("Test " + i);
-		}
-
+		consoleActivity.appendText(TESTFILL);
+		Helper.sleepMillis(200);
+		consoleActivity.appendText(TESTFILL);
+		Helper.sleepMillis(200);
+		consoleActivity.appendText(TESTFILL);
 		Helper.sleepMillis(300);
 
 		assertTrue(consoleActivity.isScrolledDown());
@@ -114,10 +125,12 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 
 		assertFalse(consoleActivity.isScrolledDown());
 
-		for (int i = 0; i < 40; i++) {
-			Helper.sleepMillis(200);
-			consoleActivity.appendText("Test " + i);
-		}
+		consoleActivity.appendText(TESTFILL);
+		Helper.sleepMillis(200);
+		consoleActivity.appendText(TESTFILL);
+		Helper.sleepMillis(200);
+		consoleActivity.appendText(TESTFILL);
+		Helper.sleepMillis(300);
 
 		assertFalse(consoleActivity.isScrolledDown());
 	}
