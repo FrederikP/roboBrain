@@ -506,8 +506,23 @@ public class Starter extends Activity {
 			}
 		});
 
+		return waitForDialogToBeCreated(dialogs);
+	}
+
+	/**
+	 * Since dialog creation happens in UI thread, this method waits for dialog
+	 * to be put in dialogs list with index 0.
+	 * 
+	 * @param dialogs
+	 *            The list, the dialog will be saved in
+	 * @return Dialog, or null if it wasn't found in time
+	 */
+	public AlertDialog waitForDialogToBeCreated(final List<AlertDialog> dialogs) {
+		if (dialogs == null) {
+			return null;
+		}
 		double waitedSecs = 0;
-		while (dialogs.get(0) == null && waitedSecs < 5) {
+		while (dialogs.size() == 0 && waitedSecs < 2) {
 			waitedSecs = waitedSecs + 0.1;
 			try {
 				Thread.sleep(100);
@@ -518,10 +533,11 @@ public class Starter extends Activity {
 			}
 		}
 
-		if (dialogs.get(0) == null) {
+		if (dialogs.size() == 0) {
 			RoboLog.alertError(Starter.this, "Failed to create dialog in 5 secs");
 			return null;
 		}
+
 		return dialogs.get(0);
 	}
 

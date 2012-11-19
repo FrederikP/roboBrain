@@ -23,6 +23,9 @@
 package eu.fpetersen.robobrain.ui.test;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -238,6 +241,40 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		assertNotNull(dialog);
 
 		assertFalse(dialog.isShowing());
+
+	}
+
+	/**
+	 * Test dialog waiting method
+	 */
+	public void testDialogWaiting() {
+		final List<AlertDialog> dialogs = new ArrayList<AlertDialog>();
+
+		// Test if method returns null for empty list
+		AlertDialog dialog = starterActivity.waitForDialogToBeCreated(dialogs);
+		assertNull(dialog);
+
+		final AlertDialog dialogToInsert = starterActivity.showAlertDialog("Test", "Tested");
+
+		TimerTask addDialogTask = new TimerTask() {
+
+			@Override
+			public void run() {
+				dialogs.add(dialogToInsert);
+			}
+		};
+		Timer timer = new Timer();
+		timer.schedule(addDialogTask, 1000);
+
+		// Test if method returns dialog, after it's added by timer task
+		dialog = starterActivity.waitForDialogToBeCreated(dialogs);
+		assertNotNull(dialog);
+		assertEquals(dialog, dialogToInsert);
+
+		// Test if method returns dialog, which is already added
+		dialog = starterActivity.waitForDialogToBeCreated(dialogs);
+		assertNotNull(dialog);
+		assertEquals(dialog, dialogToInsert);
 
 	}
 
