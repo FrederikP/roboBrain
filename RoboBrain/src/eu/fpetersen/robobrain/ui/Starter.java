@@ -102,6 +102,8 @@ public class Starter extends Activity {
 		mRobotBehaviorTable = (TableLayout) findViewById(R.id.robot_behavior_table);
 		mProgressDialog = new ProgressDialog(Starter.this);
 
+		setupStarterReceiver();
+
 		mToggleStatusB.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
@@ -118,8 +120,6 @@ public class Starter extends Activity {
 		 */
 
 		checkForInstalledPackages();
-
-		setupStarterReceiver();
 
 	}
 
@@ -506,15 +506,11 @@ public class Starter extends Activity {
 	}
 
 	public void removeAllOpenDialogs() {
-		runOnUiThread(new Runnable() {
 
-			public void run() {
-				for (Dialog d : mAllOpenDialogs) {
-					d.dismiss();
-				}
-				mAllOpenDialogs.clear();
-			}
-		});
+		for (Dialog d : mAllOpenDialogs) {
+			d.dismiss();
+		}
+		mAllOpenDialogs.clear();
 
 	}
 

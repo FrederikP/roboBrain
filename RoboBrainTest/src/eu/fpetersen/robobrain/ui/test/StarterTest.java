@@ -182,31 +182,34 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 */
 	public void testDialogCreation() {
 		Dialog dialog = starterActivity.showAlertDialog("TESTDIALOG", "Test this, baby");
-		int secondsWaited = 0;
+		double secondsWaited = 0;
 		while (!dialog.isShowing() && secondsWaited < 10) {
-			Helper.sleepMillis(1000);
-			secondsWaited++;
+			Helper.sleepMillis(100);
+			secondsWaited = secondsWaited + 0.1;
 		}
 		assertNotNull(dialog);
-		// TODO
-		// assertTrue(dialog.isShowing());
+		assertTrue(dialog.isShowing());
 
 		starterActivity.removeAllOpenDialogs();
-		Helper.sleepMillis(100);
-
+		secondsWaited = 0;
+		while (dialog.isShowing() && secondsWaited < 10) {
+			Helper.sleepMillis(100);
+			secondsWaited = secondsWaited + 0.1;
+		}
 		assertFalse(dialog.isShowing());
 
 	}
 
 	/**
-	 * Test showing dialog, when activity finished
+	 * Test showing dialog, when activity finished This should lead to a warning
+	 * being logged, about that the alert can't be shown
 	 */
 	public void testDialogCreationWhenActivityFinished() {
 		starterActivity.finish();
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(1000);
 		Dialog dialog = starterActivity.showAlertDialog("TESTDIALOG", "Test this, baby");
 
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(1000);
 		assertNotNull(dialog);
 
 		assertFalse(dialog.isShowing());
