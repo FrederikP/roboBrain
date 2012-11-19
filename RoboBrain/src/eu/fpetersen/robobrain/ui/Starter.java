@@ -22,9 +22,11 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.ui;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -61,6 +63,7 @@ import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.services.RobotServiceContainer;
 import eu.fpetersen.robobrain.services.SpeechRecognizerService;
 import eu.fpetersen.robobrain.util.AppRequirementsChecker;
+import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
  * Gives the user the option to turn the RoboBrain services on and off. When
@@ -469,26 +472,27 @@ public class Starter extends Activity {
 	 *            Message to display
 	 * @return The created Dialog
 	 */
-	public Dialog showAlertDialog(final String title, final String message) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(Starter.this);
+	public AlertDialog showAlertDialog(final String title, final String message) {
+		final List<AlertDialog> dialogs = new ArrayList<AlertDialog>();
 
-		// 2. Chain together various setter methods to set the dialog
-		// characteristics
-		builder.setMessage(message).setTitle(title);
-
-		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int id) {
-				dialog.dismiss();
-			}
-		});
-
-		// 3. Get the AlertDialog from create()
-		final Dialog dialog = builder.create();
-
-		mAllOpenDialogs.add(dialog);
 		runOnUiThread(new Runnable() {
 
 			public void run() {
+
+				AlertDialog.Builder builder = new AlertDialog.Builder(Starter.this);
+
+				builder.setMessage(message).setTitle(title);
+
+				builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				});
+
+				final AlertDialog dialog = builder.create();
+
+				mAllOpenDialogs.add(dialog);
+				dialogs.add(dialog);
 
 				try {
 					dialog.show();
@@ -502,7 +506,23 @@ public class Starter extends Activity {
 			}
 		});
 
-		return dialog;
+		double waitedSecs = 0;
+		while (dialogs.get(0) == null && waitedSecs < 5) {
+			waitedSecs = waitedSecs + 0.1;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				RoboLog.alertError(Starter.this,
+						"Thread Interrupzted while waiting for dialog to be created.");
+				e.printStackTrace();
+			}
+		}
+
+		if (dialogs.get(0) == null) {
+			RoboLog.alertError(Starter.this, "Failed to create dialog in 5 secs");
+			return null;
+		}
+		return dialogs.get(0);
 	}
 
 	public void removeAllOpenDialogs() {

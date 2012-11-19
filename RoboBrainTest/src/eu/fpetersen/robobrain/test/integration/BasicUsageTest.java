@@ -109,14 +109,15 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		});
 
 		// Wait a while to make sure the real service can be started
-		int waitedSecs = 0;
+		double waitedSecs = 0;
 		while (!statusTV.getText().toString().matches("Started!") && waitedSecs < 20) {
-			Helper.sleepMillis(1000);
-			waitedSecs++;
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
 		}
+		getInstrumentation().waitForIdleSync();
 
 		starterActivity.removeAllOpenDialogs();
-		Helper.sleepMillis(100);
+		getInstrumentation().waitForIdleSync();
 
 		assertEquals("Started!", statusTV.getText());
 
@@ -151,14 +152,15 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		// Wait a while to make sure the behavior can be started
 		waitedSecs = 0;
 		while (behaviorList.getChildCount() != 1 && waitedSecs < 20) {
-			Helper.sleepMillis(1000);
-			waitedSecs++;
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
 		}
+		getInstrumentation().waitForIdleSync();
 
 		assertEquals(1, behaviorList.getChildCount());
 
 		// Some more waiting just to let the UI finish building
-		Helper.sleepMillis(500);
+		getInstrumentation().waitForIdleSync();
 
 		final Button stopButton = (Button) behaviorList.getChildAt(0);
 
@@ -175,14 +177,15 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		// Wait a while to make sure the behavior can be stopped
 		waitedSecs = 0;
 		while (behaviorList.getChildCount() != 3 && waitedSecs < 20) {
-			Helper.sleepMillis(1000);
-			waitedSecs++;
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
 		}
+		getInstrumentation().waitForIdleSync();
 
 		assertEquals(3, behaviorList.getChildCount());
 
 		// Some more waiting just to let the UI finish building
-		Helper.sleepMillis(500);
+		getInstrumentation().waitForIdleSync();
 
 		// ----Turn on one behavior per mocked voice
 		SpeechResultManager speechResultManager = SpeechResultManager.getInstance();
@@ -198,9 +201,10 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		while ((cc.getRunningBehavior() == null || !cc.getRunningBehavior().getSpeechName()
 				.toLowerCase(Locale.US).contains("obstacle"))
 				&& waitedSecs < 20) {
-			Helper.sleepMillis(1000);
-			waitedSecs++;
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
 		}
+		getInstrumentation().waitForIdleSync();
 		Behavior runningBehavior = cc.getRunningBehavior();
 		assertNotNull(runningBehavior);
 		assertTrue(runningBehavior.getSpeechName().toLowerCase(Locale.US).contains("obstacle"));
@@ -208,7 +212,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		assertEquals(1, behaviorList.getChildCount());
 
 		// Some more waiting just to let the UI finish building
-		Helper.sleepMillis(500);
+		getInstrumentation().waitForIdleSync();
 
 		final Button stopButton2 = (Button) behaviorList.getChildAt(0);
 
@@ -224,14 +228,15 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		// Wait a while to make sure the behavior can be stopped
 		waitedSecs = 0;
 		while (behaviorList.getChildCount() != 3 && waitedSecs < 20) {
-			Helper.sleepMillis(1000);
-			waitedSecs++;
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
 		}
+		getInstrumentation().waitForIdleSync();
 
 		assertEquals(3, behaviorList.getChildCount());
 
 		// Some more waiting just to let the UI finish building
-		Helper.sleepMillis(500);
+		getInstrumentation().waitForIdleSync();
 
 		// ----Turn off service----
 		starterActivity.runOnUiThread(new Runnable() {
@@ -244,14 +249,15 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		// Wait a while to make sure the real service can be stopped
 		waitedSecs = 0;
 		while (!statusTV.getText().toString().matches("Stopped!") && waitedSecs < 20) {
-			Helper.sleepMillis(1000);
-			waitedSecs++;
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
 		}
+		getInstrumentation().waitForIdleSync();
 
 		assertEquals("Stopped!", statusTV.getText());
 
 		// Some more waiting just to let the UI finish building
-		Helper.sleepMillis(500);
+		getInstrumentation().waitForIdleSync();
 
 		assertFalse(table.isShown());
 

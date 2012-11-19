@@ -25,7 +25,6 @@ package eu.fpetersen.robobrain.util.test;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.R;
-import eu.fpetersen.robobrain.test.util.Helper;
 import eu.fpetersen.robobrain.ui.Console;
 import eu.fpetersen.robobrain.util.RoboLog;
 
@@ -56,15 +55,15 @@ public class RoboLogTest extends ActivityInstrumentationTestCase2 {
 	 * Test if RoboLog message is correctly logged to Console UI activity
 	 */
 	public void testRoboLogLogging() {
-		Helper.sleepMillis(1000);
+		getInstrumentation().waitForIdleSync();
 		TextView consoleTextView = (TextView) consoleActivity.findViewById(R.id.consoleTextView);
 		String findThis = "Logged!";
 
-		Helper.sleepMillis(1000);
+		getInstrumentation().waitForIdleSync();
 
 		RoboLog.log(consoleActivity, findThis, true);
 
-		Helper.sleepMillis(2000);
+		getInstrumentation().waitForIdleSync();
 
 		String allText = consoleTextView.getText().toString();
 		assertTrue(allText.contains(findThis));

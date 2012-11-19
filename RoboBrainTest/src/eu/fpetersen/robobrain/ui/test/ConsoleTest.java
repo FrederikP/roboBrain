@@ -29,7 +29,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
-import eu.fpetersen.robobrain.test.util.Helper;
 import eu.fpetersen.robobrain.ui.Console;
 
 /**
@@ -86,9 +85,9 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 		TextView consoleTextView = (TextView) consoleActivity.findViewById(R.id.consoleTextView);
 		String findThis = "INTHEMIDDLE";
 		consoleActivity.appendText(TESTFILL);
-		Helper.sleepMillis(200);
+		getInstrumentation().waitForIdleSync();
 		consoleActivity.appendText(findThis);
-		Helper.sleepMillis(200);
+		getInstrumentation().waitForIdleSync();
 		consoleActivity.appendText(TESTFILL);
 		String allText = consoleTextView.getText().toString();
 		assertTrue(allText.contains(findThis));
@@ -102,15 +101,15 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	 */
 	public void testTextScrolling() {
 		consoleActivity.appendText(TESTFILL);
-		Helper.sleepMillis(200);
+		getInstrumentation().waitForIdleSync();
 		consoleActivity.appendText(TESTFILL);
-		Helper.sleepMillis(200);
+		getInstrumentation().waitForIdleSync();
 		consoleActivity.appendText(TESTFILL);
-		Helper.sleepMillis(300);
+		getInstrumentation().waitForIdleSync();
 
 		assertTrue(consoleActivity.isScrolledDown());
 
-		Helper.sleepMillis(1000);
+		getInstrumentation().waitForIdleSync();
 
 		final ScrollView textScroll = (ScrollView) consoleActivity
 				.findViewById(R.id.consoleScroller);
@@ -121,16 +120,16 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 			}
 		});
 
-		Helper.sleepMillis(1000);
+		getInstrumentation().waitForIdleSync();
 
 		assertFalse(consoleActivity.isScrolledDown());
 
 		consoleActivity.appendText(TESTFILL);
-		Helper.sleepMillis(200);
+		getInstrumentation().waitForIdleSync();
 		consoleActivity.appendText(TESTFILL);
-		Helper.sleepMillis(200);
+		getInstrumentation().waitForIdleSync();
 		consoleActivity.appendText(TESTFILL);
-		Helper.sleepMillis(300);
+		getInstrumentation().waitForIdleSync();
 
 		assertFalse(consoleActivity.isScrolledDown());
 	}
@@ -146,7 +145,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 		cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, appendMe);
 		consoleActivity.sendBroadcast(cIntent);
 
-		Helper.sleepMillis(500);
+		getInstrumentation().waitForIdleSync();
 		String allText = consoleTextView.getText().toString();
 		assertTrue(allText.contains(appendMe));
 

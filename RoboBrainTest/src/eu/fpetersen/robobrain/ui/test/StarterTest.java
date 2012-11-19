@@ -24,8 +24,11 @@ package eu.fpetersen.robobrain.ui.test;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -178,24 +181,41 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	}
 
 	/**
-	 * Test creation of Alert Dialog
+	 * Test creation of Alert Dialog and removal by removeAllOpenDialogs.
 	 */
-	public void testDialogCreation() {
+	public void testDialogCreationAndRemovalByMethod() {
 		Dialog dialog = starterActivity.showAlertDialog("TESTDIALOG", "Test this, baby");
-		double secondsWaited = 0;
-		while (!dialog.isShowing() && secondsWaited < 10) {
-			Helper.sleepMillis(100);
-			secondsWaited = secondsWaited + 0.1;
-		}
+		getInstrumentation().waitForIdleSync();
 		assertNotNull(dialog);
 		assertTrue(dialog.isShowing());
 
 		starterActivity.removeAllOpenDialogs();
-		secondsWaited = 0;
-		while (dialog.isShowing() && secondsWaited < 10) {
-			Helper.sleepMillis(100);
-			secondsWaited = secondsWaited + 0.1;
-		}
+		getInstrumentation().waitForIdleSync();
+		assertFalse(dialog.isShowing());
+
+	}
+
+	/**
+	 * Test creation of Alert Dialog and removal by click on button.
+	 */
+	public void testDialogCreationAndRemovalByClick() {
+
+		AlertDialog dialog = starterActivity.showAlertDialog("TESTDIALOG", "Test this, baby");
+
+		getInstrumentation().waitForIdleSync();
+		assertNotNull(dialog);
+		assertTrue(dialog.isShowing());
+
+		final Button positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+		Log.v("ButtonTex", "" + positive.getText());
+		starterActivity.runOnUiThread(new Runnable() {
+
+			public void run() {
+				positive.performClick();
+			}
+		});
+
+		getInstrumentation().waitForIdleSync();
 		assertFalse(dialog.isShowing());
 
 	}
@@ -206,18 +226,15 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 */
 	public void testDialogCreationWhenActivityFinished() {
 		starterActivity.finish();
-		double secondsWaited = 0;
-		while (!starterActivity.isFinishing() && secondsWaited < 10) {
-			Helper.sleepMillis(100);
-			secondsWaited = secondsWaited + 0.1;
-		}
+		getInstrumentation().waitForIdleSync();
 		assertTrue(starterActivity.isFinishing());
 
-		Helper.sleepMillis(2000);
+		getInstrumentation().waitForIdleSync();
 
 		Dialog dialog = starterActivity.showAlertDialog("TESTDIALOG", "Test this, baby");
 
-		Helper.sleepMillis(1000);
+		getInstrumentation().waitForIdleSync();
+
 		assertNotNull(dialog);
 
 		assertFalse(dialog.isShowing());
