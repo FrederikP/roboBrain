@@ -20,46 +20,41 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.test.mock;
+package eu.fpetersen.robobrain.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.test.mock.MockPackageManager;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 /**
+ * Handles version information management
+ * 
  * @author Frederik Petersen
  * 
  */
-public class MockRoboBrainPackageManager extends MockPackageManager {
+public class VersionHelper {
 
-	List<PackageInfo> mPackages = new ArrayList<PackageInfo>();
-
-	public MockRoboBrainPackageManager() {
-		super();
-	}
-
-	@Override
-	public List<PackageInfo> getInstalledPackages(int flags) {
-		return mPackages;
-	}
-
-	public void addPackageInfo(PackageInfo info) {
-		mPackages.add(info);
-	}
-
-	@Override
-	public PackageInfo getPackageInfo(String packageName, int flags) throws NameNotFoundException {
-		if (flags != 0) {
-			return null;
-		}
-		for (PackageInfo info : mPackages) {
-			if (info.packageName.matches(packageName)) {
-				return info;
+	/**
+	 * Returns version number of RoboBrain app for the given PackageManager
+	 * 
+	 * @param packageManager
+	 * @param context
+	 * @return Version of Robobrain, Empty String if it could not be found
+	 */
+	public static String getVersion(PackageManager packageManager, Context context) {
+		String version = "";
+		try {
+			PackageInfo pInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+			if (pInfo != null) {
+				version = pInfo.versionName;
 			}
+		} catch (NameNotFoundException e) {
+			RoboLog.alertError(context, "Version could not be set");
 		}
-		return null;
+
+		return version;
+
 	}
 
 }

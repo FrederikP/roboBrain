@@ -23,8 +23,6 @@
 package eu.fpetersen.robobrain.ui;
 
 import android.app.Activity;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -32,7 +30,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.R;
-import eu.fpetersen.robobrain.util.RoboLog;
+import eu.fpetersen.robobrain.util.VersionHelper;
 
 /**
  * Shows general information about the app and allows switching to other
@@ -55,15 +53,7 @@ public class About extends Activity {
 		websiteView.setMovementMethod(LinkMovementMethod.getInstance());
 
 		// Set version
-		PackageInfo pInfo = null;
-		String version = "";
-		try {
-			pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-			version = pInfo.versionName;
-		} catch (NameNotFoundException e) {
-			RoboLog.alertError(About.this, "Version could not be set");
-		}
-
+		String version = VersionHelper.getVersion(getPackageManager(), About.this);
 		TextView versionView = (TextView) findViewById(R.id.versionText);
 		versionView.setText(version);
 
