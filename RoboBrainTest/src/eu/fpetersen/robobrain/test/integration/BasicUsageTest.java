@@ -205,6 +205,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 			waitedSecs = waitedSecs + 0.1;
 		}
 		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(100);
 		Behavior runningBehavior = cc.getRunningBehavior();
 		assertNotNull(runningBehavior);
 		assertTrue(runningBehavior.getSpeechName().toLowerCase(Locale.US).contains("obstacle"));
