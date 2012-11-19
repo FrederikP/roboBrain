@@ -236,9 +236,14 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		Dialog dialog = starterActivity.showAlertDialog("TESTDIALOG", "Test this, baby");
 
-		getInstrumentation().waitForIdleSync();
-
 		assertNotNull(dialog);
+
+		getInstrumentation().waitForIdleSync();
+		double waitedSecs = 0;
+		while (dialog.isShowing() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 
 		assertFalse(dialog.isShowing());
 
