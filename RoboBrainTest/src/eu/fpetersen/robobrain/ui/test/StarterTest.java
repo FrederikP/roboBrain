@@ -206,7 +206,15 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 */
 	public void testDialogCreationWhenActivityFinished() {
 		starterActivity.finish();
-		Helper.sleepMillis(1000);
+		double secondsWaited = 0;
+		while (!starterActivity.isFinishing() && secondsWaited < 10) {
+			Helper.sleepMillis(100);
+			secondsWaited = secondsWaited + 0.1;
+		}
+		assertTrue(starterActivity.isFinishing());
+
+		Helper.sleepMillis(2000);
+
 		Dialog dialog = starterActivity.showAlertDialog("TESTDIALOG", "Test this, baby");
 
 		Helper.sleepMillis(1000);
