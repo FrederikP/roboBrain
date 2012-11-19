@@ -39,18 +39,19 @@ import eu.fpetersen.robobrain.ui.Console;
  */
 public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 
-	private static final String TESTFILL = "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n"
-			+ "Testgshäüfodishfäodshgsffushgs\n" + "Testgshäüfodishfäodshgsffushgs\n";
+	private static final String TESTFILL = "Testgsjdslgsfgsdlfgsdiccfgsdio\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n"
+			+ "Testgsjdslgsfgsdlfgsdiccfgsdi\n" + "Testgsjdslgsfgsdlfgsdiccfgsd\n";
 
 	private Console consoleActivity;
 
