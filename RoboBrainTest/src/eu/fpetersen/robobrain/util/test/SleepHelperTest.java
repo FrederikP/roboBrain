@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.test.AndroidTestCase;
+import eu.fpetersen.robobrain.test.util.Helper;
 import eu.fpetersen.robobrain.util.SleepHelper;
 
 /**
@@ -55,6 +56,7 @@ public class SleepHelperTest extends AndroidTestCase {
 			@Override
 			public void run() {
 				sleepThread.interrupt();
+				Helper.sleepMillis(200);
 				assertFalse(sleepThread.isAlive());
 			}
 		};
