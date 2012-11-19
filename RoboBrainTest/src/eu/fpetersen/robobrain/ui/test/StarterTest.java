@@ -248,10 +248,15 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 * Test dialog waiting method
 	 */
 	public void testDialogWaiting() {
+
+		// Test if method returns null for null list
+		AlertDialog dialog = starterActivity.waitForDialogToBeCreated(null);
+		assertNull(dialog);
+
 		final List<AlertDialog> dialogs = new ArrayList<AlertDialog>();
 
 		// Test if method returns null for empty list
-		AlertDialog dialog = starterActivity.waitForDialogToBeCreated(dialogs);
+		dialog = starterActivity.waitForDialogToBeCreated(dialogs);
 		assertNull(dialog);
 
 		final AlertDialog dialogToInsert = starterActivity.showAlertDialog("Test", "Tested");

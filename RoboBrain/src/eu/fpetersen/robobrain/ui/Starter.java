@@ -64,6 +64,7 @@ import eu.fpetersen.robobrain.services.RobotServiceContainer;
 import eu.fpetersen.robobrain.services.SpeechRecognizerService;
 import eu.fpetersen.robobrain.util.AppRequirementsChecker;
 import eu.fpetersen.robobrain.util.RoboLog;
+import eu.fpetersen.robobrain.util.SleepHelper;
 
 /**
  * Gives the user the option to turn the RoboBrain services on and off. When
@@ -524,13 +525,7 @@ public class Starter extends Activity {
 		double waitedSecs = 0;
 		while (dialogs.size() == 0 && waitedSecs < 2) {
 			waitedSecs = waitedSecs + 0.1;
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				RoboLog.alertError(Starter.this,
-						"Thread Interrupzted while waiting for dialog to be created.");
-				e.printStackTrace();
-			}
+			SleepHelper.sleepMillis(Starter.this, 100);
 		}
 
 		if (dialogs.size() == 0) {
