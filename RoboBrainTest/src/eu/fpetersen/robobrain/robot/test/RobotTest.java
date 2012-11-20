@@ -85,6 +85,32 @@ public class RobotTest extends AndroidTestCase {
 
 	}
 
+	/**
+	 * Just make sure no exception is thrown. Possible improvement would be a
+	 * registered listener
+	 */
+	public void testAmarinoSending() {
+		mService = new MockRobotService(getContext());
+		MockRobotFactory factory = new MockRobotFactory(mService);
+		Robot robot = factory.createSimpleRobot("TestBot");
+
+		assertNotNull(robot);
+
+		// int
+		robot.sendToArduino('X', 1);
+
+		// int[]
+		int[] intArray = { 1, 2, 3 };
+		robot.sendToArduino('X', intArray);
+
+		// String
+		robot.sendToArduino('X', "boo");
+
+		// String Array
+		String[] stringArray = { "Blub", "Blab" };
+		robot.sendToArduino('X', stringArray);
+	}
+
 	@Override
 	protected void tearDown() throws Exception {
 		if (mService != null) {
