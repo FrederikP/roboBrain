@@ -20,42 +20,59 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.util;
+package eu.fpetersen.robobrain.util.test;
 
 import java.io.IOException;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.res.Resources.NotFoundException;
+import android.test.AndroidTestCase;
+import android.util.Xml;
+import eu.fpetersen.robobrain.R;
+import eu.fpetersen.robobrain.util.XmlParserHelper;
+
 /**
- * Helper Class for XML Parsing. Central place to access methods that are needed
- * in different Factories.
+ * 
+ * Tests {@link XmlParserHelper}
  * 
  * @author Frederik Petersen
  * 
  */
-public class XmlParserHelper {
+public class XmlParserHelperTest extends AndroidTestCase {
 
-	/**
-	 * Skip the current tag
-	 * 
-	 * @param parser
-	 *            Parser of which the next tag is to be skipped
-	 * @throws XmlPullParserException
-	 * @throws IOException
-	 */
-	public void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
-		if (parser.getEventType() != XmlPullParser.START_TAG) {
-			throw new IllegalStateException();
+	private XmlParserHelper mXmlParserHelper;
+
+	@Override
+	protected void setUp() throws Exception {
+		mXmlParserHelper = new XmlParserHelper();
+		super.setUp();
+	}
+
+	public void testSkipping() throws NotFoundException, XmlPullParserException, IOException {
+
+		XmlPullParser parser = Xml.newPullParser();
+		parser.setInput(getContext().getResources().openRawResource(R.raw.test), null);
+		parser.nextTag();
+		parser.nextTag();
+		parser.require(XmlPullParser.START_TAG, null, "eins");
+		parser.nextTag();
+		parser.nextTag();
+		parser.require(XmlPullParser.START_TAG, null, "zwei");
+		mXmlParserHelper.skip(parser);
+		parser.nextTag();
+		parser.require(XmlPullParser.START_TAG, null, "drei");
+		parser.nextTag();
+		boolean error = false;
+		try {
+			mXmlParserHelper.skip(parser);
+		} catch (IllegalStateException e) {
+			error = true;
 		}
-		int depth = 1;
-		while (depth != 0) {
-			if (parser.next() == XmlPullParser.END_TAG) {
-				depth--;
-			} else if (parser.next() == XmlPullParser.START_TAG) {
-				depth++;
-			}
-		}
+
+		assertTrue(error);
+
 	}
 
 }
