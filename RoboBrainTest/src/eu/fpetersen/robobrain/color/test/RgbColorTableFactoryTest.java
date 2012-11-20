@@ -56,6 +56,14 @@ public class RgbColorTableFactoryTest extends AndroidTestCase {
 
 		RgbColor notExistantColor = table.getColorForName("BarschGruen");
 		assertNull(notExistantColor);
+
+		RgbColor randomColor = table.getRandomColor();
+		assertNotNull(randomColor);
+		int red = randomColor.getRed();
+		int blue = randomColor.getBlue();
+		int green = randomColor.getGreen();
+
+		assertTrue(red >= 0 && red <= 255 && blue >= 0 && blue <= 255 && green >= 0 && green <= 255);
 	}
 
 	/**
