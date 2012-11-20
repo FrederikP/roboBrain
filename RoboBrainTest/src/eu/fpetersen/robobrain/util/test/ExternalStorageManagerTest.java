@@ -91,6 +91,14 @@ public class ExternalStorageManagerTest extends AndroidTestCase {
 
 	}
 
+	public void testGetNewBehaviorMapping() {
+		String name = "mapping.xml";
+		File file = externalStorageManager.getBehaviorMappingFile(name);
+		assertTrue(file.exists());
+		file.delete();
+
+	}
+
 	@Override
 	protected void tearDown() throws Exception {
 		// ///CLOVER:FLUSH
