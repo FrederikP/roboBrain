@@ -186,7 +186,10 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 
 	}
 
-	// Test speechCommanding Behavior, some without speech attribute
+	/**
+	 * Test speechCommanding Behavior, some without speech attribute
+	 * 
+	 */
 	public void testSpeechCommand() {
 		MockRobotFactory fac = new MockRobotFactory(mService);
 		Robot robot = fac.createSimpleRobot("TESTBOT");
@@ -235,6 +238,30 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 
 		assertFalse(obstBehavior.isTurnedOn());
 		assertNull(cc.getRunningBehavior());
+
+	}
+
+	/**
+	 * Makes sure that nothing happens when non registered behavior ids are sent
+	 * to {@link BehaviorSwitcher}
+	 */
+	public void testStartStopNonRegisteredBehavior() {
+		MockRobotFactory fac = new MockRobotFactory(mService);
+		Robot robot = fac.createSimpleRobot("TESTBOT");
+		List<Behavior> noBehaviors = new ArrayList<Behavior>();
+
+		Behavior simpleBehavior = new BackAndForthBehavior();
+		BehaviorInitializer simpleBehaviorInitializer = new BehaviorInitializer(
+				"BackAndForthBehavior", "");
+		simpleBehaviorInitializer.initialize(simpleBehavior, robot);
+
+		mService.addCC(robot, noBehaviors);
+
+		mSwitcher.startBehavior(simpleBehavior.getId());
+		Helper.sleepMillis(200);
+		assertFalse(simpleBehavior.isTurnedOn());
+
+		mSwitcher.stopBehavior(simpleBehavior.getId());
 
 	}
 
