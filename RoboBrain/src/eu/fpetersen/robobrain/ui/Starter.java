@@ -391,8 +391,9 @@ public class Starter extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.activity_starter, menu);
 
-		MenuHelper.addConsoleMenuClickListener(menu, Starter.this);
-		MenuHelper.addAboutMenuClickListener(menu, Starter.this);
+		MenuHelper menuHelper = new MenuHelper();
+		menuHelper.addConsoleMenuClickListener(menu, Starter.this);
+		menuHelper.addAboutMenuClickListener(menu, Starter.this);
 		return super.onCreateOptionsMenu(menu);
 	}
 

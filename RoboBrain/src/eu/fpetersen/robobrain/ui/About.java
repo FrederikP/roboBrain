@@ -64,8 +64,9 @@ public class About extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.activity_about, menu);
 
-		MenuHelper.addConsoleMenuClickListener(menu, About.this);
-		MenuHelper.addStarterMenuClickListener(menu, About.this);
+		MenuHelper menuHelper = new MenuHelper();
+		menuHelper.addConsoleMenuClickListener(menu, About.this);
+		menuHelper.addStarterMenuClickListener(menu, About.this);
 		return super.onCreateOptionsMenu(menu);
 	}
 

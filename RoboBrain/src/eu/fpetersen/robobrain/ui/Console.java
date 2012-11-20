@@ -134,9 +134,9 @@ public class Console extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.activity_console, menu);
-
-		MenuHelper.addStarterMenuClickListener(menu, Console.this);
-		MenuHelper.addAboutMenuClickListener(menu, Console.this);
+		MenuHelper menuHelper = new MenuHelper();
+		menuHelper.addStarterMenuClickListener(menu, Console.this);
+		menuHelper.addAboutMenuClickListener(menu, Console.this);
 		return super.onCreateOptionsMenu(menu);
 	}
 

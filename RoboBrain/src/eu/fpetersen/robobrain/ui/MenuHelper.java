@@ -46,7 +46,7 @@ public class MenuHelper {
 	 * @param activity
 	 *            calling this Helper method
 	 */
-	public static void addConsoleMenuClickListener(Menu menu, final Activity activity) {
+	public void addConsoleMenuClickListener(Menu menu, final Activity activity) {
 		MenuItem console = menu.findItem(R.id.console_menu_item);
 		final Intent cIntent = new Intent(activity, Console.class);
 		cIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -68,7 +68,7 @@ public class MenuHelper {
 	 * @param activity
 	 *            calling this Helper method
 	 */
-	public static void addStarterMenuClickListener(Menu menu, final Activity activity) {
+	public void addStarterMenuClickListener(Menu menu, final Activity activity) {
 		MenuItem starter = menu.findItem(R.id.starter_menu_item);
 		final Intent cIntent = new Intent(activity, Starter.class);
 		cIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -90,7 +90,7 @@ public class MenuHelper {
 	 * @param activity
 	 *            calling this Helper method
 	 */
-	public static void addAboutMenuClickListener(Menu menu, final Activity activity) {
+	public void addAboutMenuClickListener(Menu menu, final Activity activity) {
 		MenuItem starter = menu.findItem(R.id.about_menu_item);
 		final Intent cIntent = new Intent(activity, About.class);
 		cIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
