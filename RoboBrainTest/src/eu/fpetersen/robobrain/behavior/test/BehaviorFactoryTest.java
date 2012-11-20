@@ -28,7 +28,6 @@ import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.behavior.BehaviorFactory;
 import eu.fpetersen.robobrain.behavior.BehaviorInitializer;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
@@ -40,15 +39,17 @@ import eu.fpetersen.robobrain.test.mock.MockRobotService;
  */
 public class BehaviorFactoryTest extends AndroidTestCase {
 
+	private MockRobotService mService;
+
 	/**
 	 * Tests Behavior Creation by trying to instantiate the
 	 * {@link BackAndForthBehavior}
 	 */
 	public void testBehaviorCreation() {
-		RobotService service = new MockRobotService(getContext());
-		MockRobotFactory factory = new MockRobotFactory(getContext());
+		mService = new MockRobotService(getContext());
+		MockRobotFactory factory = new MockRobotFactory(mService);
 		Robot robot = factory.createSimpleRobot("TESTBOT");
-		BehaviorFactory bFac = BehaviorFactory.getInstance(service);
+		BehaviorFactory bFac = BehaviorFactory.getInstance(mService);
 		Behavior behavior = bFac.createBehavior(
 				new BehaviorInitializer(BackAndForthBehavior.class.getName(), "speech"), robot);
 		assertNotNull(behavior);
@@ -60,6 +61,9 @@ public class BehaviorFactoryTest extends AndroidTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
+		if (mService != null) {
+			mService.destroy();
+		}
 		// ///CLOVER:FLUSH
 		super.tearDown();
 	}

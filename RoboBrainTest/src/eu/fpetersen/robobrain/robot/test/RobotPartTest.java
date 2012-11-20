@@ -31,7 +31,6 @@ import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotPart;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
 import eu.fpetersen.robobrain.robot.RobotPartInitializer;
-import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
@@ -43,12 +42,14 @@ import eu.fpetersen.robobrain.test.mock.MockRobotService;
  */
 public class RobotPartTest extends AndroidTestCase {
 
+	private MockRobotService mService;
+
 	/**
 	 * Test creating a motor, including flags
 	 */
 	public void testMotorCreation() {
-		RobotService service = new MockRobotService(getContext());
-		MockRobotFactory factory = new MockRobotFactory(getContext());
+		mService = new MockRobotService(getContext());
+		MockRobotFactory factory = new MockRobotFactory(mService);
 		Robot mockRobot = factory.createSimpleRobot("TestBot");
 		Map<String, Character> flags = new HashMap<String, Character>();
 		flags.put("advance", 'A');
@@ -58,7 +59,7 @@ public class RobotPartTest extends AndroidTestCase {
 		flags.put("right", 'R');
 
 		RobotPartInitializer initializer = new RobotPartInitializer("Motor", mockRobot, flags);
-		Motor motor = (Motor) RobotPartFactory.getInstance(service).createRobotPart("Motor",
+		Motor motor = (Motor) RobotPartFactory.getInstance(mService).createRobotPart("Motor",
 				initializer);
 
 		assertNotNull(motor);
@@ -75,15 +76,15 @@ public class RobotPartTest extends AndroidTestCase {
 	 * Test creating a motor, including flags
 	 */
 	public void testMotorWithMissingFlags() {
-		RobotService service = new MockRobotService(getContext());
-		MockRobotFactory factory = new MockRobotFactory(getContext());
+		mService = new MockRobotService(getContext());
+		MockRobotFactory factory = new MockRobotFactory(mService);
 		Robot mockRobot = factory.createSimpleRobot("TestBot");
 		Map<String, Character> flags = new HashMap<String, Character>();
 		flags.put("advance", 'A');
 		flags.put("stop", 'S');
 
 		RobotPartInitializer initializer = new RobotPartInitializer("Motor", mockRobot, flags);
-		Motor motor = (Motor) RobotPartFactory.getInstance(service).createRobotPart("Motor",
+		Motor motor = (Motor) RobotPartFactory.getInstance(mService).createRobotPart("Motor",
 				initializer);
 
 		assertNotNull(motor);
@@ -98,6 +99,9 @@ public class RobotPartTest extends AndroidTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
+		if (mService != null) {
+			mService.destroy();
+		}
 		// ///CLOVER:FLUSH
 		super.tearDown();
 	}

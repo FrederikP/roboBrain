@@ -48,13 +48,16 @@ public class MockRobotService extends RobotService {
 
 	private Context mTestContext;
 
-	private DistributingSpeechReceiver distSpeechRec;
+	private DistributingSpeechReceiver mDistSpeechRec;
 
 	private UUID id;
 
+	private boolean mIsDestroyed = false;
+
 	public MockRobotService(Context context) {
 		mTestContext = context;
-		distSpeechRec = new DistributingSpeechReceiver();
+		mDistSpeechRec = new DistributingSpeechReceiver();
+		registerReceiver(mDistSpeechRec, new IntentFilter(RoboBrainIntent.ACTION_SPEECH));
 		id = RobotServiceContainer.addRobotService(MockRobotService.this);
 	}
 
@@ -94,7 +97,7 @@ public class MockRobotService extends RobotService {
 
 	@Override
 	public DistributingSpeechReceiver getDistributingSpeechReceiver() {
-		return distSpeechRec;
+		return mDistSpeechRec;
 	}
 
 	@Override
@@ -116,4 +119,10 @@ public class MockRobotService extends RobotService {
 		sendBroadcast(intent);
 	}
 
+	public void destroy() {
+		if (!mIsDestroyed) {
+			mIsDestroyed = true;
+			unregisterReceiver(mDistSpeechRec);
+		}
+	}
 }

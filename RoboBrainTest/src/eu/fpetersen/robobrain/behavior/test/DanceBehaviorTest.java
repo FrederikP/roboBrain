@@ -30,6 +30,7 @@ import eu.fpetersen.robobrain.behavior.DanceBehavior;
 import eu.fpetersen.robobrain.color.RgbColor;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
+import eu.fpetersen.robobrain.test.mock.MockRobotService;
 import eu.fpetersen.robobrain.test.util.Helper;
 
 /**
@@ -41,9 +42,12 @@ import eu.fpetersen.robobrain.test.util.Helper;
  */
 public class DanceBehaviorTest extends AndroidTestCase {
 
+	private MockRobotService mService;
+
 	@Override
 	protected void setUp() throws Exception {
 		System.setProperty(getContext().getString(R.string.envvar_testing), "true");
+		mService = new MockRobotService(getContext());
 		super.setUp();
 	}
 
@@ -51,7 +55,7 @@ public class DanceBehaviorTest extends AndroidTestCase {
 	 * Tries to test and cover as much of the {@link DanceBehavior} as possible
 	 */
 	public void testRunningDanceBehavior() {
-		MockRobotFactory fact = new MockRobotFactory(getContext());
+		MockRobotFactory fact = new MockRobotFactory(mService);
 		Robot robot = fact.createSimpleRobot("TestBot");
 		Behavior danceB = new DanceBehavior();
 		BehaviorInitializer initializer = new BehaviorInitializer("DanceBehavior", "Dance");
@@ -80,6 +84,15 @@ public class DanceBehaviorTest extends AndroidTestCase {
 		Helper.sleepMillis(200);
 		assertFalse(danceB.isTurnedOn());
 
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		if (mService != null) {
+			mService.destroy();
+		}
+		// ///CLOVER:FLUSH
+		super.tearDown();
 	}
 
 }

@@ -42,13 +42,15 @@ import eu.fpetersen.robobrain.test.mock.MockRobotService;
  */
 public class RobotFactoryTest extends AndroidTestCase {
 
+	private MockRobotService mService;
+
 	/**
 	 * Creates really simple robot, no parts, no file This tests a class in the
 	 * Test Project. Just to make sure, nothing goes wrong there
 	 */
 	public void testSimpleRobotCreation() {
 		String robotName = "TestBot";
-		MockRobotFactory factory = new MockRobotFactory(getContext());
+		MockRobotFactory factory = new MockRobotFactory(mService);
 		Robot robot = factory.createSimpleRobot("TestBot");
 		assertNotNull(robot);
 		assertEquals(robot.getName(), robotName);
@@ -59,8 +61,8 @@ public class RobotFactoryTest extends AndroidTestCase {
 	 */
 	public void testXmlRobotCreation() {
 		InputStream robotXml = getContext().getResources().openRawResource(R.raw.testbot);
-		Robot robot = RobotFactory.getInstance(new MockRobotService(getContext()))
-				.createRobotFromXml(robotXml);
+		mService = new MockRobotService(getContext());
+		Robot robot = RobotFactory.getInstance(mService).createRobotFromXml(robotXml);
 		assertNotNull(robot);
 		assertEquals("TESTBOT", robot.getName());
 		assertNotNull(robot.getMainMotor());
@@ -72,6 +74,9 @@ public class RobotFactoryTest extends AndroidTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
+		if (mService != null) {
+			mService.destroy();
+		}
 		// ///CLOVER:FLUSH
 		super.tearDown();
 	}

@@ -25,7 +25,6 @@ package eu.fpetersen.robobrain.test.mock;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.content.Context;
 import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.ProximitySensor;
 import eu.fpetersen.robobrain.robot.RgbLed;
@@ -45,8 +44,9 @@ public class MockRobotFactory {
 
 	private RobotService mService;
 
-	public MockRobotFactory(Context context) {
-		mService = new MockRobotService(context);
+	public MockRobotFactory(RobotService robotService) {
+		mService = robotService;
+		;
 	}
 
 	/**

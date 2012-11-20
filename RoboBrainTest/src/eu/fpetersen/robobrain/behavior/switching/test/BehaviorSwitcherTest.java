@@ -33,6 +33,7 @@ import eu.fpetersen.robobrain.behavior.ObstAvoidanceBehavior;
 import eu.fpetersen.robobrain.behavior.switching.BehaviorSwitcher;
 import eu.fpetersen.robobrain.communication.CommandCenter;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.speech.SpeechResultManager;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 import eu.fpetersen.robobrain.test.util.Helper;
@@ -46,17 +47,17 @@ import eu.fpetersen.robobrain.test.util.Helper;
 public class BehaviorSwitcherTest extends AndroidTestCase {
 
 	private BehaviorSwitcher mSwitcher;
-	private MockRobotService service;
+	private MockRobotService mService;
 
 	@Override
 	protected void setUp() throws Exception {
-		service = new MockRobotService(getContext());
-		mSwitcher = new BehaviorSwitcher(service);
+		mService = new MockRobotService(getContext());
+		mSwitcher = new BehaviorSwitcher(mService);
 		super.setUp();
 	}
 
 	public void testStartingAndStoppingBehavior() {
-		MockRobotFactory fac = new MockRobotFactory(getContext());
+		MockRobotFactory fac = new MockRobotFactory(mService);
 		Robot robot = fac.createSimpleRobot("TESTBOT");
 		List<Behavior> behaviors = new ArrayList<Behavior>();
 
@@ -67,16 +68,16 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 
 		behaviors.add(simpleBehavior);
 
-		service.addCC(robot, behaviors);
+		mService.addCC(robot, behaviors);
 
-		Behavior behavior = service.getBehaviorForUUID(simpleBehavior.getId());
+		Behavior behavior = mService.getBehaviorForUUID(simpleBehavior.getId());
 		assertNotNull(behavior);
 		assertEquals(simpleBehavior, behavior);
 
 		mSwitcher.startBehavior(simpleBehavior.getId());
 		Helper.sleepMillis(200);
 
-		CommandCenter cc = service.getCCForAddress(robot.getAddress());
+		CommandCenter cc = mService.getCCForAddress(robot.getAddress());
 		assertNotNull(cc);
 		assertTrue(simpleBehavior.isTurnedOn());
 
@@ -91,7 +92,7 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 	}
 
 	public void testStartingBehaviorWhenOtherIsRunning() {
-		MockRobotFactory fac = new MockRobotFactory(getContext());
+		MockRobotFactory fac = new MockRobotFactory(mService);
 		Robot robot = fac.createSimpleRobot("TESTBOT");
 		List<Behavior> behaviors = new ArrayList<Behavior>();
 
@@ -109,25 +110,25 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 
 		behaviors.add(obstBehavior);
 
-		service.addCC(robot, behaviors);
+		mService.addCC(robot, behaviors);
 
 		// Start one service
 
-		Behavior behavior = service.getBehaviorForUUID(simpleBehavior.getId());
+		Behavior behavior = mService.getBehaviorForUUID(simpleBehavior.getId());
 		assertNotNull(behavior);
 		assertEquals(simpleBehavior, behavior);
 
 		mSwitcher.startBehavior(simpleBehavior.getId());
 		Helper.sleepMillis(200);
 
-		CommandCenter cc = service.getCCForAddress(robot.getAddress());
+		CommandCenter cc = mService.getCCForAddress(robot.getAddress());
 		assertNotNull(cc);
 		assertTrue(simpleBehavior.isTurnedOn());
 
 		assertEquals(cc.getRunningBehavior(), simpleBehavior);
 
 		// Start other service
-		behavior = service.getBehaviorForUUID(obstBehavior.getId());
+		behavior = mService.getBehaviorForUUID(obstBehavior.getId());
 		assertNotNull(behavior);
 		assertEquals(obstBehavior, behavior);
 
@@ -151,7 +152,7 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 	}
 
 	public void testTurningOffAllBehavior() {
-		MockRobotFactory fac = new MockRobotFactory(getContext());
+		MockRobotFactory fac = new MockRobotFactory(mService);
 		Robot robot = fac.createSimpleRobot("TESTBOT");
 		List<Behavior> behaviors = new ArrayList<Behavior>();
 
@@ -162,16 +163,16 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 
 		behaviors.add(simpleBehavior);
 
-		service.addCC(robot, behaviors);
+		mService.addCC(robot, behaviors);
 
-		Behavior behavior = service.getBehaviorForUUID(simpleBehavior.getId());
+		Behavior behavior = mService.getBehaviorForUUID(simpleBehavior.getId());
 		assertNotNull(behavior);
 		assertEquals(simpleBehavior, behavior);
 
 		mSwitcher.startBehavior(simpleBehavior.getId());
 		Helper.sleepMillis(200);
 
-		CommandCenter cc = service.getCCForAddress(robot.getAddress());
+		CommandCenter cc = mService.getCCForAddress(robot.getAddress());
 		assertNotNull(cc);
 		assertTrue(simpleBehavior.isTurnedOn());
 
@@ -185,9 +186,62 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 
 	}
 
+	// Test speechCommanding Behavior, some without speech attribute
+	public void testSpeechCommand() {
+		MockRobotFactory fac = new MockRobotFactory(mService);
+		Robot robot = fac.createSimpleRobot("TESTBOT");
+		List<Behavior> behaviors = new ArrayList<Behavior>();
+
+		Behavior simpleBehavior = new BackAndForthBehavior();
+		BehaviorInitializer simpleBehaviorInitializer = new BehaviorInitializer(
+				"BackAndForthBehavior", "");
+		simpleBehaviorInitializer.initialize(simpleBehavior, robot);
+
+		behaviors.add(simpleBehavior);
+
+		Behavior obstBehavior = new ObstAvoidanceBehavior();
+		BehaviorInitializer obstBehaviorInitializer = new BehaviorInitializer("ObstacleBehavior",
+				"obstacle");
+		obstBehaviorInitializer.initialize(obstBehavior, robot);
+
+		behaviors.add(obstBehavior);
+
+		mService.addCC(robot, behaviors);
+
+		Behavior behavior = mService.getBehaviorForUUID(simpleBehavior.getId());
+		assertNotNull(behavior);
+		assertEquals(simpleBehavior, behavior);
+
+		List<String> mockedSpeechResults = new ArrayList<String>();
+		mockedSpeechResults.add("bla bli blu");
+		mockedSpeechResults.add("start notexistant behavior");
+		mockedSpeechResults.add("start obstacle behavior");
+		SpeechResultManager.getInstance().allocateNewResults(getContext(), mockedSpeechResults);
+
+		Helper.sleepMillis(200);
+
+		CommandCenter cc = mService.getCCForAddress(robot.getAddress());
+		assertNotNull(cc);
+		assertTrue(obstBehavior.isTurnedOn());
+
+		assertEquals(cc.getRunningBehavior(), obstBehavior);
+
+		mockedSpeechResults = new ArrayList<String>();
+		mockedSpeechResults.add("bla bli blu");
+		mockedSpeechResults.add("start notexistant behavior");
+		mockedSpeechResults.add("stop all behavior");
+		SpeechResultManager.getInstance().allocateNewResults(getContext(), mockedSpeechResults);
+		Helper.sleepMillis(200);
+
+		assertFalse(obstBehavior.isTurnedOn());
+		assertNull(cc.getRunningBehavior());
+
+	}
+
 	@Override
 	protected void tearDown() throws Exception {
 		mSwitcher.destroy();
+		mService.destroy();
 		super.tearDown();
 	}
 }

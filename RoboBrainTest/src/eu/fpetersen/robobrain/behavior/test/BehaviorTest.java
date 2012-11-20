@@ -30,11 +30,15 @@ import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
+import eu.fpetersen.robobrain.test.mock.MockRobotService;
 import eu.fpetersen.robobrain.test.util.Helper;
 
 public class BehaviorTest extends AndroidTestCase {
 
+	private MockRobotService mService;
+
 	public void testBasicBehavior() {
+		mService = new MockRobotService(getContext());
 		final String started = "started";
 
 		final Map<String, Boolean> testMap = new HashMap<String, Boolean>();
@@ -45,7 +49,8 @@ public class BehaviorTest extends AndroidTestCase {
 
 			@Override
 			public Robot getRobot() {
-				MockRobotFactory factory = new MockRobotFactory(getContext());
+				MockRobotFactory factory = new MockRobotFactory(mService);
+				;
 				Robot robot = factory.createSimpleRobot("TestBot");
 				return robot;
 			}
@@ -106,6 +111,9 @@ public class BehaviorTest extends AndroidTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
+		if (mService != null) {
+			mService.destroy();
+		}
 		// ///CLOVER:FLUSH
 		super.tearDown();
 	}

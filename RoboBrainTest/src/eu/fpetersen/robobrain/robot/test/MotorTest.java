@@ -31,7 +31,6 @@ import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
 import eu.fpetersen.robobrain.robot.RobotPartInitializer;
-import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
@@ -43,14 +42,16 @@ import eu.fpetersen.robobrain.test.mock.MockRobotService;
  */
 public class MotorTest extends AndroidTestCase {
 
+	private MockRobotService mService;
+
 	/**
 	 * Test if Motor is in the right state, after called methods
 	 */
 	public void testStateManagement() {
-		RobotService service = new MockRobotService(getContext());
+		mService = new MockRobotService(getContext());
 		int speed = 200;
 		int angle = 90;
-		MockRobotFactory factory = new MockRobotFactory(getContext());
+		MockRobotFactory factory = new MockRobotFactory(mService);
 		Robot mockRobot = factory.createSimpleRobot("TestBot");
 		Map<String, Character> flags = new HashMap<String, Character>();
 		flags.put("advance", 'A');
@@ -60,7 +61,7 @@ public class MotorTest extends AndroidTestCase {
 		flags.put("right", 'R');
 
 		RobotPartInitializer initializer = new RobotPartInitializer("Motor", mockRobot, flags);
-		Motor motor = (Motor) RobotPartFactory.getInstance(service).createRobotPart("Motor",
+		Motor motor = (Motor) RobotPartFactory.getInstance(mService).createRobotPart("Motor",
 				initializer);
 
 		motor.advance(speed);
@@ -100,6 +101,9 @@ public class MotorTest extends AndroidTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
+		if (mService != null) {
+			mService.destroy();
+		}
 		// ///CLOVER:FLUSH
 		super.tearDown();
 	}

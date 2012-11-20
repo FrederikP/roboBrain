@@ -30,6 +30,7 @@ import eu.fpetersen.robobrain.robot.RgbLed;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.Servo;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
+import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**
  * Tests the {@link Requirements} class
@@ -41,9 +42,12 @@ public class RequirementsTest extends AndroidTestCase {
 
 	private Robot mockRobot;
 
+	private MockRobotService mRobotService;
+
 	@Override
 	protected void setUp() throws Exception {
-		MockRobotFactory fact = new MockRobotFactory(getContext());
+		mRobotService = new MockRobotService(getContext());
+		MockRobotFactory fact = new MockRobotFactory(mRobotService);
 		mockRobot = fact.createSimpleRobot("TestBot");
 		super.setUp();
 	}
@@ -86,6 +90,14 @@ public class RequirementsTest extends AndroidTestCase {
 
 		// Test negative
 		assertFalse(requirements.fulfillsRequirements(mockRobot));
+	}
+
+	@Override
+	protected void tearDown() throws Exception {
+		if (mRobotService != null) {
+			mRobotService.destroy();
+		}
+		super.tearDown();
 	}
 
 }

@@ -30,7 +30,6 @@ import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.BehaviorInitializer;
 import eu.fpetersen.robobrain.behavior.BehaviorMappingFactory;
-import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
 /**
@@ -42,11 +41,13 @@ import eu.fpetersen.robobrain.test.mock.MockRobotService;
  */
 public class BehaviorMappingFactoryTest extends AndroidTestCase {
 
+	private MockRobotService mService;
+
 	public void testCreatingBehaviorMappingFromXml() {
-		RobotService service = new MockRobotService(getContext());
+		mService = new MockRobotService(getContext());
 		InputStream mappingXml = getContext().getResources().openRawResource(R.raw.behaviormapping);
 		assertNotNull(mappingXml);
-		BehaviorMappingFactory bmFac = BehaviorMappingFactory.getInstance(service);
+		BehaviorMappingFactory bmFac = BehaviorMappingFactory.getInstance(mService);
 		assertNotNull(bmFac);
 		Map<String, List<BehaviorInitializer>> mapping = bmFac.createMappings(mappingXml);
 		assertNotNull(mapping);
@@ -58,6 +59,9 @@ public class BehaviorMappingFactoryTest extends AndroidTestCase {
 
 	@Override
 	protected void tearDown() throws Exception {
+		if (mService != null) {
+			mService.destroy();
+		}
 		// ///CLOVER:FLUSH
 		super.tearDown();
 	}

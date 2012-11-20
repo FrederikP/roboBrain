@@ -55,7 +55,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 	private Starter starterActivity;
 
-	private MockRobotService robotService;
+	private MockRobotService mRobotService;
 
 	public StarterTest() {
 		super(Starter.class);
@@ -64,14 +64,6 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	@Override
 	protected void setUp() throws Exception {
 		starterActivity = getActivity();
-		robotService = new MockRobotService(starterActivity);
-		MockRobotFactory factory = new MockRobotFactory(starterActivity);
-		Robot robot = factory.createSimpleRobot("TestBot");
-		Behavior b1 = new BackAndForthBehavior();
-		b1.initialize(robot, "BackAndForth", "TestSpeechName");
-		ArrayList<Behavior> behaviors = new ArrayList<Behavior>();
-		behaviors.add(b1);
-		robotService.addCC(robot, behaviors);
 		System.setProperty(starterActivity.getString(R.string.envvar_testing), "true");
 		super.setUp();
 	}
@@ -80,7 +72,15 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 * Test toggling the RoboBrain Service from the UI
 	 */
 	public void testStatusToggle() {
-		assertFalse(robotService.isRunning());
+		mRobotService = new MockRobotService(starterActivity);
+		MockRobotFactory factory = new MockRobotFactory(mRobotService);
+		Robot robot = factory.createSimpleRobot("TestBot");
+		Behavior b1 = new BackAndForthBehavior();
+		b1.initialize(robot, "BackAndForth", "TestSpeechName");
+		ArrayList<Behavior> behaviors = new ArrayList<Behavior>();
+		behaviors.add(b1);
+		mRobotService.addCC(robot, behaviors);
+		assertFalse(mRobotService.isRunning());
 		final TextView statusTV = (TextView) starterActivity.findViewById(R.id.status_textview);
 		final ToggleButton toggleButton = (ToggleButton) starterActivity
 				.findViewById(R.id.togglestatus_button);
@@ -102,14 +102,14 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		}
 
 		// set mock service to running
-		robotService.setRunning(true);
-		assertTrue(robotService.isRunning());
+		mRobotService.setRunning(true);
+		assertTrue(mRobotService.isRunning());
 
 		Helper.sleepMillis(3000);
 
 		// Overwrite real Service with Mock, because we only want to check this
 		// Activity
-		robotService.broadcastUIUpdateIntent(false);
+		mRobotService.broadcastUIUpdateIntent(false);
 
 		TextView robotNameView = getRobotNameTextView();
 		int seconds = 0;
@@ -122,7 +122,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		Helper.sleepMillis(1000);
 
-		assertTrue(robotService.isRunning());
+		assertTrue(mRobotService.isRunning());
 		assertEquals("Started!", statusTV.getText());
 
 		int tableChilds = starterActivity.getRobotBehaviorTable().getChildCount();
@@ -148,16 +148,16 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		}
 
 		// set mock service to not running
-		robotService.setRunning(false);
+		mRobotService.setRunning(false);
 
 		// Overwrite real Service with Mock, because we only want to check this
 		// Activity
-		robotService.broadcastUIUpdateIntent(true);
+		mRobotService.broadcastUIUpdateIntent(true);
 
 		Helper.sleepMillis(3000);
 
 		assertEquals("Stopped!", statusTV.getText());
-		assertFalse(robotService.isRunning());
+		assertFalse(mRobotService.isRunning());
 
 		tableChilds = starterActivity.getRobotBehaviorTable().getChildCount();
 
@@ -290,6 +290,10 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 	@Override
 	protected void tearDown() throws Exception {
+		if (mRobotService != null) {
+			mRobotService.destroy();
+		}
+		getInstrumentation().waitForIdleSync();
 		// ///CLOVER:FLUSH
 		starterActivity.finish();
 		super.tearDown();
