@@ -39,7 +39,6 @@ import eu.fpetersen.robobrain.robot.RgbLed;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.Servo;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
-import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
  * This Behavior reacts to speech commands. For now it changes the Robot's LED
@@ -95,8 +94,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 				if (colorMatch) {
 					RgbColor color = mColorTable.getColorForName(colorName);
-					RoboLog.log(getRobot().getRobotService(), "Displaying color: " + colorName,
-							false);
+					mLog.log("Displaying color: " + colorName, false);
 					led.set(color.getRed(), color.getGreen(), color.getBlue());
 					break;
 				}
@@ -144,8 +142,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 				|| SpeechRecognizer.isRecognitionAvailable(getRobot().getRobotService())) {
 			super.startBehavior();
 		} else {
-			RoboLog.alertWarning(getRobot().getRobotService(),
-					"Cannot connect to speech Recognition Service.");
+			mLog.alertWarning("Cannot connect to speech Recognition Service.");
 			stopBehavior();
 		}
 
@@ -156,12 +153,12 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 		if (getRobot().getMainMotor().getState() != MotorState.STOPPED) {
 			if (getRobot().getFrontSensor().getValue() < 30
 					&& getRobot().getMainMotor().getState() != MotorState.FORWARD) {
-				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in front", true);
+				mLog.log("Stopping due to obstacle in front", true);
 				getRobot().getMainMotor().stop(0);
 			}
 			if (getRobot().getBackSensor().getValue() == 0
 					&& getRobot().getMainMotor().getState() != MotorState.BACKWARD) {
-				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in back", true);
+				mLog.log("Stopping due to obstacle in back", true);
 				getRobot().getMainMotor().stop(0);
 			}
 		}
@@ -192,8 +189,7 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 		if (motor.getState() != MotorState.STOPPED) {
 			for (String resultLine : results) {
 				if (resultLine.toLowerCase(Locale.US).contains("stop")) {
-					RoboLog.log(getRobot().getRobotService(), "Received voice command to stop",
-							true);
+					mLog.log("Received voice command to stop", true);
 					motor.stop(0);
 					break;
 				}
@@ -202,23 +198,19 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 			// If stop is not in results, do whatever is found first
 			for (String resultLine : results) {
 				if (resultLine.toLowerCase(Locale.US).contains("forward")) {
-					RoboLog.log(getRobot().getRobotService(), "Received voice command to advance",
-							true);
+					mLog.log("Received voice command to advance", true);
 					motor.advance(SPEED);
 					break;
 				} else if (resultLine.toLowerCase(Locale.US).contains("backward")) {
-					RoboLog.log(getRobot().getRobotService(), "Received voice command to backoff",
-							true);
+					mLog.log("Received voice command to backoff", true);
 					motor.backOff(SPEED);
 					break;
 				} else if (resultLine.toLowerCase(Locale.US).contains("right")) {
-					RoboLog.log(getRobot().getRobotService(),
-							"Received voice command to turn right", true);
+					mLog.log("Received voice command to turn right", true);
 					motor.turnRight(ANGLE);
 					break;
 				} else if (resultLine.toLowerCase(Locale.US).contains("left")) {
-					RoboLog.log(getRobot().getRobotService(),
-							"Received voice command to turn left", true);
+					mLog.log("Received voice command to turn left", true);
 					motor.turnLeft(ANGLE);
 					break;
 				}

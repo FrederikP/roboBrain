@@ -44,7 +44,7 @@ public class XmlParserHelper {
 	 * @throws XmlPullParserException
 	 * @throws IOException
 	 */
-	public static void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
+	public void skip(XmlPullParser parser) throws XmlPullParserException, IOException {
 		if (parser.getEventType() != XmlPullParser.START_TAG) {
 			throw new IllegalStateException();
 		}

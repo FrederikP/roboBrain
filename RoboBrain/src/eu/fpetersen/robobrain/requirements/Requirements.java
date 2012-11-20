@@ -53,17 +53,18 @@ public class Requirements {
 	}
 
 	public boolean fulfillsRequirements(Robot robot) {
+		RoboLog log = new RoboLog("Requirements", robot.getRobotService());
 		for (String id : mPartsRequired.keySet()) {
 			RobotPart part = robot.getPart(id);
 			if (part == null) {
-				RoboLog.alertError(robot.getRobotService(), "Robot " + robot.getName()
+				log.alertError("Robot " + robot.getName()
 						+ " does not fulfill Requirements: Part with id " + id
 						+ " could not be found");
 				return false;
 			}
 			String typeName = part.getClass().getName();
 			if (!typeName.matches(mPartsRequired.get(id))) {
-				RoboLog.alertError(robot.getRobotService(), "Robot " + robot.getName()
+				log.alertError("Robot " + robot.getName()
 						+ " does not fulfill Requirements: Part with id " + id
 						+ " is not of type: " + mPartsRequired.get(id));
 				return false;

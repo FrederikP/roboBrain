@@ -35,9 +35,17 @@ import eu.fpetersen.robobrain.util.SleepHelper;
  */
 public class SleepHelperTest extends AndroidTestCase {
 
+	private SleepHelper sleepHelper;
+
+	@Override
+	protected void setUp() throws Exception {
+		sleepHelper = new SleepHelper(getContext());
+		super.setUp();
+	}
+
 	public void testSleeping() {
 		long millis = System.currentTimeMillis();
-		SleepHelper.sleepMillis(getContext(), 200);
+		sleepHelper.sleepMillis(200);
 		assertTrue(System.currentTimeMillis() - 200 >= millis);
 	}
 
@@ -45,7 +53,7 @@ public class SleepHelperTest extends AndroidTestCase {
 		Runnable sleepTask = new Runnable() {
 
 			public void run() {
-				SleepHelper.sleepMillis(getContext(), 2000);
+				sleepHelper.sleepMillis(2000);
 			}
 		};
 		final Thread sleepThread = new Thread(sleepTask);

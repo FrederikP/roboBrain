@@ -52,6 +52,8 @@ public abstract class Behavior {
 	private String mSpeechName;
 	private Requirements mRequirements = new Requirements();
 
+	protected RoboLog mLog;
+
 	/**
 	 * Is to be called right after creating a new instance of this class. It
 	 * basically has constructor functionality to allow dynamic contruction of
@@ -69,6 +71,7 @@ public abstract class Behavior {
 		this.mRobot = robot;
 		this.mName = name;
 		this.mSpeechName = speechName;
+		mLog = new RoboLog("Behavior", robot.getRobotService());
 	}
 
 	/**
@@ -88,8 +91,7 @@ public abstract class Behavior {
 		Runnable startTask = new Runnable() {
 
 			public void run() {
-				RoboLog.log(getRobot().getRobotService(), "Started behavior: " + mName
-						+ " for robot: " + getRobot().getName(), true);
+				mLog.log("Started behavior: " + mName + " for robot: " + getRobot().getName(), true);
 				if (mTurnedOn == false) {
 
 					mTurnedOn = true;
@@ -127,8 +129,7 @@ public abstract class Behavior {
 	 */
 	public void stopBehavior() {
 		this.mTurnedOn = false;
-		RoboLog.log(getRobot().getRobotService(), "Stopped behavior: " + mName + " for robot: "
-				+ getRobot().getName(), true);
+		mLog.log("Stopped behavior: " + mName + " for robot: " + getRobot().getName(), true);
 		updateBehaviorStatusInUI();
 	}
 
@@ -164,7 +165,7 @@ public abstract class Behavior {
 	 *            Message that is to be displayed in the Console UI
 	 */
 	public void toConsole(String message) {
-		RoboLog.log(getRobot().getRobotService(), message, true);
+		mLog.log(message, true);
 	}
 
 	/**

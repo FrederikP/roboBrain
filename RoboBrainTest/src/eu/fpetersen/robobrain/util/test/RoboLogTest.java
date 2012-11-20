@@ -35,12 +35,12 @@ import eu.fpetersen.robobrain.util.RoboLog;
  * @author Frederik Petersen
  * 
  */
-@SuppressWarnings("rawtypes")
-public class RoboLogTest extends ActivityInstrumentationTestCase2 {
+public class RoboLogTest extends ActivityInstrumentationTestCase2<Console> {
 
 	private Console consoleActivity;
 
-	@SuppressWarnings("unchecked")
+	private RoboLog mLog;
+
 	public RoboLogTest() {
 		super(Console.class);
 	}
@@ -48,7 +48,8 @@ public class RoboLogTest extends ActivityInstrumentationTestCase2 {
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		consoleActivity = (Console) getActivity();
+		consoleActivity = getActivity();
+		mLog = new RoboLog("RoboLogTest", consoleActivity);
 	}
 
 	/**
@@ -61,7 +62,7 @@ public class RoboLogTest extends ActivityInstrumentationTestCase2 {
 
 		getInstrumentation().waitForIdleSync();
 
-		RoboLog.log(consoleActivity, findThis, true);
+		mLog.log(findThis, true);
 
 		getInstrumentation().waitForIdleSync();
 

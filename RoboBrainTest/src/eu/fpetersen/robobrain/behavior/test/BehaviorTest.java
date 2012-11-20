@@ -27,6 +27,7 @@ import java.util.Map;
 
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.behavior.Behavior;
+import eu.fpetersen.robobrain.behavior.BehaviorInitializer;
 import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
@@ -80,6 +81,12 @@ public class BehaviorTest extends AndroidTestCase {
 				// Nothing to setup for now
 			}
 		};
+
+		BehaviorInitializer initializer = new BehaviorInitializer("TestBehavior", "Test");
+		MockRobotFactory fact = new MockRobotFactory(mService);
+		Robot simpleRobot = fact.createSimpleRobot("TestBot");
+
+		initializer.initialize(behavior, simpleRobot);
 
 		Runnable runThis = new Runnable() {
 

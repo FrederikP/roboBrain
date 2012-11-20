@@ -35,6 +35,14 @@ import android.content.pm.PackageManager.NameNotFoundException;
  */
 public class VersionHelper {
 
+	private RoboLog mLog;
+	private Context mContext;
+
+	public VersionHelper(Context context) {
+		mContext = context;
+		mLog = new RoboLog("VersionHelper", context);
+	}
+
 	/**
 	 * Returns version number of RoboBrain app for the given PackageManager
 	 * 
@@ -42,15 +50,15 @@ public class VersionHelper {
 	 * @param context
 	 * @return Version of Robobrain, Empty String if it could not be found
 	 */
-	public static String getVersion(PackageManager packageManager, Context context) {
+	public String getVersion(PackageManager packageManager) {
 		String version = "";
 		try {
-			PackageInfo pInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+			PackageInfo pInfo = packageManager.getPackageInfo(mContext.getPackageName(), 0);
 			if (pInfo != null) {
 				version = pInfo.versionName;
 			}
 		} catch (NameNotFoundException e) {
-			RoboLog.alertError(context, "Version could not be set");
+			mLog.alertError("Version could not be set");
 		}
 
 		return version;

@@ -36,7 +36,6 @@ import android.util.Xml;
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
-import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.XmlParserHelper;
 
 /**
@@ -54,8 +53,11 @@ public class RobotFactory extends RoboBrainFactory {
 	 */
 	private static final String NS = null;
 
+	private XmlParserHelper mXmlParserHelper;
+
 	private RobotFactory(RobotService service) {
 		super(service);
+		mXmlParserHelper = new XmlParserHelper();
 	}
 
 	public static RobotFactory getInstance(RobotService service) {
@@ -88,8 +90,7 @@ public class RobotFactory extends RoboBrainFactory {
 				e.printStackTrace();
 			}
 		}
-		RoboLog.alertError(getService(),
-				"Something went wrong while building Robot. Check for valid and accessable conf files.");
+		mLog.alertError("Something went wrong while building Robot. Check for valid and accessable conf files.");
 		return null;
 	}
 
@@ -100,8 +101,7 @@ public class RobotFactory extends RoboBrainFactory {
 			parser.nextTag();
 			return readRobot(parser);
 		} catch (Exception e) {
-			RoboLog.alertError(getService(),
-					"Something went wrong while building Robot. Check for valid and accessable conf files.");
+			mLog.alertError("Something went wrong while building Robot. Check for valid and accessable conf files.");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -135,7 +135,7 @@ public class RobotFactory extends RoboBrainFactory {
 			if (name.equals("parts")) {
 				addParts(parser, robot);
 			} else {
-				XmlParserHelper.skip(parser);
+				mXmlParserHelper.skip(parser);
 			}
 		}
 
@@ -164,7 +164,7 @@ public class RobotFactory extends RoboBrainFactory {
 				readInPart(parser, robot);
 
 			} else {
-				XmlParserHelper.skip(parser);
+				mXmlParserHelper.skip(parser);
 			}
 		}
 	}
@@ -194,7 +194,7 @@ public class RobotFactory extends RoboBrainFactory {
 			if (name.equals("flags")) {
 				flags = readInFlags(parser);
 			} else {
-				XmlParserHelper.skip(parser);
+				mXmlParserHelper.skip(parser);
 			}
 		}
 		RobotPartInitializer initializer = new RobotPartInitializer(id, robot, flags);
@@ -230,7 +230,7 @@ public class RobotFactory extends RoboBrainFactory {
 				if (name.equals("flag")) {
 					readInFlag(flags, parser);
 				} else {
-					XmlParserHelper.skip(parser);
+					mXmlParserHelper.skip(parser);
 				}
 			}
 			parser.require(XmlPullParser.END_TAG, NS, "flags");
@@ -264,8 +264,9 @@ public class RobotFactory extends RoboBrainFactory {
 	 * @return Map of Robots with names
 	 */
 	public Map<String, Robot> createRobots() {
+		ExternalStorageManager esManager = new ExternalStorageManager(getService());
 		Map<String, Robot> robots = new HashMap<String, Robot>();
-		File robotsXmlDir = ExternalStorageManager.getRobotsXmlDir(getService());
+		File robotsXmlDir = esManager.getRobotsXmlDir();
 		try {
 			for (File robotXml : robotsXmlDir.listFiles()) {
 				if (robotXml.getAbsolutePath().endsWith(".xml")) {
@@ -274,8 +275,7 @@ public class RobotFactory extends RoboBrainFactory {
 				}
 			}
 		} catch (NullPointerException e) {
-			RoboLog.alertError(getService(),
-					"SDCard could not be accessed. Please check if SDCard is mounted.");
+			mLog.alertError("SDCard could not be accessed. Please check if SDCard is mounted.");
 		}
 		return robots;
 	}

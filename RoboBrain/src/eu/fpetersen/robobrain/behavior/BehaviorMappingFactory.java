@@ -37,7 +37,6 @@ import android.util.Xml;
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
-import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.XmlParserHelper;
 
 /**
@@ -51,9 +50,11 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 
 	private static BehaviorMappingFactory sInstance;
 	private static final String NS = null;
+	private XmlParserHelper mXmlParserHelper;
 
 	private BehaviorMappingFactory(RobotService service) {
 		super(service);
+		mXmlParserHelper = new XmlParserHelper();
 	}
 
 	/**
@@ -67,10 +68,10 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 	 * @return Mapping of robotname to behaviornames.
 	 */
 	public Map<String, List<BehaviorInitializer>> createMappings(InputStream in) {
+		ExternalStorageManager esManager = new ExternalStorageManager(getService());
 		try {
 			if (in == null) {
-				in = new FileInputStream(
-						ExternalStorageManager.getBehaviorMappingFile(getService()));
+				in = new FileInputStream(esManager.getBehaviorMappingFile());
 			}
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(in, null);
@@ -78,11 +79,9 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 			return readMappings(parser);
 		} catch (XmlPullParserException e) {
 			if (e.getMessage().contains("Premature end of document")) {
-				RoboLog.alertWarning(getService(),
-						"Empty behaviormapping.xml on sd card. Please configure...");
+				mLog.alertWarning("Empty behaviormapping.xml on sd card. Please configure...");
 			} else {
-				RoboLog.alertError(getService(),
-						"Error parsing your behaviormapping.xml. Is it valid xml?");
+				mLog.alertWarning("Error parsing your behaviormapping.xml. Is it valid xml?");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,6 +106,7 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 	 */
 	private Map<String, List<BehaviorInitializer>> readMappings(XmlPullParser parser)
 			throws XmlPullParserException, IOException {
+
 		Map<String, List<BehaviorInitializer>> behaviorMapping = new HashMap<String, List<BehaviorInitializer>>();
 		parser.require(XmlPullParser.START_TAG, NS, "behaviormapping");
 		while (parser.next() != XmlPullParser.END_TAG) {
@@ -117,7 +117,7 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 			if (name.equals("robot")) {
 				addRobotToMapping(parser, behaviorMapping);
 			} else {
-				XmlParserHelper.skip(parser);
+				mXmlParserHelper.skip(parser);
 			}
 		}
 
@@ -150,7 +150,7 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 			if (name.equals("behavior")) {
 				addBehaviorInitializer(behaviorInitializersForRobot, parser);
 			} else {
-				XmlParserHelper.skip(parser);
+				mXmlParserHelper.skip(parser);
 			}
 		}
 
@@ -178,7 +178,7 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 			behaviorInitializersForRobot.add(new BehaviorInitializer(name, parser
 					.getAttributeValue(NS, "speechName")));
 		} catch (NullPointerException e) {
-			RoboLog.alertWarning(getService(), "No SpeechName configured for behavior: " + name);
+			mLog.alertWarning("No SpeechName configured for behavior: " + name);
 			behaviorInitializersForRobot.add(new BehaviorInitializer(name, ""));
 		}
 		parser.nextTag();

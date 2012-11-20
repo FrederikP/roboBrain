@@ -38,17 +38,25 @@ import eu.fpetersen.robobrain.R;
  */
 public class ExternalStorageManager {
 
+	private Context mContext;
+
+	private RoboLog mLog;
+
+	public ExternalStorageManager(Context context) {
+		mContext = context;
+		mLog = new RoboLog("ExternalStorageManager", context);
+	}
+
 	/**
 	 * Creates new directory if it does not exist
 	 * 
 	 * @param dir
 	 *            Directory to create if it does not already exist
 	 */
-	private static void createDirIfNotExistant(Context context, File dir) {
+	private void createDirIfNotExistant(File dir) {
 		if (!dir.exists()) {
 			if (!dir.mkdir()) {
-				RoboLog.alertError(context,
-						"Directory could not be created: " + dir.getAbsolutePath());
+				mLog.alertError("Directory could not be created: " + dir.getAbsolutePath());
 			}
 		}
 	}
@@ -57,10 +65,10 @@ public class ExternalStorageManager {
 	 * 
 	 * @return File that represents robobrains root directory in sd card.
 	 */
-	public static File getRoboBrainRoot(Context context) {
+	public File getRoboBrainRoot() {
 		File roboBrainRoot = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-				+ File.separator + context.getString(R.string.sd_robobrain_root_dir));
-		createDirIfNotExistant(context, roboBrainRoot);
+				+ File.separator + mContext.getString(R.string.sd_robobrain_root_dir));
+		createDirIfNotExistant(roboBrainRoot);
 		return roboBrainRoot;
 	}
 
@@ -68,15 +76,14 @@ public class ExternalStorageManager {
 	 * 
 	 * @return File that represents robobrains behaviormapping.xml file
 	 */
-	public static File getBehaviorMappingFile(Context context) {
-		File roboBrainRoot = getRoboBrainRoot(context);
+	public File getBehaviorMappingFile() {
+		File roboBrainRoot = getRoboBrainRoot();
 		File behaviorMappingFile = new File(roboBrainRoot, "behaviormapping.xml");
 		if (!behaviorMappingFile.exists()) {
 			try {
 				behaviorMappingFile.createNewFile();
 			} catch (IOException e) {
-				RoboLog.alertError(context,
-						"Something went wrong when trying to create behaviormapping file. Check sd card and log.");
+				mLog.alertError("Something went wrong when trying to create behaviormapping file. Check sd card and log.");
 				e.printStackTrace();
 			}
 		}
@@ -88,10 +95,10 @@ public class ExternalStorageManager {
 	 * @return File that represents the directory which hold the robot
 	 *         configuration *.xml files.
 	 */
-	public static File getRobotsXmlDir(Context context) {
-		File robotsXmlDir = new File(getRoboBrainRoot(context).getAbsolutePath() + File.separator
-				+ context.getString(R.string.sd_robobrain_robots_xml_dir));
-		createDirIfNotExistant(context, robotsXmlDir);
+	public File getRobotsXmlDir() {
+		File robotsXmlDir = new File(getRoboBrainRoot().getAbsolutePath() + File.separator
+				+ mContext.getString(R.string.sd_robobrain_robots_xml_dir));
+		createDirIfNotExistant(robotsXmlDir);
 		return robotsXmlDir;
 	}
 }

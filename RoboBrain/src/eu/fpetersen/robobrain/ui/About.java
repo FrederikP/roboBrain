@@ -53,7 +53,8 @@ public class About extends Activity {
 		websiteView.setMovementMethod(LinkMovementMethod.getInstance());
 
 		// Set version
-		String version = VersionHelper.getVersion(getPackageManager(), About.this);
+		VersionHelper vHelper = new VersionHelper(About.this);
+		String version = vHelper.getVersion(getPackageManager());
 		TextView versionView = (TextView) findViewById(R.id.versionText);
 		versionView.setText(version);
 

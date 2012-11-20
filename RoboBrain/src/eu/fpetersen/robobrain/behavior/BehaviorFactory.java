@@ -27,7 +27,6 @@ import java.util.StringTokenizer;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
-import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
  * 
@@ -89,13 +88,12 @@ public class BehaviorFactory extends RoboBrainFactory {
 			initializer.setName(shortName);
 			initializer.initialize(behavior, robot);
 		} catch (InstantiationException e) {
-			RoboLog.alertWarning(getService(), "Behavior class " + name
-					+ " could not be instantiated");
+			mLog.alertWarning("Behavior class " + name + " could not be instantiated");
 		} catch (IllegalAccessException e) {
-			RoboLog.alertWarning(getService(), "Behavior class " + name
+			mLog.alertWarning("Behavior class " + name
 					+ " could not be instantiated due to the constructor having restricted access");
 		} catch (ClassNotFoundException e) {
-			RoboLog.alertWarning(getService(), "Behavior class " + name + " could not be found");
+			mLog.alertWarning("Behavior class " + name + " could not be found");
 		}
 		return behavior;
 	}

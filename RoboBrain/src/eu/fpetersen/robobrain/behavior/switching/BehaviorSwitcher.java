@@ -48,8 +48,12 @@ public class BehaviorSwitcher {
 
 	private SpeechControlledBehaviorSwitcher mSpeechControlledBehaviorSwitcher;
 
+	private RoboLog mLog;
+
 	public BehaviorSwitcher(RobotService service) {
 		mService = service;
+
+		mLog = new RoboLog("BehaviorSwitcher", service);
 
 		setupBehaviorReceiver();
 
@@ -99,7 +103,7 @@ public class BehaviorSwitcher {
 	public void startBehavior(UUID uuid) {
 		final Behavior b = mService.getBehaviorForUUID(uuid);
 		if (b == null || b.getRobot() == null) {
-			RoboLog.alertError(getRobotService(), "No CC for Behavior UUID: " + uuid);
+			mLog.alertError("No CC for Behavior UUID: " + uuid);
 			return;
 		}
 		CommandCenter cc = mService.getCCForAddress(b.getRobot().getAddress());
@@ -119,8 +123,9 @@ public class BehaviorSwitcher {
 	private void stopRunningBehavior(CommandCenter cc) {
 		Behavior runningBehavior = cc.getRunningBehavior();
 		if (runningBehavior != null) {
-			RoboLog.log(mService, "Behavior with the follwing UUID is being stopped: "
-					+ runningBehavior.getId(), true);
+			mLog.log(
+					"Behavior with the follwing UUID is being stopped: " + runningBehavior.getId(),
+					true);
 			runningBehavior.stopBehavior();
 		}
 	}
@@ -135,7 +140,7 @@ public class BehaviorSwitcher {
 	public void stopBehavior(UUID uuid) {
 		final Behavior b = mService.getBehaviorForUUID(uuid);
 		if (b == null) {
-			RoboLog.alertError(getRobotService(), "Could not find behavior for UUID: " + uuid);
+			mLog.alertError("Could not find behavior for UUID: " + uuid);
 			return;
 		}
 		b.stopBehavior();

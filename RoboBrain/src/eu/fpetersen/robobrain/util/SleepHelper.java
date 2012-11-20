@@ -32,6 +32,12 @@ import android.content.Context;
  */
 public class SleepHelper {
 
+	private RoboLog mLog;
+
+	public SleepHelper(Context context) {
+		mLog = new RoboLog("SleepHelper", context);
+	}
+
 	/**
 	 * Set the Thread to sleep for the given amount of milli seconds
 	 * 
@@ -39,11 +45,11 @@ public class SleepHelper {
 	 * @param millis
 	 *            Time to sleep in milli seconds
 	 */
-	public static void sleepMillis(Context context, long millis) {
+	public void sleepMillis(long millis) {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-			RoboLog.alertError(context, "Thread interrupted while sleeping");
+			mLog.alertError("Thread interrupted while sleeping");
 			e.printStackTrace();
 		}
 	}

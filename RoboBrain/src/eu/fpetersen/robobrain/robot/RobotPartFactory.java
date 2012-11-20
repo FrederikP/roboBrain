@@ -24,7 +24,6 @@ package eu.fpetersen.robobrain.robot;
 
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
-import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
  * Singleton factory which creates RobotParts. Dynamically chooses subclass
@@ -70,13 +69,12 @@ public class RobotPartFactory extends RoboBrainFactory {
 			part = (RobotPart) Class.forName(partClassName).newInstance();
 			initializer.initialize(part);
 		} catch (InstantiationException e) {
-			RoboLog.alertWarning(getService(), "RobotPart class " + type
-					+ " could not be instantiated");
+			mLog.alertWarning("RobotPart class " + type + " could not be instantiated");
 		} catch (IllegalAccessException e) {
-			RoboLog.alertWarning(getService(), "RobotPart class " + type
+			mLog.alertWarning("RobotPart class " + type
 					+ " could not be instantiated due to the constructor having restricted access");
 		} catch (ClassNotFoundException e) {
-			RoboLog.alertWarning(getService(), "RobotPart class " + type + " could not be found");
+			mLog.alertWarning("RobotPart class " + type + " could not be found");
 		}
 		return part;
 	}

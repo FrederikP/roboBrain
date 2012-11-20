@@ -36,7 +36,13 @@ import eu.fpetersen.robobrain.communication.RoboBrainIntent;
  */
 public class RoboLog {
 
-	private static final String TAG = "RoboLog";
+	private String mTag = "RoboLog";
+	private Context mContext = null;
+
+	public RoboLog(String tag, Context context) {
+		mTag = tag;
+		mContext = context;
+	}
 
 	/**
 	 * Log message to robobrains console and androids loggin system
@@ -48,12 +54,12 @@ public class RoboLog {
 	 *            false if it would be called way to much. This hugely
 	 *            influences performance
 	 */
-	public static void log(Context context, String message, boolean toUIConsole) {
-		Log.v(TAG, message);
+	public void log(String message, boolean toUIConsole) {
+		Log.v(mTag, message);
 		if (toUIConsole) {
 			Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
 			cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, message);
-			context.sendBroadcast(cIntent);
+			mContext.sendBroadcast(cIntent);
 		}
 	}
 
@@ -64,10 +70,10 @@ public class RoboLog {
 	 * @param message
 	 *            Error message to display to user and in log
 	 */
-	public static void alertError(Context context, String message) {
+	public void alertError(String message) {
 		String errorTag = "[ERROR]";
-		log(context, message + errorTag, true);
-		broadcastAlertIntent(message, errorTag, context);
+		log(message + errorTag, true);
+		broadcastAlertIntent(message, errorTag);
 
 	}
 
@@ -79,17 +85,23 @@ public class RoboLog {
 	 * @param message
 	 *            Warning message to display to user and in log
 	 */
-	public static void alertWarning(Context context, String message) {
+	public void alertWarning(String message) {
 		String errorTag = "[WARNING]";
-		log(context, message + errorTag, true);
-		broadcastAlertIntent(message, errorTag, context);
+		log(message + errorTag, true);
+		broadcastAlertIntent(message, errorTag);
 	}
 
-	private static void broadcastAlertIntent(String message, String errorTag, Context context) {
+	/**
+	 * Broadcast alert intent to be received by UI activity
+	 * 
+	 * @param message
+	 * @param errorTag
+	 */
+	private void broadcastAlertIntent(String message, String errorTag) {
 		Intent intent = new Intent(RoboBrainIntent.ACTION_SHOWALERT);
 		intent.putExtra(RoboBrainIntent.EXTRA_ALERTMESSAGE, message);
 		intent.putExtra(RoboBrainIntent.EXTRA_ERRORTAG, errorTag);
-		context.sendBroadcast(intent);
+		mContext.sendBroadcast(intent);
 
 	}
 

@@ -42,8 +42,11 @@ public class RobotReceiver extends BroadcastReceiver {
 
 	private RobotService mService;
 
+	private RoboLog mLog;
+
 	public RobotReceiver(RobotService service) {
 		this.mService = service;
+		mLog = new RoboLog("RobotReceiver", service);
 	}
 
 	@Override
@@ -83,7 +86,7 @@ public class RobotReceiver extends BroadcastReceiver {
 						robot.getMainMotor().delayActionDone();
 					} else if (data.startsWith(consolePrefix)) {
 						String substring = data.substring(consolePrefix.length());
-						RoboLog.log(mService, substring, true);
+						mLog.log(substring, true);
 					}
 
 					/*

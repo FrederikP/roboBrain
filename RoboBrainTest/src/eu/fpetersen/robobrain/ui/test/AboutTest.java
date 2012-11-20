@@ -25,10 +25,10 @@ package eu.fpetersen.robobrain.ui.test;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Log;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.ui.About;
-import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
  * tests the {@link About} activity
@@ -62,7 +62,7 @@ public class AboutTest extends ActivityInstrumentationTestCase2<About> {
 					mAboutActivity.getPackageName(), 0);
 			version = pInfo.versionName;
 		} catch (NameNotFoundException e) {
-			RoboLog.alertError(mAboutActivity, "Version could not be set");
+			Log.w("About", "Version could not be set");
 		}
 
 		assertFalse(version.matches(""));

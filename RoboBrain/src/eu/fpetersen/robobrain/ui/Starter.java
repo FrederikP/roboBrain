@@ -92,10 +92,14 @@ public class Starter extends Activity {
 
 	private BroadcastReceiver starterReceiver;
 
+	private RoboLog mLog;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mLog = new RoboLog("Starter", Starter.this);
+
 		setContentView(R.layout.activity_starter);
 
 		mAllOpenDialogs = new HashSet<Dialog>();
@@ -520,17 +524,18 @@ public class Starter extends Activity {
 	 * @return Dialog, or null if it wasn't found in time
 	 */
 	public AlertDialog waitForDialogToBeCreated(final List<AlertDialog> dialogs) {
+		SleepHelper sleepHelper = new SleepHelper(Starter.this);
 		if (dialogs == null) {
 			return null;
 		}
 		double waitedSecs = 0;
 		while (dialogs.size() == 0 && waitedSecs < 2) {
 			waitedSecs = waitedSecs + 0.1;
-			SleepHelper.sleepMillis(Starter.this, 100);
+			sleepHelper.sleepMillis(100);
 		}
 
 		if (dialogs.size() == 0) {
-			RoboLog.alertError(Starter.this, "Failed to create dialog in 5 secs");
+			mLog.alertError("Failed to create dialog in 5 secs");
 			return null;
 		}
 

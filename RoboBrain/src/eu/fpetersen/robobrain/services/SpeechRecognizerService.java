@@ -54,6 +54,8 @@ public class SpeechRecognizerService extends Service {
 	protected static final String TAG = "RobotBrain - SpeechRecognizerService";
 	private SpeechRecognizer mSpeechR;
 
+	private RoboLog mLog;
+
 	/**
 	 * Setup the Speech Recognizer with the Android API
 	 */
@@ -130,6 +132,8 @@ public class SpeechRecognizerService extends Service {
 
 	@Override
 	public void onCreate() {
+		mLog = new RoboLog("SpeechRecognizerService", SpeechRecognizerService.this);
+
 		if (SpeechRecognizer.isRecognitionAvailable(SpeechRecognizerService.this)) {
 			Runnable startVoiceRTask = new Runnable() {
 
@@ -140,8 +144,7 @@ public class SpeechRecognizerService extends Service {
 			Handler loopHandler = new Handler(Looper.getMainLooper());
 			loopHandler.post(startVoiceRTask);
 		} else {
-			RoboLog.alertWarning(SpeechRecognizerService.this,
-					"No Speech Recognition available on this device.");
+			mLog.alertWarning("No Speech Recognition available on this device.");
 			this.stopSelf();
 		}
 

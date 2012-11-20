@@ -35,6 +35,14 @@ import eu.fpetersen.robobrain.util.VersionHelper;
  */
 public class VersionHelperTest extends AndroidTestCase {
 
+	private VersionHelper versionHelper;
+
+	@Override
+	protected void setUp() throws Exception {
+		versionHelper = new VersionHelper(getContext());
+		super.setUp();
+	}
+
 	public void testGetVersionPositive() {
 		String versionName = "1.2";
 		MockRoboBrainPackageManager packageManager = new MockRoboBrainPackageManager();
@@ -44,7 +52,7 @@ public class VersionHelperTest extends AndroidTestCase {
 		roboBrainInfo.versionName = versionName;
 		packageManager.addPackageInfo(roboBrainInfo);
 
-		String version = VersionHelper.getVersion(packageManager, getContext());
+		String version = versionHelper.getVersion(packageManager);
 		assertNotNull(version);
 		assertEquals(versionName, version);
 	}
@@ -58,7 +66,7 @@ public class VersionHelperTest extends AndroidTestCase {
 		roboBrainInfo.versionName = versionName;
 		packageManager.addPackageInfo(roboBrainInfo);
 
-		String version = VersionHelper.getVersion(packageManager, getContext());
+		String version = versionHelper.getVersion(packageManager);
 		assertNotNull(version);
 		assertEquals("", version);
 	}

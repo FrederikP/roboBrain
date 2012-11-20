@@ -91,6 +91,8 @@ public class RobotService extends Service {
 
 	private UUID id;
 
+	private RoboLog mLog;
+
 	/**
 	 * 
 	 * @return True if service is running, false if not.
@@ -101,7 +103,9 @@ public class RobotService extends Service {
 
 	@Override
 	public void onCreate() {
-		RoboLog.log(RobotService.this, "Creating RoboBrain service", true);
+		mLog = new RoboLog("RobotService", RobotService.this);
+
+		mLog.log("Creating RoboBrain service", true);
 
 		id = RobotServiceContainer.addRobotService(RobotService.this);
 
@@ -123,8 +127,7 @@ public class RobotService extends Service {
 						CommandCenter cc = getCCForAddress(address);
 						if (cc != null) {
 							String robotName = cc.getRobot().getName();
-							RoboLog.alertError(RobotService.this, robotName
-									+ " unexpectedly disconnected.");
+							mLog.alertError(robotName + " unexpectedly disconnected.");
 						}
 
 					}
@@ -149,7 +152,7 @@ public class RobotService extends Service {
 			testingEnvvar = null;
 		}
 		final boolean testing = (testingEnvvar != null && testingEnvvar.matches("true"));
-		RoboLog.log(RobotService.this, "Starting RoboBrain service", true);
+		mLog.log("Starting RoboBrain service", true);
 		if (getAllCCs().isEmpty()) {
 			if (testing) {
 				setupCommandCentersTest();
@@ -249,22 +252,18 @@ public class RobotService extends Service {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				RoboLog.alertError(RobotService.this,
-						"Thread was interupted while waiting for connection status.");
+				mLog.alertError("Thread was interupted while waiting for connection status.");
 			}
 			waitedSeconds++;
 		}
 
 		if (waitedSeconds >= timeout) {
 			if (connectionTable.size() == 0) {
-				RoboLog.alertError(RobotService.this,
-						"There was no response from Amarino. Have you installed Amarino toolkit?");
+				mLog.alertError("There was no response from Amarino. Have you installed Amarino toolkit?");
 			} else {
-				RoboLog.alertError(
-						RobotService.this,
-						"There was no response from Amarino for at least one device. "
-								+ "Are you sure the MAC addresses in the config are correct? Is every robot"
-								+ " registered with Amarino?");
+				mLog.alertError("There was no response from Amarino for at least one device. "
+						+ "Are you sure the MAC addresses in the config are correct? Is every robot"
+						+ " registered with Amarino?");
 			}
 		}
 
@@ -273,7 +272,7 @@ public class RobotService extends Service {
 				String robotName = getCCForAddress(connectionEntry.getKey()).getRobot().getName();
 				// Device was successfully registered with Amarino. The
 				// connection failed anyways. Turned off?
-				RoboLog.alertError(RobotService.this, "Connection failed for robot: " + robotName
+				mLog.alertError("Connection failed for robot: " + robotName
 						+ ". Are you sure this robot is turned on?");
 			}
 		}
@@ -290,7 +289,7 @@ public class RobotService extends Service {
 		InputStream robotFile = getResources().openRawResource(R.raw.testbot);
 		Robot robot = robotFactory.createRobotFromXml(robotFile);
 		if (robot == null) {
-			RoboLog.alertError(RobotService.this, "Setting up test robot failed. What the heck?");
+			mLog.alertError("Setting up test robot failed. What the heck?");
 		}
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 				.getInstance(RobotService.this);
@@ -319,8 +318,7 @@ public class RobotService extends Service {
 		RobotFactory robotFactory = RobotFactory.getInstance(this);
 		Map<String, Robot> robots = robotFactory.createRobots();
 		if (robots.size() == 0) {
-			RoboLog.alertWarning(RobotService.this,
-					"No robot configured. See documentation for explanation on xml config.");
+			mLog.alertWarning("No robot configured. See documentation for explanation on xml config.");
 		}
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 				.getInstance(RobotService.this);
@@ -347,7 +345,7 @@ public class RobotService extends Service {
 
 	@Override
 	public boolean stopService(Intent name) {
-		RoboLog.log(RobotService.this, "Stopping RoboBrain service", true);
+		mLog.log("Stopping RoboBrain service", true);
 		if (mRunning) {
 			stopRunningService();
 		}
@@ -358,7 +356,7 @@ public class RobotService extends Service {
 
 	@Override
 	public void onDestroy() {
-		RoboLog.log(RobotService.this, "Destroying RoboBrain service", true);
+		mLog.log("Destroying RoboBrain service", true);
 		if (mRunning) {
 			stopRunningService();
 		}
@@ -455,7 +453,7 @@ public class RobotService extends Service {
 				return center;
 			}
 		}
-		RoboLog.alertError(RobotService.this, "CommandCenter not found for MAC: " + address);
+		mLog.alertError("CommandCenter not found for MAC: " + address);
 		return null;
 	}
 

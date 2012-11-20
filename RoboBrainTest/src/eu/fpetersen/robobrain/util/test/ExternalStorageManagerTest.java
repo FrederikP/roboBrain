@@ -34,12 +34,19 @@ import eu.fpetersen.robobrain.util.ExternalStorageManager;
  * 
  */
 public class ExternalStorageManagerTest extends AndroidTestCase {
+	private ExternalStorageManager externalStorageManager;
+
+	@Override
+	protected void setUp() throws Exception {
+		externalStorageManager = new ExternalStorageManager(getContext());
+		super.setUp();
+	}
 
 	/**
 	 * Tests if robot xml dir exists (or can be created) and can be referenced
 	 */
 	public void testGetRobotXmlDir() {
-		File file = ExternalStorageManager.getRobotsXmlDir(getContext());
+		File file = externalStorageManager.getRobotsXmlDir();
 		checkIfExists(file);
 	}
 
@@ -48,7 +55,7 @@ public class ExternalStorageManagerTest extends AndroidTestCase {
 	 * referenced
 	 */
 	public void testGetBehaviorMapping() {
-		File file = ExternalStorageManager.getBehaviorMappingFile(getContext());
+		File file = externalStorageManager.getBehaviorMappingFile();
 		checkIfExists(file);
 	}
 
@@ -56,7 +63,7 @@ public class ExternalStorageManagerTest extends AndroidTestCase {
 	 * Tests if robot root dir exists (or can be created) and can be referenced
 	 */
 	public void testRobotRootDirMapping() {
-		File file = ExternalStorageManager.getRoboBrainRoot(getContext());
+		File file = externalStorageManager.getRoboBrainRoot();
 		checkIfExists(file);
 	}
 

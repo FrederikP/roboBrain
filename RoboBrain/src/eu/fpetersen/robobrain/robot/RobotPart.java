@@ -45,6 +45,8 @@ public abstract class RobotPart {
 	private Map<String, Character> mFlags;
 	private String mId;
 
+	private RoboLog mLog;
+
 	/**
 	 * This needs to be called after instantiated the RobotPart and it exists
 	 * because the default constructor is needed to dynamically decide which
@@ -55,6 +57,7 @@ public abstract class RobotPart {
 	 * @return true if flag requirements are met, false if not
 	 */
 	protected boolean initialize(String id, Robot robot, Map<String, Character> flags) {
+		mLog = new RoboLog("RobotPart", robot.getRobotService());
 		this.mId = id;
 		this.mRobot = robot;
 		this.mFlags = flags;
@@ -62,9 +65,8 @@ public abstract class RobotPart {
 			checkForRequiredFlags();
 		} catch (RequiredFlagsNotSetException e) {
 			for (String flagId : e.getMissingFlagIds()) {
-				RoboLog.alertError(robot.getRobotService(), "Required flag with the id \"" + flagId
-						+ "\" missing for robot \"" + robot.getName() + "\" and it's part \"" + mId
-						+ "\"");
+				mLog.alertError("Required flag with the id \"" + flagId + "\" missing for robot \""
+						+ robot.getName() + "\" and it's part \"" + mId + "\"");
 			}
 			return false;
 		}
@@ -150,8 +152,7 @@ public abstract class RobotPart {
 	 */
 	public char getFlag(String id) {
 		if (!mFlags.containsKey(id)) {
-			RoboLog.alertError(mRobot.getRobotService(), "Flag with id \"" + id
-					+ "\" was not defined in xml");
+			mLog.alertError("Flag with id \"" + id + "\" was not defined in xml");
 			return ' ';
 		}
 		return mFlags.get(id);

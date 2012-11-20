@@ -34,8 +34,11 @@ public abstract class RoboBrainFactory {
 
 	private RobotService mService;
 
+	protected RoboLog mLog;
+
 	public RoboBrainFactory(RobotService service) {
 		this.mService = service;
+		mLog = new RoboLog("Factory", service);
 	}
 
 	public RobotService getService() {

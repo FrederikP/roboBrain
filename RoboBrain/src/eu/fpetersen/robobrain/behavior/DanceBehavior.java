@@ -49,7 +49,6 @@ import eu.fpetersen.robobrain.robot.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.ProximitySensor;
 import eu.fpetersen.robobrain.robot.RgbLed;
 import eu.fpetersen.robobrain.robot.Servo;
-import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
  * Make the robot play music and move to it.
@@ -92,12 +91,12 @@ public class DanceBehavior extends Behavior {
 		if (getRobot().getMainMotor().getState() != MotorState.STOPPED) {
 			if (getRobot().getFrontSensor().getValue() < 30
 					&& getRobot().getMainMotor().getState() != MotorState.FORWARD) {
-				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in front", true);
+				mLog.log("Stopping due to obstacle in front", true);
 				getRobot().getMainMotor().stop(0);
 			}
 			if (getRobot().getBackSensor().getValue() == 0
 					&& getRobot().getMainMotor().getState() != MotorState.BACKWARD) {
-				RoboLog.log(getRobot().getRobotService(), "Stopping due to obstacle in back", true);
+				mLog.log("Stopping due to obstacle in back", true);
 				getRobot().getMainMotor().stop(0);
 			}
 		}
@@ -185,8 +184,7 @@ public class DanceBehavior extends Behavior {
 		File sdcard = Environment.getExternalStorageDirectory();
 		File musicDir = new File(sdcard, "robobrain/music");
 		if (!musicDir.exists() || !musicDir.isDirectory()) {
-			RoboLog.alertError(getRobot().getRobotService(),
-					"No music can be played. No /music directory in /robobrain");
+			mLog.alertError("No music can be played. No /music directory in /robobrain");
 		} else {
 			FilenameFilter filter = new FilenameFilter() {
 
@@ -201,8 +199,7 @@ public class DanceBehavior extends Behavior {
 			String[] musicFiles = musicDir.list(filter);
 			int numberOfFiles = musicFiles.length;
 			if (musicFiles.length < 1) {
-				RoboLog.alertError(getRobot().getRobotService(),
-						"No music in directory /robobrain/music");
+				mLog.alertError("No music in directory /robobrain/music");
 			} else {
 				Random random = new Random();
 				int rand = random.nextInt(numberOfFiles);

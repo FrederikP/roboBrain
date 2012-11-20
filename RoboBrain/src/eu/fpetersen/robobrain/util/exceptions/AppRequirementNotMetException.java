@@ -46,10 +46,11 @@ public class AppRequirementNotMetException extends Exception {
 	 * @param starter
 	 */
 	public void showAlert(Context context) {
+		RoboLog log = new RoboLog("AppRequirementNotMetException", context);
 		if (mIsWarning) {
-			RoboLog.alertWarning(context, getMessage());
+			log.alertWarning(getMessage());
 		} else {
-			RoboLog.alertError(context, getMessage());
+			log.alertError(getMessage());
 		}
 	}
 
