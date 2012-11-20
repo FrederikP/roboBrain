@@ -175,7 +175,8 @@ public class Starter extends Activity {
 	 * Checks for all required App packages.
 	 */
 	private void checkForInstalledPackages() {
-		AppRequirementsChecker.checkForRequirements(Starter.this, getPackageManager());
+		AppRequirementsChecker checker = new AppRequirementsChecker(Starter.this);
+		checker.checkForRequirements(getPackageManager());
 	}
 
 	/**

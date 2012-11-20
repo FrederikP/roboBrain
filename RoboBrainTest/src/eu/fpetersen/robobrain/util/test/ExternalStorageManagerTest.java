@@ -55,7 +55,7 @@ public class ExternalStorageManagerTest extends AndroidTestCase {
 	 * referenced
 	 */
 	public void testGetBehaviorMapping() {
-		File file = externalStorageManager.getBehaviorMappingFile();
+		File file = externalStorageManager.getBehaviorMappingFile("behaviormapping.xml");
 		checkIfExists(file);
 	}
 
@@ -67,9 +67,28 @@ public class ExternalStorageManagerTest extends AndroidTestCase {
 		checkIfExists(file);
 	}
 
-	public static void checkIfExists(File file) {
+	public void checkIfExists(File file) {
 		assertNotNull(file);
 		assertTrue(file.exists());
+	}
+
+	public void testCreateDirNotPossible() {
+		File file = new File("bla" + File.separator + "blu" + File.separator + "blo");
+		assertNotNull(file);
+		assertFalse(file.exists());
+		externalStorageManager.createDirIfNotExistant(file);
+		assertFalse(file.exists());
+	}
+
+	public void testGetBehaviorMappingNotPossible() {
+		String name = "bla" + File.separator + "blu" + File.separator + "blo" + File.separator
+				+ "mapping.xml";
+		File file = new File(name);
+		assertNotNull(file);
+		assertFalse(file.exists());
+		externalStorageManager.getBehaviorMappingFile(name);
+		assertFalse(file.exists());
+
 	}
 
 	@Override

@@ -71,7 +71,7 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 		ExternalStorageManager esManager = new ExternalStorageManager(getService());
 		try {
 			if (in == null) {
-				in = new FileInputStream(esManager.getBehaviorMappingFile());
+				in = new FileInputStream(esManager.getBehaviorMappingFile("behaviormapping.xml"));
 			}
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(in, null);

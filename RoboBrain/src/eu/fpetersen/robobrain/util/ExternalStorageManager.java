@@ -53,7 +53,7 @@ public class ExternalStorageManager {
 	 * @param dir
 	 *            Directory to create if it does not already exist
 	 */
-	private void createDirIfNotExistant(File dir) {
+	public void createDirIfNotExistant(File dir) {
 		if (!dir.exists()) {
 			if (!dir.mkdir()) {
 				mLog.alertError("Directory could not be created: " + dir.getAbsolutePath());
@@ -76,9 +76,9 @@ public class ExternalStorageManager {
 	 * 
 	 * @return File that represents robobrains behaviormapping.xml file
 	 */
-	public File getBehaviorMappingFile() {
+	public File getBehaviorMappingFile(String name) {
 		File roboBrainRoot = getRoboBrainRoot();
-		File behaviorMappingFile = new File(roboBrainRoot, "behaviormapping.xml");
+		File behaviorMappingFile = new File(roboBrainRoot, name);
 		if (!behaviorMappingFile.exists()) {
 			try {
 				behaviorMappingFile.createNewFile();

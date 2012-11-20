@@ -37,6 +37,12 @@ import eu.fpetersen.robobrain.util.exceptions.AppRequirementNotMetException;
  */
 public class AppRequirementsChecker {
 
+	private Context mContext;
+
+	public AppRequirementsChecker(Context context) {
+		mContext = context;
+	}
+
 	/**
 	 * Checks for all required packages that RoboBrain needs
 	 * 
@@ -45,11 +51,11 @@ public class AppRequirementsChecker {
 	 * @return True if all packages installed with required version, false if
 	 *         not
 	 */
-	public static boolean checkForRequirements(Context context, PackageManager packageManager) {
+	public boolean checkForRequirements(PackageManager packageManager) {
 		try {
-			AppRequirementsChecker.checkForAmarino(packageManager);
+			checkForAmarino(packageManager);
 		} catch (AppRequirementNotMetException e) {
-			e.showAlert(context);
+			e.showAlert(mContext);
 			return false;
 		}
 		return true;
@@ -62,7 +68,7 @@ public class AppRequirementsChecker {
 	 * @throws AppRequirementNotMetException
 	 *             when requirement is not met
 	 */
-	private static void checkForAmarino(PackageManager packageManager)
+	private void checkForAmarino(PackageManager packageManager)
 			throws AppRequirementNotMetException {
 		List<PackageInfo> listOfAllApps = packageManager.getInstalledPackages(0);
 		Integer versionCode = null;

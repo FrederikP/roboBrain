@@ -33,6 +33,14 @@ import eu.fpetersen.robobrain.util.AppRequirementsChecker;
  */
 public class AppRequirementsCheckerTest extends AndroidTestCase {
 
+	private AppRequirementsChecker mChecker;
+
+	@Override
+	protected void setUp() throws Exception {
+		mChecker = new AppRequirementsChecker(getContext());
+		super.setUp();
+	}
+
 	/**
 	 * Emulate old Amarino Version
 	 */
@@ -45,7 +53,7 @@ public class AppRequirementsCheckerTest extends AndroidTestCase {
 
 		manager.addPackageInfo(amarinoOld);
 
-		boolean success = AppRequirementsChecker.checkForRequirements(getContext(), manager);
+		boolean success = mChecker.checkForRequirements(manager);
 
 		assertFalse(success);
 	}
@@ -60,7 +68,7 @@ public class AppRequirementsCheckerTest extends AndroidTestCase {
 
 		manager.addPackageInfo(amarinoOld);
 
-		boolean success = AppRequirementsChecker.checkForRequirements(getContext(), manager);
+		boolean success = mChecker.checkForRequirements(manager);
 
 		assertFalse(success);
 	}
@@ -77,7 +85,7 @@ public class AppRequirementsCheckerTest extends AndroidTestCase {
 
 		manager.addPackageInfo(amarinoOld);
 
-		boolean success = AppRequirementsChecker.checkForRequirements(getContext(), manager);
+		boolean success = mChecker.checkForRequirements(manager);
 
 		assertTrue(success);
 	}
