@@ -52,8 +52,9 @@ public final class R {
     }
     public static final class raw {
         public static final int behaviormapping=0x7f040000;
-        public static final int rgb=0x7f040001;
-        public static final int testbot=0x7f040002;
+        public static final int empty=0x7f040001;
+        public static final int rgb=0x7f040002;
+        public static final int testbot=0x7f040003;
     }
     public static final class string {
         public static final int about_menu_item=0x7f050013;

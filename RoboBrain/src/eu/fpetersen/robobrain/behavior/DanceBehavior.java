@@ -39,6 +39,7 @@ import java.util.TimerTask;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
+import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.color.RgbColor;
 import eu.fpetersen.robobrain.color.RgbColorTable;
 import eu.fpetersen.robobrain.color.RgbColorTableFactory;
@@ -160,7 +161,8 @@ public class DanceBehavior extends Behavior {
 		TimerTask rgbTask = new TimerTask() {
 
 			private RgbColorTable colorTable = RgbColorTableFactory.getInstance()
-					.getStandardColorTableFromTextFile(getRobot().getRobotService());
+					.getStandardColorTableFromTextFile(
+							getRobot().getRobotService().getResources().openRawResource(R.raw.rgb));
 
 			@Override
 			public void run() {

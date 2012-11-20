@@ -22,7 +22,10 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.color.test;
 
+import java.io.InputStream;
+
 import android.test.AndroidTestCase;
+import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.color.RgbColor;
 import eu.fpetersen.robobrain.color.RgbColorTable;
 import eu.fpetersen.robobrain.color.RgbColorTableFactory;
@@ -42,13 +45,37 @@ public class RgbColorTableFactoryTest extends AndroidTestCase {
 	public void testColorsFromFileCreation() {
 		RgbColorTableFactory rgbFac = RgbColorTableFactory.getInstance();
 		assertNotNull(rgbFac);
-		RgbColorTable table = rgbFac.getStandardColorTableFromTextFile(getContext());
+		RgbColorTable table = rgbFac.getStandardColorTableFromTextFile(getContext().getResources()
+				.openRawResource(R.raw.rgb));
 		assertNotNull(table);
 		assertTrue(table.getNames().size() > 0);
 		String newColorName = "Some Color";
 		table.addColor(newColorName, new RgbColor(newColorName, 22, 22, 22));
 		RgbColor newColor = table.getColorForName(newColorName);
 		assertNotNull(newColor);
+
+		RgbColor notExistantColor = table.getColorForName("BarschGruen");
+		assertNull(notExistantColor);
+	}
+
+	/**
+	 * Test if empty ColorTable is created when entering empty file
+	 */
+	public void testColorsFromEmptyFileCreation() {
+		RgbColorTableFactory rgbFac = RgbColorTableFactory.getInstance();
+		assertNotNull(rgbFac);
+		InputStream is = getContext().getResources().openRawResource(R.raw.empty);
+		assertNotNull(is);
+		RgbColorTable table = rgbFac.getStandardColorTableFromTextFile(is);
+		assertNotNull(table);
+		assertTrue(table.getNames().size() == 0);
+		String newColorName = "Some Color";
+		table.addColor(newColorName, new RgbColor(newColorName, 22, 22, 22));
+		RgbColor newColor = table.getColorForName(newColorName);
+		assertNotNull(newColor);
+
+		RgbColor notExistantColor = table.getColorForName("BarschGruen");
+		assertNull(notExistantColor);
 	}
 
 	@Override

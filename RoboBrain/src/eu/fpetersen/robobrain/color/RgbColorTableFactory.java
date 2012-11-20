@@ -30,8 +30,7 @@ import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-import android.content.Context;
-import eu.fpetersen.robobrain.R;
+import android.util.Log;
 
 /**
  * Singleton factory for creating {@link RgbColorTable}s for example from a
@@ -62,11 +61,9 @@ public class RgbColorTableFactory {
 	 * @return RGBColorTable filled with colors that don't include numbers in
 	 *         the names.
 	 */
-	public RgbColorTable getStandardColorTableFromTextFile(Context context) {
+	public RgbColorTable getStandardColorTableFromTextFile(InputStream is) {
 		RgbColorTable table = new RgbColorTable();
 
-		// The InputStream opens the resourceId and sends it to the buffer
-		InputStream is = context.getResources().openRawResource(R.raw.rgb);
 		BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.defaultCharset()));
 		String readLine = null;
 
@@ -76,12 +73,15 @@ public class RgbColorTableFactory {
 				addColorFromTextLine(table, readLine, false);
 			}
 
+			if (table.getNames().size() < 1) {
+				throw new IOException("Empty file. No Colors could be found.");
+			}
+
 			// Close the InputStream and BufferedReader
 			is.close();
 			br.close();
-
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.w("RGBColorTableFactory", "Color Table could not be created from file.", e);
 		}
 
 		return table;
