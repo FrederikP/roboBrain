@@ -59,7 +59,7 @@ public class MockRoboBrainPackageManager extends MockPackageManager {
 				return info;
 			}
 		}
-		return null;
+		throw new NameNotFoundException("Could not find package: " + packageName);
 	}
 
 }

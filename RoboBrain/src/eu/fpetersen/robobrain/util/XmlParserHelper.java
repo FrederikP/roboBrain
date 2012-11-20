@@ -50,9 +50,10 @@ public class XmlParserHelper {
 		}
 		int depth = 1;
 		while (depth != 0) {
-			if (parser.next() == XmlPullParser.END_TAG) {
+			int next = parser.next();
+			if (next == XmlPullParser.END_TAG) {
 				depth--;
-			} else if (parser.next() == XmlPullParser.START_TAG) {
+			} else if (next == XmlPullParser.START_TAG) {
 				depth++;
 			}
 		}

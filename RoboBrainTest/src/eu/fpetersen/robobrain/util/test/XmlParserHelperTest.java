@@ -60,17 +60,19 @@ public class XmlParserHelperTest extends AndroidTestCase {
 		parser.nextTag();
 		parser.nextTag();
 		parser.require(XmlPullParser.START_TAG, null, "zwei");
-		mXmlParserHelper.skip(parser);
+		parser.nextTag();
 		parser.nextTag();
 		parser.require(XmlPullParser.START_TAG, null, "drei");
+		mXmlParserHelper.skip(parser);
+
 		parser.nextTag();
+		mXmlParserHelper.skip(parser);
 		boolean error = false;
 		try {
 			mXmlParserHelper.skip(parser);
 		} catch (IllegalStateException e) {
 			error = true;
 		}
-
 		assertTrue(error);
 
 	}
