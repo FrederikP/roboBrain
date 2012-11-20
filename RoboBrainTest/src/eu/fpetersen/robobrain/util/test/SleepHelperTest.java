@@ -57,7 +57,7 @@ public class SleepHelperTest extends AndroidTestCase {
 		sleepThread.start();
 
 		sleepThread.interrupt();
-		Helper.sleepMillis(200);
+		Helper.sleepMillis(1000);
 		assertFalse(sleepThread.isAlive());
 
 	}
