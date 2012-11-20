@@ -3,7 +3,7 @@
     <target name="javadoc">
         <javadoc access="private" author="true" classpath="libs/AmarinoLibrary_v0_55.jar;/var/lib/jenkins/tools/android-sdk/tools/support/annotations.jar;libs/android-support-v4.jar" destdir="javadoc" doctitle="RoboBrain" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="eu.fpetersen.robobrain.behavior.switching,eu.fpetersen.robobrain.communication,eu.fpetersen.robobrain.robot,eu.fpetersen.robobrain.ui,eu.fpetersen.robobrain.requirements,eu.fpetersen.robobrain.util.exceptions,eu.fpetersen.robobrain.behavior,eu.fpetersen.robobrain.speech,eu.fpetersen.robobrain.util,eu.fpetersen.robobrain.services,eu.fpetersen.robobrain.color" source="1.7" sourcefiles="gen/eu/fpetersen/robobrain/BuildConfig.java,gen/eu/fpetersen/robobrain/R.java" sourcepath="src;gen" splitindex="true" use="true" version="true">
             <link href="http://www.amarino-toolkit.net/tl_files/doc"/>
-            <link offline="true" href="http://d.android.com/reference" packagelistLoc="/var/lib/jenkins/tools/android-sdk/tools"/>
+            <link offline="true" href="http://d.android.com/reference" packagelistLoc="/var/lib/jenkins/tools/android-sdk/tools/reference"/>
         </javadoc>
     </target>
 </project>
