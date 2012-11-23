@@ -70,7 +70,7 @@ public class RobotReceiverTest extends AndroidTestCase {
 		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, mRobot.getAddress());
 
 		mRobotReceiver.onReceive(getContext(), intent);
-		assertEquals(12, mRobot.getFrontSensor().getValue());
+		assertEquals(newValue, mRobot.getFrontSensor().getValue());
 
 		// Test BackSensor
 		newValue = 1;
@@ -80,7 +80,7 @@ public class RobotReceiverTest extends AndroidTestCase {
 		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, mRobot.getAddress());
 
 		mRobotReceiver.onReceive(getContext(), intent);
-		assertEquals(12, mRobot.getBackSensor());
+		assertEquals(newValue, mRobot.getBackSensor().getValue());
 
 		// Test motor stop after delayed action
 		intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
