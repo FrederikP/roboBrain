@@ -25,7 +25,6 @@ package eu.fpetersen.robobrain.communication;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.services.RobotService;
@@ -63,43 +62,40 @@ public class RobotReceiver extends BroadcastReceiver {
 			data = data.replace("\n", "");
 			String address = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
 			CommandCenter cc = mService.getCCForAddress(address);
-			if (cc != null) {
-				Robot robot = cc.getRobot();
-				if (robot != null) {
-					String frontPrefix = "FRONTPROX:";
-					String backPrefix = "BACKPROX:";
-					String consolePrefix = "CONSOLE:";
-					String stoppedAfterDelay = "STOPPEDAFTERDELAY";
-					if (data.startsWith(frontPrefix)) {
-						String substring = data.substring(frontPrefix.length());
-						int proxValue = Integer.parseInt(substring);
-						if (proxValue == 0) {
-							Log.v("RobotReceiver", "Front Prox returned 0");
-						} else {
-							robot.getFrontSensor().setValue(proxValue);
-						}
-					} else if (data.startsWith(backPrefix)) {
-						String substring = data.substring(backPrefix.length());
-						int proxValue = Integer.parseInt(substring);
-						robot.getBackSensor().setValue(proxValue);
-					} else if (data.contains(stoppedAfterDelay)) {
-						robot.getMainMotor().delayActionDone();
-					} else if (data.startsWith(consolePrefix)) {
-						String substring = data.substring(consolePrefix.length());
-						mLog.log(substring, true);
-					}
-
-					/*
-					 * //Uncomment for debugging purposes: (Slow phone can be
-					 * overwhelmed by a high rate of data
-					 * 
-					 * Intent cIntent = new
-					 * Intent(RoboBrainIntent.ACTION_OUTPUT);
-					 * cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, data);
-					 * context.sendBroadcast(cIntent);
-					 */
-				}
+			if (cc == null) {
+				return;
 			}
+			Robot robot = cc.getRobot();
+			if (robot == null) {
+				return;
+			}
+			String frontPrefix = "FRONTPROX:";
+			String backPrefix = "BACKPROX:";
+			String consolePrefix = "CONSOLE:";
+			String stoppedAfterDelay = "STOPPEDAFTERDELAY";
+			if (data.startsWith(frontPrefix)) {
+				String substring = data.substring(frontPrefix.length());
+				int proxValue = Integer.parseInt(substring);
+				robot.getFrontSensor().setValue(proxValue);
+			} else if (data.startsWith(backPrefix)) {
+				String substring = data.substring(backPrefix.length());
+				int proxValue = Integer.parseInt(substring);
+				robot.getBackSensor().setValue(proxValue);
+			} else if (data.contains(stoppedAfterDelay)) {
+				robot.getMainMotor().delayActionDone();
+			} else if (data.startsWith(consolePrefix)) {
+				String substring = data.substring(consolePrefix.length());
+				mLog.log(substring, true);
+			}
+
+			/*
+			 * //Uncomment for debugging purposes: (Slow phone can be
+			 * overwhelmed by a high rate of data
+			 * 
+			 * Intent cIntent = new Intent(RoboBrainIntent.ACTION_OUTPUT);
+			 * cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, data);
+			 * context.sendBroadcast(cIntent);
+			 */
 		}
 
 	}
