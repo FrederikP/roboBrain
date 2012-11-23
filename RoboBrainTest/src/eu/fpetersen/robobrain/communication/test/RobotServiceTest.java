@@ -47,25 +47,17 @@ public class RobotServiceTest extends ServiceTestCase<RobotService> {
 	 * Test starting the Robot Service per Intent
 	 */
 	public void testStartingRobotService() {
-		startService(new Intent(getContext(), RobotService.class));
-
-		int countSecs = 0;
-		RobotService service = getService();
-		while (service == null && countSecs < 5) {
-			Helper.sleepMillis(1000);
-			countSecs++;
-			service = getService();
-		}
+		RobotService service = startService();
 
 		assertNotNull(service);
 
 		// Check if onCreate() was called
 		assertNotNull(service.getDistributingSpeechReceiver());
 
-		countSecs = 0;
+		double countSecs = 0;
 		while (!service.isRunning() && countSecs < 20) {
-			Helper.sleepMillis(1000);
-			countSecs++;
+			Helper.sleepMillis(100);
+			countSecs = countSecs + 0.1;
 		}
 
 		assertTrue(service.isRunning());
@@ -74,11 +66,40 @@ public class RobotServiceTest extends ServiceTestCase<RobotService> {
 
 		countSecs = 0;
 		while (service.isRunning() && countSecs < 5) {
-			Helper.sleepMillis(1000);
-			countSecs++;
+			Helper.sleepMillis(100);
+			countSecs = countSecs + 0.1;
 		}
 		assertFalse(service.isRunning());
 
+	}
+
+	private RobotService startService() {
+		startService(new Intent(getContext(), RobotService.class));
+
+		double countSecs = 0;
+		RobotService service = getService();
+		while (service == null && countSecs < 5) {
+			Helper.sleepMillis(000);
+			countSecs = countSecs + 0.1;
+			service = getService();
+		}
+		return service;
+	}
+
+	public void testIfOnBindReturnsNull() {
+		RobotService service = getService();
+		assertNull(service);
+	}
+
+	public void testStoppingService() {
+		RobotService service = startService();
+		service.stopService(new Intent(getContext(), RobotService.class));
+		double countSecs = 0;
+		while (service.isRunning() && countSecs < 5) {
+			Helper.sleepMillis(100);
+			countSecs = countSecs + 0.1;
+		}
+		assertFalse(service.isRunning());
 	}
 
 	@Override

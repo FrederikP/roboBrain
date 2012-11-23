@@ -66,9 +66,6 @@ public class RobotReceiver extends BroadcastReceiver {
 				return;
 			}
 			Robot robot = cc.getRobot();
-			if (robot == null) {
-				return;
-			}
 			String frontPrefix = "FRONTPROX:";
 			String backPrefix = "BACKPROX:";
 			String consolePrefix = "CONSOLE:";

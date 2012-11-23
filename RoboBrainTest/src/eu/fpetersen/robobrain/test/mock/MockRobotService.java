@@ -36,6 +36,7 @@ import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.services.RobotServiceContainer;
 import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
+import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
  * Simple mock for the {@link RobotService} class, so that tests for activities
@@ -55,6 +56,7 @@ public class MockRobotService extends RobotService {
 	private boolean mIsDestroyed = false;
 
 	public MockRobotService(Context context) {
+		mLog = new RoboLog("MockRobotService", MockRobotService.this);
 		mTestContext = context;
 		mDistSpeechRec = new DistributingSpeechReceiver();
 		registerReceiver(mDistSpeechRec, new IntentFilter(RoboBrainIntent.ACTION_SPEECH));

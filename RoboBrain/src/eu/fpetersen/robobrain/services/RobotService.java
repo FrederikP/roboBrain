@@ -91,7 +91,7 @@ public class RobotService extends Service {
 
 	private UUID id;
 
-	private RoboLog mLog;
+	protected RoboLog mLog;
 
 	/**
 	 * 
@@ -136,11 +136,6 @@ public class RobotService extends Service {
 		};
 
 		super.onCreate();
-	}
-
-	@Override
-	public IBinder onBind(Intent arg0) {
-		return null;
 	}
 
 	@Override
@@ -503,6 +498,11 @@ public class RobotService extends Service {
 	 */
 	public Map<UUID, Behavior> getAllBehaviors() {
 		return mAllBehaviors;
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
 	}
 
 }

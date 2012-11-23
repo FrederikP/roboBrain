@@ -57,6 +57,23 @@ public class RobotReceiverTest extends AndroidTestCase {
 	}
 
 	/**
+	 * Test if something bad happens when a non existant Adress is saved to
+	 * intent
+	 */
+	public void testWithNonExistantAddress() {
+
+		Intent intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA_TYPE, AmarinoIntent.STRING_EXTRA);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA, "FRONTPROX:" + 12);
+		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, "DOESNOTEXIST");
+
+		mRobotReceiver.onReceive(getContext(), intent);
+
+		assertEquals(mRobot.getFrontSensor().getValue(), 0);
+
+	}
+
+	/**
 	 * Test if all positive behavior works out, by checking on the robots sensor
 	 * values and motor state
 	 */
