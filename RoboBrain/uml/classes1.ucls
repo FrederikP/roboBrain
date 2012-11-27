@@ -163,8 +163,8 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="21" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.RgbLed" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/RgbLed.java" binary="false">    
+  <class id="21" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.parts.RgbLed" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/parts/RgbLed.java" binary="false">    
     <position height="-1" width="-1" x="161" y="124"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
@@ -179,32 +179,32 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <enumeration id="23" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.Motor.MotorState" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/Motor.java" binary="false">    
+  <enumeration id="23" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.parts.Motor.MotorState" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/parts/Motor.java" binary="false">    
     <position height="-1" width="-1" x="381" y="574"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </enumeration>  
-  <class id="24" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.Servo" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/Servo.java" binary="false">    
+  <class id="24" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.parts.Servo" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/parts/Servo.java" binary="false">    
     <position height="-1" width="-1" x="622" y="239"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="25" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.Sensor" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/Sensor.java" binary="false">    
+  <class id="25" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.parts.Sensor" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/parts/Sensor.java" binary="false">    
     <position height="-1" width="-1" x="280" y="255"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="26" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.ProximitySensor" 
-    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/ProximitySensor.java" binary="false">    
+  <class id="26" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.parts.ProximitySensor" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/parts/ProximitySensor.java" binary="false">    
     <position height="-1" width="-1" x="191" y="687"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
@@ -219,16 +219,16 @@
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="28" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.Motor" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/Motor.java" binary="false">    
+  <class id="28" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.parts.Motor" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/parts/Motor.java" binary="false">    
     <position height="-1" width="-1" x="435" y="299"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      
       <operations public="true" package="true" protected="true" private="true"/>    
     </display>  
   </class>  
-  <class id="29" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.RobotPart" project="RoboBrain" 
-    file="/RoboBrain/src/eu/fpetersen/robobrain/robot/RobotPart.java" binary="false">    
+  <class id="29" corner="BOTTOM_RIGHT" language="java" name="eu.fpetersen.robobrain.robot.parts.RobotPart" 
+    project="RoboBrain" file="/RoboBrain/src/eu/fpetersen/robobrain/robot/parts/RobotPart.java" binary="false">    
     <position height="-1" width="-1" x="357" y="-26"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true"/>      

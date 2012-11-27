@@ -26,8 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.test.AndroidTestCase;
-import eu.fpetersen.robobrain.robot.Motor;
-import eu.fpetersen.robobrain.robot.Motor.MotorState;
+import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
 import eu.fpetersen.robobrain.robot.RobotPartInitializer;

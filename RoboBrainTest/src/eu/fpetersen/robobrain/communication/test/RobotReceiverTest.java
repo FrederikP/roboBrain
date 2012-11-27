@@ -29,7 +29,7 @@ import android.test.AndroidTestCase;
 import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.RobotReceiver;
-import eu.fpetersen.robobrain.robot.Motor.MotorState;
+import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;

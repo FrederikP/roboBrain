@@ -20,48 +20,37 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.robot;
+package eu.fpetersen.robobrain.robot.parts;
 
-import java.util.Map;
+import java.util.List;
 
-import eu.fpetersen.robobrain.robot.parts.RobotPart;
+//TODO: Find a way to differ between digital and analog value ranges 
+//(i.e. binary infrared sensor and a cm value ranged ultrasonix sensor)
 
 /**
- * Takes care of managing the parameters that are needed for initializing the
- * RobotPart
+ * A simple proximity sensor representation for an Arduino sensor.
  * 
  * @author Frederik Petersen
  * 
  */
-public class RobotPartInitializer {
-
-	private Robot mRobot;
-
-	private Map<String, Character> mFlags;
-
-	private String mId;
-
-	private boolean requirementsMet = false;
-
-	public RobotPartInitializer(String id, Robot robot, Map<String, Character> flags) {
-		this.mRobot = robot;
-		this.mFlags = flags;
-		this.mId = id;
-	}
+public class ProximitySensor extends Sensor {
 
 	/**
-	 * Initialize the {@link RobotPart} with the parameters stored in this
-	 * {@link RobotPartInitializer}
-	 * 
-	 * @param part
-	 *            {@link RobotPart} to initialize
+	 * Represents the value as set by the sensor.
 	 */
-	public void initialize(RobotPart part) {
-		requirementsMet = part.initialize(mId, mRobot, mFlags);
+	private int mValue = 0;
+
+	public void setValue(int proxValue) {
+		mValue = proxValue;
 	}
 
-	public boolean areRequirementsMet() {
-		return requirementsMet;
+	public int getValue() {
+		return mValue;
+	}
+
+	@Override
+	protected List<String> getRequiredFlagIds() {
+		return null;
 	}
 
 }

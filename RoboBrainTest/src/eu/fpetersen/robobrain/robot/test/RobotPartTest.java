@@ -26,13 +26,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.test.AndroidTestCase;
-import eu.fpetersen.robobrain.robot.Motor;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.robot.RobotPart;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
 import eu.fpetersen.robobrain.robot.RobotPartInitializer;
+import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.RobotPart;
+import eu.fpetersen.robobrain.test.mock.AbstractPart;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
+import eu.fpetersen.robobrain.test.mock.PrivateConstructorPart;
 
 /**
  * Tests {@link RobotPart} class.
@@ -94,6 +96,25 @@ public class RobotPartTest extends AndroidTestCase {
 		assertEquals('A', motor.getFlag("advance"));
 
 		assertEquals(' ', motor.getFlag("backoff"));
+
+	}
+
+	public void testNegativeFactoryBehavior() {
+		mService = new MockRobotService(getContext());
+		MockRobotFactory factory = new MockRobotFactory(mService);
+		Robot mockRobot = factory.createSimpleRobot("TestBot");
+
+		RobotPartFactory fac = RobotPartFactory.getInstance(mService);
+		RobotPartInitializer initializer = new RobotPartInitializer("Rocket", mockRobot, null);
+
+		RobotPart part = fac.createRobotPart("Rocket", initializer);
+		assertNull(part);
+
+		part = fac.createRobotPart(AbstractPart.class.getName(), initializer);
+		assertNull(part);
+
+		part = fac.createRobotPart(PrivateConstructorPart.class.getName(), initializer);
+		assertNull(part);
 
 	}
 

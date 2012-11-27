@@ -23,11 +23,11 @@
 package eu.fpetersen.robobrain.behavior;
 
 import eu.fpetersen.robobrain.requirements.Requirements;
-import eu.fpetersen.robobrain.robot.Motor;
-import eu.fpetersen.robobrain.robot.Motor.MotorState;
-import eu.fpetersen.robobrain.robot.ProximitySensor;
+import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.ProximitySensor;
+import eu.fpetersen.robobrain.robot.parts.Servo;
+import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.robot.Servo;
 
 /**
  * Makes the robot go back and forth. Very simple behavior. Checks front and

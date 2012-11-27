@@ -25,13 +25,13 @@ package eu.fpetersen.robobrain.test.mock;
 import java.util.HashMap;
 import java.util.Map;
 
-import eu.fpetersen.robobrain.robot.Motor;
-import eu.fpetersen.robobrain.robot.ProximitySensor;
-import eu.fpetersen.robobrain.robot.RgbLed;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
 import eu.fpetersen.robobrain.robot.RobotPartInitializer;
-import eu.fpetersen.robobrain.robot.Servo;
+import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.ProximitySensor;
+import eu.fpetersen.robobrain.robot.parts.RgbLed;
+import eu.fpetersen.robobrain.robot.parts.Servo;
 import eu.fpetersen.robobrain.services.RobotService;
 
 /**

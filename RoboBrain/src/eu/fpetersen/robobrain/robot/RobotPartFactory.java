@@ -22,6 +22,7 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot;
 
+import eu.fpetersen.robobrain.robot.parts.RobotPart;
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
 
@@ -63,7 +64,12 @@ public class RobotPartFactory extends RoboBrainFactory {
 	 *         is amiss, check log.
 	 */
 	public RobotPart createRobotPart(String type, RobotPartInitializer initializer) {
-		String partClassName = "eu.fpetersen.robobrain.robot." + type;
+		String partClassName;
+		if (!type.contains(".")) {
+			partClassName = "eu.fpetersen.robobrain.robot.parts." + type;
+		} else {
+			partClassName = type;
+		}
 		RobotPart part = null;
 		try {
 			part = (RobotPart) Class.forName(partClassName).newInstance();

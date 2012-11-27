@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.robot.RobotPart;
+import eu.fpetersen.robobrain.robot.parts.RobotPart;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 /**

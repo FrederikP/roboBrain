@@ -20,48 +20,34 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.robot;
+package eu.fpetersen.robobrain.robot.parts;
 
-import java.util.Map;
-
-import eu.fpetersen.robobrain.robot.parts.RobotPart;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Takes care of managing the parameters that are needed for initializing the
- * RobotPart
+ * Representation of a servo connected to an Arduino device.
  * 
  * @author Frederik Petersen
  * 
  */
-public class RobotPartInitializer {
-
-	private Robot mRobot;
-
-	private Map<String, Character> mFlags;
-
-	private String mId;
-
-	private boolean requirementsMet = false;
-
-	public RobotPartInitializer(String id, Robot robot, Map<String, Character> flags) {
-		this.mRobot = robot;
-		this.mFlags = flags;
-		this.mId = id;
-	}
+public class Servo extends RobotPart {
 
 	/**
-	 * Initialize the {@link RobotPart} with the parameters stored in this
-	 * {@link RobotPartInitializer}
+	 * Set servo to specified angle
 	 * 
-	 * @param part
-	 *            {@link RobotPart} to initialize
+	 * @param angle
+	 *            Angle in degrees
 	 */
-	public void initialize(RobotPart part) {
-		requirementsMet = part.initialize(mId, mRobot, mFlags);
+	public void setToAngle(int angle) {
+		getRobot().sendToArduino(getFlag("toAngle"), angle);
 	}
 
-	public boolean areRequirementsMet() {
-		return requirementsMet;
+	@Override
+	protected List<String> getRequiredFlagIds() {
+		List<String> requiredFlagIds = new ArrayList<String>();
+		requiredFlagIds.add("toAngle");
+		return requiredFlagIds;
 	}
 
 }

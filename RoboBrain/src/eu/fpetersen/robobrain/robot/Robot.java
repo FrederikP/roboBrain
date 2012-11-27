@@ -26,6 +26,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import at.abraxas.amarino.Amarino;
+import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.ProximitySensor;
+import eu.fpetersen.robobrain.robot.parts.RgbLed;
+import eu.fpetersen.robobrain.robot.parts.RobotPart;
+import eu.fpetersen.robobrain.robot.parts.Servo;
 import eu.fpetersen.robobrain.services.RobotService;
 
 /**

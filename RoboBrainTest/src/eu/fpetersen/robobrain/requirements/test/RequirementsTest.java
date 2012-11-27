@@ -24,11 +24,11 @@ package eu.fpetersen.robobrain.requirements.test;
 
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.requirements.Requirements;
-import eu.fpetersen.robobrain.robot.Motor;
-import eu.fpetersen.robobrain.robot.ProximitySensor;
-import eu.fpetersen.robobrain.robot.RgbLed;
 import eu.fpetersen.robobrain.robot.Robot;
-import eu.fpetersen.robobrain.robot.Servo;
+import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.ProximitySensor;
+import eu.fpetersen.robobrain.robot.parts.RgbLed;
+import eu.fpetersen.robobrain.robot.parts.Servo;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 

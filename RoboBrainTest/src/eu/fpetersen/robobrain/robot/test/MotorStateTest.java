@@ -23,7 +23,7 @@
 package eu.fpetersen.robobrain.robot.test;
 
 import android.test.AndroidTestCase;
-import eu.fpetersen.robobrain.robot.Motor.MotorState;
+import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
 
 /**
  * Tests enum {@link MotorState}

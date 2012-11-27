@@ -20,48 +20,28 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.robot;
+package eu.fpetersen.robobrain.test.mock;
 
-import java.util.Map;
+import java.util.List;
 
 import eu.fpetersen.robobrain.robot.parts.RobotPart;
 
 /**
- * Takes care of managing the parameters that are needed for initializing the
- * RobotPart
+ * For testing if RobotPartFactory handles error with private constructor
+ * correctly.
  * 
  * @author Frederik Petersen
  * 
  */
-public class RobotPartInitializer {
+public class PrivateConstructorPart extends RobotPart {
 
-	private Robot mRobot;
+	private PrivateConstructorPart() {
 
-	private Map<String, Character> mFlags;
-
-	private String mId;
-
-	private boolean requirementsMet = false;
-
-	public RobotPartInitializer(String id, Robot robot, Map<String, Character> flags) {
-		this.mRobot = robot;
-		this.mFlags = flags;
-		this.mId = id;
 	}
 
-	/**
-	 * Initialize the {@link RobotPart} with the parameters stored in this
-	 * {@link RobotPartInitializer}
-	 * 
-	 * @param part
-	 *            {@link RobotPart} to initialize
-	 */
-	public void initialize(RobotPart part) {
-		requirementsMet = part.initialize(mId, mRobot, mFlags);
-	}
-
-	public boolean areRequirementsMet() {
-		return requirementsMet;
+	@Override
+	protected List<String> getRequiredFlagIds() {
+		return null;
 	}
 
 }

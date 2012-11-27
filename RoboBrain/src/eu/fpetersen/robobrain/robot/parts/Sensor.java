@@ -20,48 +20,15 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.robobrain.robot;
-
-import java.util.Map;
-
-import eu.fpetersen.robobrain.robot.parts.RobotPart;
+package eu.fpetersen.robobrain.robot.parts;
 
 /**
- * Takes care of managing the parameters that are needed for initializing the
- * RobotPart
+ * Generic superclass for all sensor classes, to hold information that all
+ * sensors share.
  * 
  * @author Frederik Petersen
  * 
  */
-public class RobotPartInitializer {
-
-	private Robot mRobot;
-
-	private Map<String, Character> mFlags;
-
-	private String mId;
-
-	private boolean requirementsMet = false;
-
-	public RobotPartInitializer(String id, Robot robot, Map<String, Character> flags) {
-		this.mRobot = robot;
-		this.mFlags = flags;
-		this.mId = id;
-	}
-
-	/**
-	 * Initialize the {@link RobotPart} with the parameters stored in this
-	 * {@link RobotPartInitializer}
-	 * 
-	 * @param part
-	 *            {@link RobotPart} to initialize
-	 */
-	public void initialize(RobotPart part) {
-		requirementsMet = part.initialize(mId, mRobot, mFlags);
-	}
-
-	public boolean areRequirementsMet() {
-		return requirementsMet;
-	}
+public abstract class Sensor extends RobotPart {
 
 }
