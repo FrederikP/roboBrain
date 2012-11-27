@@ -74,7 +74,8 @@ public class BehaviorFactory extends RoboBrainFactory {
 	public Behavior createBehavior(BehaviorInitializer initializer, Robot robot) {
 		String name = initializer.getName();
 		if (!name.contains(".")) {
-			name = "eu.fpetersen.robobrain.behavior." + name;
+			String behaviorPackageName = Behavior.class.getPackage().getName();
+			name = behaviorPackageName + "." + name;
 		}
 		Behavior behavior = null;
 		try {
