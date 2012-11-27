@@ -83,11 +83,11 @@ public class RobotFactoryTest extends AndroidTestCase {
 	 * @throws Exception
 	 * @throws IOException
 	 */
-	public void testXmlRobotCreationFromFolder() throws Exception {
+	public void testXmlRobotCreationFromFolder() {
 		InputStream testBot1 = null;
 		FileOutputStream outStream = null;
-		File bot1;
-		File testDir;
+		File bot1 = null;
+		File testDir = null;
 		try {
 			testDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
 					+ File.separator + mContext.getString(R.string.sd_robobrain_root_dir)
@@ -104,14 +104,22 @@ public class RobotFactoryTest extends AndroidTestCase {
 				outStream.write(c);
 			}
 		} catch (IOException e) {
-			throw new Exception("Test failed.");
+			e.printStackTrace();
+			assertTrue(1 == 0);
 		} finally {
-			if (testBot1 != null) {
-				testBot1.close();
+
+			try {
+				if (testBot1 != null) {
+					testBot1.close();
+				}
+				if (outStream != null) {
+					outStream.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				assertTrue(1 == 0);
 			}
-			if (outStream != null) {
-				outStream.close();
-			}
+
 		}
 
 		mService = new MockRobotService(getContext());
