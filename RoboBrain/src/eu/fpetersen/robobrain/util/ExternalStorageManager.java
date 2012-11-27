@@ -101,4 +101,12 @@ public class ExternalStorageManager {
 		createDirIfNotExistant(robotsXmlDir);
 		return robotsXmlDir;
 	}
+
+	public boolean sdCardIsMounted() {
+		String state = Environment.getExternalStorageState();
+		if (state.equals(Environment.MEDIA_REMOVED)) {
+			return false;
+		}
+		return true;
+	}
 }

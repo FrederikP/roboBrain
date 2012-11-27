@@ -313,6 +313,12 @@ public class RobotService extends Service {
 	 */
 	private void setupCommandCenters() {
 		ExternalStorageManager esManager = new ExternalStorageManager(RobotService.this);
+
+		if (!esManager.sdCardIsMounted()) {
+			mLog.alertWarning("No sdcard mounted. No robot data could be loaded from robobrain dir.");
+			return;
+		}
+
 		File robotsXmlDir = esManager.getRobotsXmlDir();
 		RobotFactory robotFactory = RobotFactory.getInstance(this);
 		Map<String, Robot> robots = robotFactory.createRobots(robotsXmlDir);

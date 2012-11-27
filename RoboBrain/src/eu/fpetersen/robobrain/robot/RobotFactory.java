@@ -264,16 +264,14 @@ public class RobotFactory extends RoboBrainFactory {
 	 */
 	public Map<String, Robot> createRobots(File dir) {
 		Map<String, Robot> robots = new HashMap<String, Robot>();
-		try {
-			for (File robotXml : dir.listFiles()) {
-				if (robotXml.getAbsolutePath().endsWith(".xml")) {
-					Robot newRobot = createRobotFromXML(robotXml);
-					robots.put(newRobot.getName(), newRobot);
-				}
+
+		for (File robotXml : dir.listFiles()) {
+			if (robotXml.getAbsolutePath().endsWith(".xml")) {
+				Robot newRobot = createRobotFromXML(robotXml);
+				robots.put(newRobot.getName(), newRobot);
 			}
-		} catch (NullPointerException e) {
-			mLog.alertError("SDCard could not be accessed. Please check if SDCard is mounted.");
 		}
+
 		return robots;
 	}
 
