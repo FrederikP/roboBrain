@@ -22,6 +22,7 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.services;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,6 +54,7 @@ import eu.fpetersen.robobrain.robot.RobotFactory;
 import eu.fpetersen.robobrain.speech.DistributingSpeechReceiver;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
 import eu.fpetersen.robobrain.ui.Starter;
+import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboLog;
 
 /**
@@ -310,8 +312,10 @@ public class RobotService extends Service {
 	 * setup Robot's and their behaviors
 	 */
 	private void setupCommandCenters() {
+		ExternalStorageManager esManager = new ExternalStorageManager(RobotService.this);
+		File robotsXmlDir = esManager.getRobotsXmlDir();
 		RobotFactory robotFactory = RobotFactory.getInstance(this);
-		Map<String, Robot> robots = robotFactory.createRobots();
+		Map<String, Robot> robots = robotFactory.createRobots(robotsXmlDir);
 		if (robots.size() == 0) {
 			mLog.alertWarning("No robot configured. See documentation for explanation on xml config.");
 		}

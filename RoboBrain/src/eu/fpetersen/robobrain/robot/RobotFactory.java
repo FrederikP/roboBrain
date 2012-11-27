@@ -34,7 +34,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 import eu.fpetersen.robobrain.services.RobotService;
-import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
 import eu.fpetersen.robobrain.util.XmlParserHelper;
 
@@ -263,12 +262,10 @@ public class RobotFactory extends RoboBrainFactory {
 	 * 
 	 * @return Map of Robots with names
 	 */
-	public Map<String, Robot> createRobots() {
-		ExternalStorageManager esManager = new ExternalStorageManager(getService());
+	public Map<String, Robot> createRobots(File dir) {
 		Map<String, Robot> robots = new HashMap<String, Robot>();
-		File robotsXmlDir = esManager.getRobotsXmlDir();
 		try {
-			for (File robotXml : robotsXmlDir.listFiles()) {
+			for (File robotXml : dir.listFiles()) {
 				if (robotXml.getAbsolutePath().endsWith(".xml")) {
 					Robot newRobot = createRobotFromXML(robotXml);
 					robots.put(newRobot.getName(), newRobot);

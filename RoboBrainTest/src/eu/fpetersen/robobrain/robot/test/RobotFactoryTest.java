@@ -22,8 +22,13 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.robot.test;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
+import android.os.Environment;
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.robot.Robot;
@@ -70,6 +75,69 @@ public class RobotFactoryTest extends AndroidTestCase {
 		assertNotNull(robot.getFrontSensor());
 		assertNotNull(robot.getHeadColorLed());
 		assertNotNull(robot.getHeadServo());
+	}
+
+	/**
+	 * Creates robot from raw resource xml file used in integration tests
+	 * 
+	 * @throws Exception
+	 * @throws IOException
+	 */
+	public void testXmlRobotCreationFromFolder() throws Exception {
+		InputStream testBot1 = null;
+		FileOutputStream outStream = null;
+		File bot1;
+		File testDir;
+		try {
+			testDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+					+ File.separator + mContext.getString(R.string.sd_robobrain_root_dir)
+					+ File.separator + "testbots");
+			testDir.mkdir();
+			assertTrue(testDir.exists());
+			assertTrue(testDir.isDirectory());
+			bot1 = new File(testDir.getAbsolutePath(), "testbot1.xml");
+			bot1.createNewFile();
+			testBot1 = mContext.getResources().openRawResource(R.raw.testbot);
+			outStream = new FileOutputStream(bot1);
+			int c;
+			while ((c = testBot1.read()) != -1) {
+				outStream.write(c);
+			}
+		} catch (IOException e) {
+			throw new Exception("Test failed.");
+		} finally {
+			if (testBot1 != null) {
+				testBot1.close();
+			}
+			if (outStream != null) {
+				outStream.close();
+			}
+		}
+
+		mService = new MockRobotService(getContext());
+		Map<String, Robot> robots = RobotFactory.getInstance(mService).createRobots(testDir);
+		assertNotNull(robots);
+		Robot robot = robots.get("TESTBOT");
+		assertEquals("TESTBOT", robot.getName());
+		assertNotNull(robot.getMainMotor());
+		assertNotNull(robot.getBackSensor());
+		assertNotNull(robot.getFrontSensor());
+		assertNotNull(robot.getHeadColorLed());
+		assertNotNull(robot.getHeadServo());
+
+		bot1.delete();
+		testDir.delete();
+
+	}
+
+	/**
+	 * Tests how the factory method reacts when handing in a NullPointer
+	 */
+	public void testNullPointerRobotCreation() {
+		InputStream robotXml = null;
+		mService = new MockRobotService(getContext());
+		Robot robot = RobotFactory.getInstance(mService).createRobotFromXml(robotXml);
+		assertNull(robot);
 	}
 
 	@Override
