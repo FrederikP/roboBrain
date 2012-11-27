@@ -102,6 +102,11 @@ public class ExternalStorageManager {
 		return robotsXmlDir;
 	}
 
+	/**
+	 * Should be checked before calling other methods.
+	 * 
+	 * @return True if SDcard is mounted, false if it's removed
+	 */
 	public boolean sdCardIsMounted() {
 		String state = Environment.getExternalStorageState();
 		if (state.equals(Environment.MEDIA_REMOVED)) {
