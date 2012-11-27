@@ -314,7 +314,7 @@ public class RobotService extends Service {
 	private void setupCommandCenters() {
 		ExternalStorageManager esManager = new ExternalStorageManager(RobotService.this);
 
-		if (!esManager.sdCardIsMounted()) {
+		if (!esManager.sdCardIsMountedAndWritable()) {
 			mLog.alertWarning("No sdcard mounted. No robot data could be loaded from robobrain dir.");
 			return;
 		}

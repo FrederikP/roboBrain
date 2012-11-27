@@ -24,6 +24,7 @@ package eu.fpetersen.robobrain.util.test;
 
 import java.io.File;
 
+import android.os.Environment;
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.util.ExternalStorageManager;
 
@@ -96,6 +97,16 @@ public class ExternalStorageManagerTest extends AndroidTestCase {
 		File file = externalStorageManager.getBehaviorMappingFile(name);
 		assertTrue(file.exists());
 		file.delete();
+
+	}
+
+	public void testSdCardIsMounted() {
+		String state = Environment.getExternalStorageState();
+		if (state.matches(Environment.MEDIA_MOUNTED)) {
+			assertTrue(externalStorageManager.sdCardIsMountedAndWritable());
+		} else {
+			assertFalse(externalStorageManager.sdCardIsMountedAndWritable());
+		}
 
 	}
 

@@ -107,9 +107,9 @@ public class ExternalStorageManager {
 	 * 
 	 * @return True if SDcard is mounted, false if it's removed
 	 */
-	public boolean sdCardIsMounted() {
+	public boolean sdCardIsMountedAndWritable() {
 		String state = Environment.getExternalStorageState();
-		if (state.equals(Environment.MEDIA_REMOVED)) {
+		if (!state.matches(Environment.MEDIA_MOUNTED)) {
 			return false;
 		}
 		return true;

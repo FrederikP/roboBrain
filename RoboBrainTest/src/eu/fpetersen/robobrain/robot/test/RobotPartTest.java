@@ -26,10 +26,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.test.AndroidTestCase;
+import eu.fpetersen.robobrain.color.RgbColor;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
 import eu.fpetersen.robobrain.robot.RobotPartInitializer;
 import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.RgbLed;
 import eu.fpetersen.robobrain.robot.parts.RobotPart;
 import eu.fpetersen.robobrain.test.mock.AbstractPart;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
@@ -97,6 +99,29 @@ public class RobotPartTest extends AndroidTestCase {
 
 		assertEquals(' ', motor.getFlag("backoff"));
 
+	}
+
+	public void testRgbLed() {
+		mService = new MockRobotService(getContext());
+		MockRobotFactory factory = new MockRobotFactory(mService);
+		Robot mockRobot = factory.createSimpleRobot("TestBot");
+		Map<String, Character> flags = new HashMap<String, Character>();
+		flags.put("toColor", 'D');
+
+		RobotPartInitializer initializer = new RobotPartInitializer("RgbLed", mockRobot, flags);
+
+		RgbLed led = (RgbLed) RobotPartFactory.getInstance(mService).createRobotPart("RgbLed",
+				initializer);
+
+		led.set(12, 12, 12);
+
+		assertEquals(12, led.getColor().getRed());
+
+		led.set(new RgbColor("Something", 12, 12, 12));
+
+		led.set(new RgbColor("SomethingDifferent", 15, 15, 16));
+
+		assertEquals(16, led.getColor().getBlue());
 	}
 
 	public void testNegativeFactoryBehavior() {

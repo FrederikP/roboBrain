@@ -161,7 +161,6 @@ public class RobotFactory extends RoboBrainFactory {
 			String name = parser.getName();
 			if (name.equals("part")) {
 				readInPart(parser, robot);
-
 			} else {
 				mXmlParserHelper.skip(parser);
 			}
@@ -198,13 +197,8 @@ public class RobotFactory extends RoboBrainFactory {
 		}
 		RobotPartInitializer initializer = new RobotPartInitializer(id, robot, flags);
 		robot.addPart(id, rbFac.createRobotPart(type, initializer));
-		try {
-			parser.require(XmlPullParser.END_TAG, NS, "part");
-		} catch (XmlPullParserException e) {
-			// parser still on last Flag tag -> jump to next
-			parser.nextTag();
-			parser.require(XmlPullParser.END_TAG, NS, "part");
-		}
+
+		parser.require(XmlPullParser.END_TAG, NS, "part");
 
 	}
 
@@ -220,22 +214,19 @@ public class RobotFactory extends RoboBrainFactory {
 			IOException {
 		parser.require(XmlPullParser.START_TAG, NS, "flags");
 		Map<String, Character> flags = new HashMap<String, Character>();
-		try {
-			while (parser.next() != XmlPullParser.END_TAG) {
-				if (parser.getEventType() != XmlPullParser.START_TAG) {
-					continue;
-				}
-				String name = parser.getName();
-				if (name.equals("flag")) {
-					readInFlag(flags, parser);
-				} else {
-					mXmlParserHelper.skip(parser);
-				}
+
+		while (parser.next() != XmlPullParser.END_TAG) {
+			if (parser.getEventType() != XmlPullParser.START_TAG) {
+				continue;
 			}
-			parser.require(XmlPullParser.END_TAG, NS, "flags");
-		} catch (XmlPullParserException e) {
-			e.printStackTrace();
+			String name = parser.getName();
+			if (name.equals("flag")) {
+				readInFlag(flags, parser);
+			} else {
+				mXmlParserHelper.skip(parser);
+			}
 		}
+		parser.require(XmlPullParser.END_TAG, NS, "flags");
 
 		return flags;
 
