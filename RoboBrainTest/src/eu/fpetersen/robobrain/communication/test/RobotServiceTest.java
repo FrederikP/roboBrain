@@ -87,15 +87,20 @@ public class RobotServiceTest extends ServiceTestCase<RobotService> {
 	}
 
 	public void testIfOnBindReturnsNull() {
-		RobotService service = getService();
-		assertNull(service);
+		RobotService service = startService();
+		assertNull(service.onBind(new Intent()));
+		stopService(service);
 	}
 
 	public void testStoppingService() {
 		RobotService service = startService();
 		service.stopService(new Intent(getContext(), RobotService.class));
+		stopService(service);
+	}
+
+	private void stopService(RobotService service) {
 		double countSecs = 0;
-		while (service.isRunning() && countSecs < 5) {
+		while (service.isRunning() && countSecs < 10) {
 			Helper.sleepMillis(100);
 			countSecs = countSecs + 0.1;
 		}
