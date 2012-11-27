@@ -51,9 +51,7 @@ public class RgbLed extends RobotPart {
 	 *            Blue color value 0-255
 	 */
 	public void set(int red, int green, int blue) {
-		if (this.mRed == red && this.mGreen == green && this.mBlue == blue) {
-			// Already set to this value no need to contact Arduino/Hardware
-		} else {
+		if (this.mRed != red || this.mGreen != green || this.mBlue != blue) {
 			this.mRed = red;
 			this.mGreen = green;
 			this.mBlue = blue;
