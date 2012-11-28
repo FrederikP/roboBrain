@@ -78,6 +78,33 @@ public class RobotFactoryTest extends AndroidTestCase {
 	}
 
 	/**
+	 * Creates robot from raw resource xml file with some weird tags included.
+	 */
+	public void testXmlRobotCreationWithWeirdTags() {
+		InputStream robotXml = getContext().getResources().openRawResource(R.raw.testbot_weirdtags);
+		mService = new MockRobotService(getContext());
+		Robot robot = RobotFactory.getInstance(mService).createRobotFromXml(robotXml);
+		assertNotNull(robot);
+		assertEquals("TESTBOT", robot.getName());
+		assertNotNull(robot.getMainMotor());
+		assertNotNull(robot.getBackSensor());
+		assertNotNull(robot.getFrontSensor());
+		assertNotNull(robot.getHeadColorLed());
+		assertNotNull(robot.getHeadServo());
+	}
+
+	/**
+	 * Tries creating robot from broken xml
+	 */
+	public void testXmlRobotCreationWithBrokenXml() {
+		InputStream robotXml = getContext().getResources()
+				.openRawResource(R.raw.testbot_brokentags);
+		mService = new MockRobotService(getContext());
+		Robot robot = RobotFactory.getInstance(mService).createRobotFromXml(robotXml);
+		assertNull(robot);
+	}
+
+	/**
 	 * Creates robot from raw resource xml file used in integration tests
 	 * 
 	 * @throws Exception
