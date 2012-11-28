@@ -102,12 +102,6 @@ public class RobotFactory extends RoboBrainFactory {
 		} catch (Exception e) {
 			mLog.alertError("Something went wrong while building Robot. Check for valid and accessable conf files.");
 			e.printStackTrace();
-		} finally {
-			try {
-				in.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		return null;
 	}

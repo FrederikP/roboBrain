@@ -59,7 +59,7 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 	 * 
 	 * @throws IOException
 	 */
-	public void testRunningBackAndForthBehavior() {
+	public void testRunningReactToSpeechBehavior() {
 		MockRobotFactory fact = new MockRobotFactory(mService);
 		Robot robot = fact.createSimpleRobot("TestBot");
 
@@ -81,7 +81,7 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 		Thread behaviorThread = new Thread(behaviorTask);
 		behaviorThread.start();
 
-		Helper.sleepMillis(200);
+		Helper.sleepMillis(600);
 		assertTrue(reactBehavior.isTurnedOn());
 
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
@@ -95,7 +95,7 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(1);
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(200);
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
 		mockedResults.add("backward");
@@ -116,7 +116,7 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 
 		robot.getFrontSensor().setValue(50);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(200);
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
 		mockedResults.add("right");

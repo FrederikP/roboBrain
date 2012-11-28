@@ -143,11 +143,9 @@ public class RobotService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		String testingEnvvar;
-		try {
-			testingEnvvar = System.getProperty(getString(R.string.envvar_testing));
-		} catch (Exception e) {
-			testingEnvvar = null;
-		}
+
+		testingEnvvar = System.getProperty(getString(R.string.envvar_testing));
+
 		final boolean testing = (testingEnvvar != null && testingEnvvar.matches("true"));
 		mLog.log("Starting RoboBrain service", true);
 		if (getAllCCs().isEmpty()) {
@@ -328,8 +326,10 @@ public class RobotService extends Service {
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 				.getInstance(RobotService.this);
 		// Enter null for standard sd location
+		InputStream mapping = esManager
+				.getBehaviorMappingFile(getString(R.id.robot_behavior_table));
 		Map<String, List<BehaviorInitializer>> behaviorMapping = behaviorFactory
-				.createMappings(null);
+				.createMappings(mapping);
 		if (behaviorMapping != null) {
 			BehaviorFactory bFac = BehaviorFactory.getInstance(RobotService.this);
 			for (Entry<String, Robot> robotEntry : robots.entrySet()) {

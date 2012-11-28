@@ -29,6 +29,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.communication.RoboBrainIntent;
+import eu.fpetersen.robobrain.test.util.Helper;
 import eu.fpetersen.robobrain.ui.Console;
 
 /**
@@ -147,6 +148,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 		consoleActivity.sendBroadcast(cIntent);
 
 		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(100);
 		String allText = consoleTextView.getText().toString();
 		assertTrue(allText.contains(appendMe));
 

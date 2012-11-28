@@ -23,6 +23,7 @@
 package eu.fpetersen.robobrain.util.test;
 
 import java.io.File;
+import java.io.InputStream;
 
 import android.os.Environment;
 import android.test.AndroidTestCase;
@@ -56,8 +57,8 @@ public class ExternalStorageManagerTest extends AndroidTestCase {
 	 * referenced
 	 */
 	public void testGetBehaviorMapping() {
-		File file = externalStorageManager.getBehaviorMappingFile("behaviormapping.xml");
-		checkIfExists(file);
+		InputStream stream = externalStorageManager.getBehaviorMappingFile("behaviormapping.xml");
+		assertNotNull(stream);
 	}
 
 	/**
@@ -94,9 +95,12 @@ public class ExternalStorageManagerTest extends AndroidTestCase {
 
 	public void testGetNewBehaviorMapping() {
 		String name = "mapping.xml";
-		File file = externalStorageManager.getBehaviorMappingFile(name);
-		assertTrue(file.exists());
-		file.delete();
+		InputStream fileStream = externalStorageManager.getBehaviorMappingFile(name);
+		assertNotNull(fileStream);
+
+		File roboBrainRoot = externalStorageManager.getRoboBrainRoot();
+		File behaviorMappingFile = new File(roboBrainRoot, name);
+		behaviorMappingFile.delete();
 
 	}
 

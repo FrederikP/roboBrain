@@ -97,7 +97,7 @@ public class BehaviorTest extends AndroidTestCase {
 
 		Thread thread = new Thread(runThis);
 		thread.start();
-		Helper.sleepMillis(200);
+		Helper.sleepMillis(600);
 
 		assertTrue(testMap.get(started));
 

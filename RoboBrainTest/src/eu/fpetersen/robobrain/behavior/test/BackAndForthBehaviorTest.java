@@ -80,44 +80,44 @@ public class BackAndForthBehaviorTest extends AndroidTestCase {
 		Thread behaviorThread = new Thread(behaviorTask);
 		behaviorThread.start();
 
-		Helper.sleepMillis(200);
+		Helper.sleepMillis(600);
 		assertTrue(bAndFBehavior.isTurnedOn());
 
 		assertEquals(MotorState.FORWARD, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(1);
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(200);
 		assertEquals(MotorState.BACKWARD, robot.getMainMotor().getState());
 
-		robot.getFrontSensor().setValue(100);
+		robot.getFrontSensor().setValue(200);
 		robot.getBackSensor().setValue(1);
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(200);
 		assertEquals(MotorState.BACKWARD, robot.getMainMotor().getState());
 
-		robot.getFrontSensor().setValue(100);
+		robot.getFrontSensor().setValue(200);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(200);
 		assertEquals(MotorState.FORWARD, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(200);
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(1);
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(200);
 		assertEquals(MotorState.BACKWARD, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(200);
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(50);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(200);
 		assertEquals(MotorState.FORWARD, robot.getMainMotor().getState());
 
 		// Turn off

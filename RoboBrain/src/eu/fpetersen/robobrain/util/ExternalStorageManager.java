@@ -23,7 +23,10 @@
 package eu.fpetersen.robobrain.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import android.content.Context;
 import android.os.Environment;
@@ -76,7 +79,7 @@ public class ExternalStorageManager {
 	 * 
 	 * @return File that represents robobrains behaviormapping.xml file
 	 */
-	public File getBehaviorMappingFile(String name) {
+	public InputStream getBehaviorMappingFile(String name) {
 		File roboBrainRoot = getRoboBrainRoot();
 		File behaviorMappingFile = new File(roboBrainRoot, name);
 		if (!behaviorMappingFile.exists()) {
@@ -87,7 +90,15 @@ public class ExternalStorageManager {
 				e.printStackTrace();
 			}
 		}
-		return behaviorMappingFile;
+		InputStream stream = null;
+		try {
+			stream = new FileInputStream(behaviorMappingFile);
+		} catch (FileNotFoundException e) {
+			mLog.alertError("behaviormapping file could bot be read");
+			e.printStackTrace();
+		}
+
+		return stream;
 	}
 
 	/**
