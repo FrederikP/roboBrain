@@ -89,7 +89,7 @@ public abstract class RobotPart {
 		}
 		List<String> missingFlagIds = new ArrayList<String>();
 		for (String reqFlag : requiredFlagIds) {
-			if (!mFlags.containsKey(reqFlag)) {
+			if (mFlags == null || !mFlags.containsKey(reqFlag)) {
 				missingFlagIds.add(reqFlag);
 			}
 		}

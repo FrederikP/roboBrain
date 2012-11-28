@@ -264,7 +264,11 @@ public class RobotService extends Service {
 
 		for (Entry<String, Boolean> connectionEntry : connectionTable.entrySet()) {
 			if (!connectionEntry.getValue()) {
-				String robotName = getCCForAddress(connectionEntry.getKey()).getRobot().getName();
+				CommandCenter center = getCCForAddress(connectionEntry.getKey());
+				if (center == null) {
+					continue;
+				}
+				String robotName = center.getRobot().getName();
 				// Device was successfully registered with Amarino. The
 				// connection failed anyways. Turned off?
 				mLog.alertError("Connection failed for robot: " + robotName
@@ -325,7 +329,6 @@ public class RobotService extends Service {
 		}
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 				.getInstance(RobotService.this);
-		// Enter null for standard sd location
 		InputStream mapping = esManager.getBehaviorMappingFile(getString(R.string.mapping_file));
 		Map<String, List<BehaviorInitializer>> behaviorMapping = behaviorFactory
 				.createMappings(mapping);
@@ -335,6 +338,11 @@ public class RobotService extends Service {
 				Robot robot = robotEntry.getValue();
 				List<BehaviorInitializer> behaviorInitializers = behaviorMapping.get(robotEntry
 						.getKey());
+				if (behaviorInitializers == null) {
+					mLog.alertWarning("Robot " + robotEntry.getKey()
+							+ " was not configured in behaviormapping.xml");
+					continue;
+				}
 				List<Behavior> behaviors = new ArrayList<Behavior>();
 				for (BehaviorInitializer initializer : behaviorInitializers) {
 					Behavior behavior = bFac.createBehavior(initializer, robot);
