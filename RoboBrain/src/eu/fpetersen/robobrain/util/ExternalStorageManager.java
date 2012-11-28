@@ -114,4 +114,15 @@ public class ExternalStorageManager {
 		}
 		return true;
 	}
+
+	/**
+	 * 
+	 * @return RoboBrains Music Directory
+	 */
+	public File getMusicDir() {
+		File musicDir = new File(getRoboBrainRoot().getAbsolutePath() + File.separator
+				+ mContext.getString(R.string.sd_robobrain_music_dir));
+		createDirIfNotExistant(musicDir);
+		return musicDir;
+	}
 }

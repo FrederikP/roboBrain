@@ -38,17 +38,17 @@ import java.util.TimerTask;
 
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Environment;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.color.RgbColor;
 import eu.fpetersen.robobrain.color.RgbColorTable;
 import eu.fpetersen.robobrain.color.RgbColorTableFactory;
 import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.parts.ProximitySensor;
 import eu.fpetersen.robobrain.robot.parts.RgbLed;
 import eu.fpetersen.robobrain.robot.parts.Servo;
-import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
+import eu.fpetersen.robobrain.util.ExternalStorageManager;
 
 /**
  * Make the robot play music and move to it.
@@ -76,9 +76,7 @@ public class DanceBehavior extends Behavior {
 		checkForObstacle();
 
 		if (mPlayer != null) {
-			if (mPlayer.isPlaying()) {
-
-			} else {
+			if (!mPlayer.isPlaying()) {
 				startPlayingRandomMusic();
 			}
 		}
@@ -181,30 +179,29 @@ public class DanceBehavior extends Behavior {
 	 * Randomly choose music file from /robobrain/music/ dir and play it
 	 */
 	private void startPlayingRandomMusic() {
-		File sdcard = Environment.getExternalStorageDirectory();
-		File musicDir = new File(sdcard, "robobrain/music");
-		if (!musicDir.exists() || !musicDir.isDirectory()) {
-			mLog.alertError("No music can be played. No /music directory in /robobrain");
-		} else {
-			FilenameFilter filter = new FilenameFilter() {
+		ExternalStorageManager exManager = new ExternalStorageManager(getRobot().getRobotService());
+		if (!exManager.sdCardIsMountedAndWritable()) {
+			return;
+		}
+		File musicDir = exManager.getMusicDir();
+		FilenameFilter filter = new FilenameFilter() {
 
-				public boolean accept(File dir, String filename) {
-					if (filename.endsWith(".mp3") || filename.endsWith(".wma")
-							|| filename.endsWith(".ogg")) {
-						return true;
-					}
-					return false;
+			public boolean accept(File dir, String filename) {
+				if (filename.endsWith(".mp3") || filename.endsWith(".wma")
+						|| filename.endsWith(".ogg")) {
+					return true;
 				}
-			};
-			String[] musicFiles = musicDir.list(filter);
-			int numberOfFiles = musicFiles.length;
-			if (musicFiles.length < 1) {
-				mLog.alertError("No music in directory /robobrain/music");
-			} else {
-				Random random = new Random();
-				int rand = random.nextInt(numberOfFiles);
-				startMusic(new File(musicDir, musicFiles[rand]));
+				return false;
 			}
+		};
+		String[] musicFiles = musicDir.list(filter);
+		int numberOfFiles = musicFiles.length;
+		if (musicFiles.length < 1) {
+			mLog.alertError("No music in directory /robobrain/music");
+		} else {
+			Random random = new Random();
+			int rand = random.nextInt(numberOfFiles);
+			startMusic(new File(musicDir, musicFiles[rand]));
 		}
 
 	}

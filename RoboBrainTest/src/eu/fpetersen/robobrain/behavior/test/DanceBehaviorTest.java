@@ -22,6 +22,11 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.behavior.test;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import android.test.AndroidTestCase;
 import eu.fpetersen.robobrain.R;
 import eu.fpetersen.robobrain.behavior.Behavior;
@@ -32,6 +37,7 @@ import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 import eu.fpetersen.robobrain.test.util.Helper;
+import eu.fpetersen.robobrain.util.ExternalStorageManager;
 
 /**
  * Tests {@link DanceBehavior}. Since there are a lot of random events, the
@@ -53,23 +59,39 @@ public class DanceBehaviorTest extends AndroidTestCase {
 
 	/**
 	 * Tries to test and cover as much of the {@link DanceBehavior} as possible
+	 * 
+	 * @throws IOException
 	 */
-	public void testRunningDanceBehavior() {
+	public void testRunningDanceBehavior() throws IOException {
+		ExternalStorageManager exManager = new ExternalStorageManager(getContext());
+		File musicDir = exManager.getMusicDir();
+		File musicFile = new File(musicDir, "empty.mp3");
+		musicFile.createNewFile();
+		putExampleMp3ToFile(musicFile);
+
 		MockRobotFactory fact = new MockRobotFactory(mService);
 		Robot robot = fact.createSimpleRobot("TestBot");
-		Behavior danceB = new DanceBehavior();
+		final Behavior danceB = new DanceBehavior();
 		BehaviorInitializer initializer = new BehaviorInitializer("DanceBehavior", "Dance");
 		initializer.initialize(danceB, robot);
 		assertNotNull(danceB.getId());
 
 		// Turn on
-		danceB.startBehavior();
+		Runnable behaviorTask = new Runnable() {
+
+			public void run() {
+				danceB.startBehavior();
+			}
+		};
+		Thread behaviorThread = new Thread(behaviorTask);
+		behaviorThread.start();
+
 		Helper.sleepMillis(200);
 		assertTrue(danceB.isTurnedOn());
 
 		// Set some values, just to make sure there is gonna be no error
 		// Also wait for a while, just to see what happens
-		Helper.sleepMillis(2000);
+		Helper.sleepMillis(3000);
 		robot.getFrontSensor().setValue(10);
 		Helper.sleepMillis(100);
 		robot.getFrontSensor().setValue(10);
@@ -84,6 +106,34 @@ public class DanceBehaviorTest extends AndroidTestCase {
 		Helper.sleepMillis(200);
 		assertFalse(danceB.isTurnedOn());
 
+		musicFile.delete();
+
+	}
+
+	/**
+	 * Puts an empty mp3 file to the desired location.
+	 * 
+	 * @param file
+	 * @throws IOException
+	 */
+	public void putExampleMp3ToFile(File file) throws IOException {
+		// create FileInputStream object for source file
+		InputStream fin = getContext().getResources().openRawResource(R.raw.empty_sound);
+
+		// create FileOutputStream object for destination file
+		FileOutputStream fout = new FileOutputStream(file);
+
+		byte[] b = new byte[1024];
+		int noOfBytes = 0;
+
+		// read bytes from source file and write to destination file
+		while ((noOfBytes = fin.read(b)) != -1) {
+			fout.write(b, 0, noOfBytes);
+		}
+
+		// close the streams
+		fin.close();
+		fout.close();
 	}
 
 	@Override

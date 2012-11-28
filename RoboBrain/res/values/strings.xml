@@ -38,6 +38,7 @@
     <string name="avail_behaviors">Available Behaviors:</string>
     <string name="sd_robobrain_root_dir">robobrain</string>
     <string name="sd_robobrain_robots_xml_dir">robots</string>
+    <string name="sd_robobrain_music_dir">music</string>
     <string name="console_timestamp_format">HH:mm:ss dd:MM:yyyy \-\-> </string>
     <string name="ok">OK</string>
     <string name="envvar_testing">robobrain_testing</string>
