@@ -159,6 +159,8 @@ public class RobotServiceTest extends ServiceTestCase<RobotService> {
 		disconnectedIntent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, "TESTADDRESS");
 		getContext().sendBroadcast(disconnectedIntent);
 
+		Helper.sleepMillis(500);
+
 		shutdownService();
 
 		countSecs = 0;
