@@ -34,7 +34,6 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
 import eu.fpetersen.robobrain.services.RobotService;
-import eu.fpetersen.robobrain.util.ExternalStorageManager;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
 import eu.fpetersen.robobrain.util.XmlParserHelper;
 
@@ -66,7 +65,6 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 	 * @return Mapping of robotname to behaviornames.
 	 */
 	public Map<String, List<BehaviorInitializer>> createMappings(InputStream in) {
-		ExternalStorageManager esManager = new ExternalStorageManager(getService());
 		try {
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(in, null);
