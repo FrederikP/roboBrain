@@ -22,13 +22,13 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.behavior;
 
-import android.util.Log;
 import eu.fpetersen.robobrain.requirements.Requirements;
+import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.parts.ProximitySensor;
 import eu.fpetersen.robobrain.robot.parts.Servo;
-import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
-import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.util.SleepHelper;
 
 /**
  * Makes robot avoid obstacles by backing off and looking in both directions for
@@ -91,22 +91,19 @@ public class ObstAvoidanceBehavior extends Behavior {
 	 * to find out which direction the robot will best turn and continue.
 	 */
 	private void checkForBestRouteAndTurn() {
+		SleepHelper sleepHelper = new SleepHelper(getRobot().getRobotService());
 		Robot robot = getRobot();
-		try {
-			robot.getHeadServo().setToAngle(50);
-			Thread.sleep(300);
-			int rightMeasurement = robot.getFrontSensor().getValue();
-			robot.getHeadServo().setToAngle(140);
-			Thread.sleep(300);
-			int leftMeasurement = robot.getFrontSensor().getValue();
-			robot.getHeadServo().setToAngle(95);
-			if (rightMeasurement >= leftMeasurement) {
-				robot.getMainMotor().turnRight(45);
-			} else {
-				robot.getMainMotor().turnLeft(45);
-			}
-		} catch (InterruptedException e) {
-			Log.e(TAG, "Interrupted while waiting for servo to turn", e);
+		robot.getHeadServo().setToAngle(50);
+		sleepHelper.sleepMillis(300);
+		int rightMeasurement = robot.getFrontSensor().getValue();
+		robot.getHeadServo().setToAngle(140);
+		sleepHelper.sleepMillis(300);
+		int leftMeasurement = robot.getFrontSensor().getValue();
+		robot.getHeadServo().setToAngle(95);
+		if (rightMeasurement >= leftMeasurement) {
+			robot.getMainMotor().turnRight(45);
+		} else {
+			robot.getMainMotor().turnLeft(45);
 		}
 	}
 

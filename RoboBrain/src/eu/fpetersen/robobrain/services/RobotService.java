@@ -124,7 +124,7 @@ public class RobotService extends Service {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				if (getAllCCs() != null) {
-					if (intent.getAction().matches(AmarinoIntent.ACTION_CONNECTED)) {
+					if (intent.getAction().matches(AmarinoIntent.ACTION_DISCONNECTED)) {
 						String address = intent.getStringExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS);
 						CommandCenter cc = getCCForAddress(address);
 						if (cc != null) {
@@ -326,8 +326,7 @@ public class RobotService extends Service {
 		BehaviorMappingFactory behaviorFactory = BehaviorMappingFactory
 				.getInstance(RobotService.this);
 		// Enter null for standard sd location
-		InputStream mapping = esManager
-				.getBehaviorMappingFile(getString(R.id.robot_behavior_table));
+		InputStream mapping = esManager.getBehaviorMappingFile(getString(R.string.mapping_file));
 		Map<String, List<BehaviorInitializer>> behaviorMapping = behaviorFactory
 				.createMappings(mapping);
 		if (behaviorMapping != null) {

@@ -48,5 +48,6 @@
     <string name="author_text">Frederik Petersen</string>
     <string name="website_label">Website:</string>
     <string name="website_text">robobrain.fpetersen.eu</string>
+    <string name="mapping_file">behaviormapping.xml</string>
 
 </resources>

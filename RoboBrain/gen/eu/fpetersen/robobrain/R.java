@@ -71,6 +71,7 @@ public final class R {
         public static final int console_timestamp_format=0x7f050011;
         public static final int envvar_testing=0x7f050013;
         public static final int initial_console_output=0x7f050007;
+        public static final int mapping_file=0x7f05001a;
         public static final int menu_settings=0x7f050001;
         public static final int ok=0x7f050012;
         public static final int robobrain_version=0x7f050015;
