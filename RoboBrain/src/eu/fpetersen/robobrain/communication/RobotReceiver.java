@@ -22,11 +22,14 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.communication;
 
+import java.util.StringTokenizer;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.robot.parts.RobotPart;
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.RoboLog;
 
@@ -66,23 +69,20 @@ public class RobotReceiver extends BroadcastReceiver {
 				return;
 			}
 			Robot robot = cc.getRobot();
-			String frontPrefix = "FRONTPROX:";
-			String backPrefix = "BACKPROX:";
-			String consolePrefix = "CONSOLE:";
-			String stoppedAfterDelay = "STOPPEDAFTERDELAY";
-			if (data.startsWith(frontPrefix)) {
-				String substring = data.substring(frontPrefix.length());
-				int proxValue = Integer.parseInt(substring);
-				robot.getFrontSensor().setValue(proxValue);
-			} else if (data.startsWith(backPrefix)) {
-				String substring = data.substring(backPrefix.length());
-				int proxValue = Integer.parseInt(substring);
-				robot.getBackSensor().setValue(proxValue);
-			} else if (data.contains(stoppedAfterDelay)) {
-				robot.getMainMotor().delayActionDone();
-			} else if (data.startsWith(consolePrefix)) {
-				String substring = data.substring(consolePrefix.length());
-				mLog.log(substring, true);
+			StringTokenizer tokenizer = new StringTokenizer(data, ":");
+			if (tokenizer.countTokens() != 2) {
+				return;
+			}
+			String prefix = tokenizer.nextToken();
+			data = tokenizer.nextToken();
+			if (prefix.matches("console")) {
+				mLog.log(data, true);
+			} else {
+				RobotPart part = robot.getPart(prefix);
+				if (part == null) {
+					return;
+				}
+				part.onReceive(data);
 			}
 
 			/*

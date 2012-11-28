@@ -141,4 +141,11 @@ public class Motor extends RobotPart {
 		return requiredFlagIds;
 	}
 
+	@Override
+	public void onReceive(String data) {
+		if (data.contains("delaydone")) {
+			delayActionDone();
+		}
+	}
+
 }

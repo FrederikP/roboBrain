@@ -53,4 +53,9 @@ public class ProximitySensor extends Sensor {
 		return null;
 	}
 
+	@Override
+	public void onReceive(String data) {
+		mValue = Integer.parseInt(data);
+	}
+
 }

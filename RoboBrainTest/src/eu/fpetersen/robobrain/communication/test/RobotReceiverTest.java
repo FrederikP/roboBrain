@@ -29,8 +29,8 @@ import android.test.AndroidTestCase;
 import at.abraxas.amarino.AmarinoIntent;
 import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.communication.RobotReceiver;
-import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
 
@@ -64,7 +64,7 @@ public class RobotReceiverTest extends AndroidTestCase {
 
 		Intent intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
 		intent.putExtra(AmarinoIntent.EXTRA_DATA_TYPE, AmarinoIntent.STRING_EXTRA);
-		intent.putExtra(AmarinoIntent.EXTRA_DATA, "FRONTPROX:" + 12);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA, "front_proxsensor:" + 12);
 		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, "DOESNOTEXIST");
 
 		mRobotReceiver.onReceive(getContext(), intent);
@@ -83,7 +83,7 @@ public class RobotReceiverTest extends AndroidTestCase {
 		int newValue = 12;
 		Intent intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
 		intent.putExtra(AmarinoIntent.EXTRA_DATA_TYPE, AmarinoIntent.STRING_EXTRA);
-		intent.putExtra(AmarinoIntent.EXTRA_DATA, "FRONTPROX:" + newValue);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA, "front_proxsensor:" + newValue);
 		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, mRobot.getAddress());
 
 		mRobotReceiver.onReceive(getContext(), intent);
@@ -93,7 +93,7 @@ public class RobotReceiverTest extends AndroidTestCase {
 		newValue = 1;
 		intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
 		intent.putExtra(AmarinoIntent.EXTRA_DATA_TYPE, AmarinoIntent.STRING_EXTRA);
-		intent.putExtra(AmarinoIntent.EXTRA_DATA, "BACKPROX:" + newValue);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA, "back_proxsensor:" + newValue);
 		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, mRobot.getAddress());
 
 		mRobotReceiver.onReceive(getContext(), intent);
@@ -102,7 +102,7 @@ public class RobotReceiverTest extends AndroidTestCase {
 		// Test motor stop after delayed action
 		intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
 		intent.putExtra(AmarinoIntent.EXTRA_DATA_TYPE, AmarinoIntent.STRING_EXTRA);
-		intent.putExtra(AmarinoIntent.EXTRA_DATA, "STOPPEDAFTERDELAY");
+		intent.putExtra(AmarinoIntent.EXTRA_DATA, "main_motor:delaydone");
 		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, mRobot.getAddress());
 
 		mRobot.getMainMotor().advance(200);
@@ -113,7 +113,36 @@ public class RobotReceiverTest extends AndroidTestCase {
 		// Test Console to make sure no errors are thrown:
 		intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
 		intent.putExtra(AmarinoIntent.EXTRA_DATA_TYPE, AmarinoIntent.STRING_EXTRA);
-		intent.putExtra(AmarinoIntent.EXTRA_DATA, "CONSOLE:log this");
+		intent.putExtra(AmarinoIntent.EXTRA_DATA, "console:log this");
+		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, mRobot.getAddress());
+
+		mRobotReceiver.onReceive(getContext(), intent);
+
+		// Just send some stuff, that shouldn't be recognized.
+		intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA_TYPE, AmarinoIntent.STRING_EXTRA);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA, "headcolor_rgbled:bla");
+		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, mRobot.getAddress());
+
+		mRobotReceiver.onReceive(getContext(), intent);
+
+		intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA_TYPE, AmarinoIntent.STRING_EXTRA);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA, "head_servo:bla");
+		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, mRobot.getAddress());
+
+		mRobotReceiver.onReceive(getContext(), intent);
+
+		intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA_TYPE, AmarinoIntent.STRING_EXTRA);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA, "blub:bla");
+		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, mRobot.getAddress());
+
+		mRobotReceiver.onReceive(getContext(), intent);
+
+		intent = new Intent(AmarinoIntent.ACTION_RECEIVED);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA_TYPE, AmarinoIntent.STRING_EXTRA);
+		intent.putExtra(AmarinoIntent.EXTRA_DATA, "headcolor_rgbled-bla");
 		intent.putExtra(AmarinoIntent.EXTRA_DEVICE_ADDRESS, mRobot.getAddress());
 
 		mRobotReceiver.onReceive(getContext(), intent);

@@ -121,7 +121,7 @@ void setup() {
 	analogWrite(BLUE2, 0);
 
 	//Send to console
-	String toCons = "CONSOLE:Robot initialized";
+	String toCons = "console:Robot initialized";
 	sendData(toCons);
 
 }
@@ -134,11 +134,11 @@ void loop() {
 
 	//Give sensor readings to Android Command Center:
 	int value = getUSMeasurement();
-	String prefix = "FRONTPROX:";
+	String prefix = "front_proxsensor:";
 	sendData(prefix, value);
 
 	value = getIRMeasurement();
-	prefix = "BACKPROX:";
+	prefix = "back_proxsensor:";
 	sendData(prefix, value);
 
 	//For motor events involving time like stopping with delay
@@ -150,7 +150,7 @@ void loop() {
 			stop();
 			millisTimer = 0;
 			eventTimerMode = NONE;
-			String sendThis = "STOPPEDAFTERDELAY";
+			String sendThis = "main_motor:delaydone";
 			sendData(sendThis);
 		}
 		break;
@@ -301,7 +301,7 @@ void turnRightWithAngle(byte flag, byte numOfValues) {
 void setLED(byte flag, byte numOfValues) {
 	int num = numOfValues - 0;
 	if (num != 3) {
-//		sendMessage("CONSOLE:", "LED TURNED OFF");
+//		sendMessage("console:", "LED TURNED OFF");
 		setLEDtoColor();
 	} else {
 		int colors[num];
@@ -313,7 +313,7 @@ void setLED(byte flag, byte numOfValues) {
 //		String comma = ",";
 //		String dot = ".";
 //		String message = starter + red + comma + green + comma + blue + dot;
-//		sendMessage("CONSOLE:", message);
+//		sendMessage("console:", message);
 		setLEDtoColor(colors[0], colors[1], colors[2]);
 	}
 

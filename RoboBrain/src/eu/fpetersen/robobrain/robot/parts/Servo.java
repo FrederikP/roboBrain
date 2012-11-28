@@ -50,4 +50,9 @@ public class Servo extends RobotPart {
 		return requiredFlagIds;
 	}
 
+	@Override
+	public void onReceive(String data) {
+		// Nothing to do.. for now.
+	}
+
 }

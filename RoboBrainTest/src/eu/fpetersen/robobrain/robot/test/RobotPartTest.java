@@ -31,6 +31,7 @@ import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.RobotPartFactory;
 import eu.fpetersen.robobrain.robot.RobotPartInitializer;
 import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.ProximitySensor;
 import eu.fpetersen.robobrain.robot.parts.RgbLed;
 import eu.fpetersen.robobrain.robot.parts.RobotPart;
 import eu.fpetersen.robobrain.test.mock.AbstractPart;
@@ -47,6 +48,31 @@ import eu.fpetersen.robobrain.test.mock.PrivateConstructorPart;
 public class RobotPartTest extends AndroidTestCase {
 
 	private MockRobotService mService;
+
+	/**
+	 * Test {@link RobotPart}s onReceive method. It is usually called when the
+	 * hardware sends data to the Android device
+	 */
+	public void testOnReceive() {
+
+		mService = new MockRobotService(getContext());
+		MockRobotFactory factory = new MockRobotFactory(mService);
+		Robot mockRobot = factory.createSimpleRobot("TestBot");
+
+		RobotPartInitializer initializer = new RobotPartInitializer("ProximitySensor", mockRobot,
+				null);
+		RobotPart sensorPart = RobotPartFactory.getInstance(mService).createRobotPart(
+				"ProximitySensor", initializer);
+
+		assertNotNull(sensorPart);
+
+		assertTrue(initializer.areRequirementsMet());
+
+		sensorPart.onReceive("23");
+
+		assertEquals(23, ((ProximitySensor) sensorPart).getValue());
+
+	}
 
 	/**
 	 * Test creating a motor, including flags

@@ -86,4 +86,9 @@ public class RgbLed extends RobotPart {
 		return new RgbColor("CurrentColor", mRed, mGreen, mBlue);
 	}
 
+	@Override
+	public void onReceive(String data) {
+		// Nothing to do... for now.
+	}
+
 }

@@ -44,4 +44,9 @@ public class PrivateConstructorPart extends RobotPart {
 		return null;
 	}
 
+	@Override
+	public void onReceive(String data) {
+
+	}
+
 }

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import eu.fpetersen.robobrain.communication.RobotReceiver;
 import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.util.RoboLog;
 import eu.fpetersen.robobrain.util.exceptions.RequiredFlagsNotSetException;
@@ -158,5 +159,13 @@ public abstract class RobotPart {
 		}
 		return mFlags.get(id);
 	}
+
+	/**
+	 * This will be called in {@link RobotReceiver} and gives the user a generic
+	 * way to set values of a robot part
+	 * 
+	 * @param data
+	 */
+	public abstract void onReceive(String data);
 
 }
