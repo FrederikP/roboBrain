@@ -128,6 +128,7 @@ public class DanceBehavior extends Behavior {
 		if (musicFile.exists()) {
 			stopMusic();
 			mPlayer = MediaPlayer.create(getRobot().getRobotService(), Uri.fromFile(musicFile));
+			mPlayer.setLooping(false);
 			mPlayer.start();
 		}
 	}
