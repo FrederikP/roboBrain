@@ -46,6 +46,10 @@ import eu.fpetersen.robobrain.util.RoboLog;
  * {@link SpeechResultManager} which then broadcasts them to be receives by a
  * {@link DistributingSpeechReceiver}
  * 
+ * NOTE: This class is not included in test coverage, as it can not be tested
+ * thoroughly in the android emulator, because the recognition service is not
+ * available
+ * 
  * @author Frederik Petersen
  * 
  */

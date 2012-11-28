@@ -318,6 +318,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		starterActivity.finish();
 		if (consoleActivity != null && !consoleActivity.isFinishing())
 			consoleActivity.finish();
+		System.setProperty(starterActivity.getString(R.string.envvar_testing), "");
 		super.tearDown();
 	}
 
