@@ -32,12 +32,12 @@ import eu.fpetersen.robobrain.color.RgbColor;
 import eu.fpetersen.robobrain.color.RgbColorTable;
 import eu.fpetersen.robobrain.color.RgbColorTableFactory;
 import eu.fpetersen.robobrain.requirements.Requirements;
+import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.robot.parts.Motor;
+import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
 import eu.fpetersen.robobrain.robot.parts.ProximitySensor;
 import eu.fpetersen.robobrain.robot.parts.RgbLed;
 import eu.fpetersen.robobrain.robot.parts.Servo;
-import eu.fpetersen.robobrain.robot.parts.Motor.MotorState;
-import eu.fpetersen.robobrain.robot.Robot;
 import eu.fpetersen.robobrain.speech.SpeechReceiver;
 
 /**
@@ -152,12 +152,12 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 	protected void behaviorLoop() {
 		if (getRobot().getMainMotor().getState() != MotorState.STOPPED) {
 			if (getRobot().getFrontSensor().getValue() < 30
-					&& getRobot().getMainMotor().getState() != MotorState.FORWARD) {
+					&& getRobot().getMainMotor().getState() == MotorState.FORWARD) {
 				mLog.log("Stopping due to obstacle in front", true);
 				getRobot().getMainMotor().stop(0);
 			}
 			if (getRobot().getBackSensor().getValue() == 0
-					&& getRobot().getMainMotor().getState() != MotorState.BACKWARD) {
+					&& getRobot().getMainMotor().getState() == MotorState.BACKWARD) {
 				mLog.log("Stopping due to obstacle in back", true);
 				getRobot().getMainMotor().stop(0);
 			}
@@ -191,29 +191,29 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 				if (resultLine.toLowerCase(Locale.US).contains("stop")) {
 					mLog.log("Received voice command to stop", true);
 					motor.stop(0);
-					break;
+					return;
 				}
 			}
-		} else {
-			// If stop is not in results, do whatever is found first
-			for (String resultLine : results) {
-				if (resultLine.toLowerCase(Locale.US).contains("forward")) {
-					mLog.log("Received voice command to advance", true);
-					motor.advance(SPEED);
-					break;
-				} else if (resultLine.toLowerCase(Locale.US).contains("backward")) {
-					mLog.log("Received voice command to backoff", true);
-					motor.backOff(SPEED);
-					break;
-				} else if (resultLine.toLowerCase(Locale.US).contains("right")) {
-					mLog.log("Received voice command to turn right", true);
-					motor.turnRight(ANGLE);
-					break;
-				} else if (resultLine.toLowerCase(Locale.US).contains("left")) {
-					mLog.log("Received voice command to turn left", true);
-					motor.turnLeft(ANGLE);
-					break;
-				}
+		}
+
+		// If stop is not in results, do whatever is found first
+		for (String resultLine : results) {
+			if (resultLine.toLowerCase(Locale.US).contains("forward")) {
+				mLog.log("Received voice command to advance", true);
+				motor.advance(SPEED);
+				break;
+			} else if (resultLine.toLowerCase(Locale.US).contains("backward")) {
+				mLog.log("Received voice command to backoff", true);
+				motor.backOff(SPEED);
+				break;
+			} else if (resultLine.toLowerCase(Locale.US).contains("right")) {
+				mLog.log("Received voice command to turn right", true);
+				motor.turnRight(ANGLE);
+				break;
+			} else if (resultLine.toLowerCase(Locale.US).contains("left")) {
+				mLog.log("Received voice command to turn left", true);
+				motor.turnLeft(ANGLE);
+				break;
 			}
 		}
 
