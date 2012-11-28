@@ -34,23 +34,32 @@ import java.util.UUID;
  */
 public class RobotServiceContainer {
 
-	private static Map<UUID, RobotService> sRobotServices = new HashMap<UUID, RobotService>();
+	private Map<UUID, RobotService> sRobotServices = new HashMap<UUID, RobotService>();
 
-	public static UUID addRobotService(RobotService service) {
+	private static RobotServiceContainer sInstance;
+
+	public UUID addRobotService(RobotService service) {
 		UUID id = UUID.randomUUID();
 		sRobotServices.put(id, service);
 		return id;
 	}
 
-	public static RobotService getRobotService(UUID id) {
+	public RobotService getRobotService(UUID id) {
 		return sRobotServices.get(id);
 	}
 
-	public static void removeRobotService(UUID id) {
+	public void removeRobotService(UUID id) {
 		sRobotServices.remove(id);
 	}
 
 	private RobotServiceContainer() {
+	}
+
+	public static RobotServiceContainer getInstance() {
+		if (sInstance == null) {
+			sInstance = new RobotServiceContainer();
+		}
+		return sInstance;
 	}
 
 }

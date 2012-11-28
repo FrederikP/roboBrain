@@ -109,7 +109,7 @@ public class RobotService extends Service {
 
 		mLog.log("Creating RoboBrain service", true);
 
-		id = RobotServiceContainer.addRobotService(RobotService.this);
+		id = RobotServiceContainer.getInstance().addRobotService(RobotService.this);
 
 		// Make sure device stays awake
 		final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -372,7 +372,7 @@ public class RobotService extends Service {
 			mWakeLock.release();
 		}
 
-		RobotServiceContainer.removeRobotService(id);
+		RobotServiceContainer.getInstance().removeRobotService(id);
 
 		super.onDestroy();
 	}

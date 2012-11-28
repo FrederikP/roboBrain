@@ -143,7 +143,7 @@ public class Starter extends Activity {
 				if (intent.getAction().matches(RoboBrainIntent.ACTION_STARTERUIUPDATE)) {
 					UUID id = (UUID) intent.getSerializableExtra(RoboBrainIntent.EXTRA_SERVICEID);
 					if (id != null) {
-						setRobotService(RobotServiceContainer.getRobotService(id));
+						setRobotService(RobotServiceContainer.getInstance().getRobotService(id));
 					} else {
 						setRobotService(null);
 					}

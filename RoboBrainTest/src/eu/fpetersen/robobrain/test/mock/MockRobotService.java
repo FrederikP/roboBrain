@@ -60,7 +60,7 @@ public class MockRobotService extends RobotService {
 		mTestContext = context;
 		mDistSpeechRec = new DistributingSpeechReceiver();
 		registerReceiver(mDistSpeechRec, new IntentFilter(RoboBrainIntent.ACTION_SPEECH));
-		id = RobotServiceContainer.addRobotService(MockRobotService.this);
+		id = RobotServiceContainer.getInstance().addRobotService(MockRobotService.this);
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class MockRobotService extends RobotService {
 		if (!setToNull) {
 			intent.putExtra(RoboBrainIntent.EXTRA_SERVICEID, id);
 		} else {
-			RobotServiceContainer.removeRobotService(id);
+			RobotServiceContainer.getInstance().removeRobotService(id);
 		}
 		sendBroadcast(intent);
 	}
