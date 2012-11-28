@@ -111,6 +111,105 @@ public class DanceBehaviorTest extends AndroidTestCase {
 	}
 
 	/**
+	 * Tries to test and cover as much of the {@link DanceBehavior} as possible
+	 * Non music file in directory.
+	 * 
+	 * @throws IOException
+	 */
+	public void testRunningDanceBehaviorWithNonMusicFileInDir() throws IOException {
+		ExternalStorageManager exManager = new ExternalStorageManager(getContext());
+		File musicDir = exManager.getMusicDir();
+
+		File nonMusicFile = new File(musicDir, "empty.nonmusic");
+		nonMusicFile.createNewFile();
+
+		MockRobotFactory fact = new MockRobotFactory(mService);
+		Robot robot = fact.createSimpleRobot("TestBot");
+		final Behavior danceB = new DanceBehavior();
+		BehaviorInitializer initializer = new BehaviorInitializer("DanceBehavior", "Dance");
+		initializer.initialize(danceB, robot);
+		assertNotNull(danceB.getId());
+
+		// Turn on
+		Runnable behaviorTask = new Runnable() {
+
+			public void run() {
+				danceB.startBehavior();
+			}
+		};
+		Thread behaviorThread = new Thread(behaviorTask);
+		behaviorThread.start();
+
+		Helper.sleepMillis(200);
+		assertTrue(danceB.isTurnedOn());
+
+		// Set some values, just to make sure there is gonna be no error
+		// Also wait for a while, just to see what happens
+		Helper.sleepMillis(5000);
+		robot.getFrontSensor().setValue(10);
+		Helper.sleepMillis(100);
+		robot.getFrontSensor().setValue(10);
+		robot.getBackSensor().setValue(0);
+		Helper.sleepMillis(100);
+
+		RgbColor color = robot.getHeadColorLed().getColor();
+		assertNotNull(color);
+
+		// Turn off
+		danceB.stopBehavior();
+		Helper.sleepMillis(200);
+		assertFalse(danceB.isTurnedOn());
+
+		nonMusicFile.delete();
+
+	}
+
+	/**
+	 * Tries to test the {@link DanceBehavior} with empty music dir
+	 * 
+	 * @throws IOException
+	 */
+	public void testRunningDanceBehaviorWithoutMusic() throws IOException {
+		MockRobotFactory fact = new MockRobotFactory(mService);
+		Robot robot = fact.createSimpleRobot("TestBot");
+		final Behavior danceB = new DanceBehavior();
+		BehaviorInitializer initializer = new BehaviorInitializer("DanceBehavior", "Dance");
+		initializer.initialize(danceB, robot);
+		assertNotNull(danceB.getId());
+
+		// Turn on
+		Runnable behaviorTask = new Runnable() {
+
+			public void run() {
+				danceB.startBehavior();
+			}
+		};
+		Thread behaviorThread = new Thread(behaviorTask);
+		behaviorThread.start();
+
+		Helper.sleepMillis(200);
+		assertTrue(danceB.isTurnedOn());
+
+		// Set some values, just to make sure there is gonna be no error
+		// Also wait for a while, just to see what happens
+		Helper.sleepMillis(1000);
+		robot.getFrontSensor().setValue(10);
+		Helper.sleepMillis(100);
+		robot.getFrontSensor().setValue(10);
+		robot.getBackSensor().setValue(0);
+		Helper.sleepMillis(100);
+
+		RgbColor color = robot.getHeadColorLed().getColor();
+		assertNotNull(color);
+
+		// Turn off
+		danceB.stopBehavior();
+		Helper.sleepMillis(200);
+		assertFalse(danceB.isTurnedOn());
+
+	}
+
+	/**
 	 * Puts an empty mp3 file to the desired location.
 	 * 
 	 * @param file
