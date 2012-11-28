@@ -28,8 +28,10 @@ import eu.fpetersen.robobrain.behavior.Behavior;
 import eu.fpetersen.robobrain.behavior.BehaviorFactory;
 import eu.fpetersen.robobrain.behavior.BehaviorInitializer;
 import eu.fpetersen.robobrain.robot.Robot;
+import eu.fpetersen.robobrain.test.mock.AbstractBehavior;
 import eu.fpetersen.robobrain.test.mock.MockRobotFactory;
 import eu.fpetersen.robobrain.test.mock.MockRobotService;
+import eu.fpetersen.robobrain.test.mock.PrivateConstructorBehavior;
 
 /**
  * Tests the {@link BehaviorFactory} class.
@@ -57,6 +59,35 @@ public class BehaviorFactoryTest extends AndroidTestCase {
 		assertNotNull(behavior.getId());
 		assertEquals(robot, behavior.getRobot());
 		assertFalse(behavior.isTurnedOn());
+	}
+
+	/**
+	 * Tests negative Behavior Creation by trying to instantiate behaviors that
+	 * do not exist / have a private constructor / are abstract
+	 * {@link BackAndForthBehavior}
+	 */
+	public void testNegativeBehaviorCreation() {
+		mService = new MockRobotService(getContext());
+		MockRobotFactory factory = new MockRobotFactory(mService);
+		Robot robot = factory.createSimpleRobot("TESTBOT");
+		BehaviorFactory bFac = BehaviorFactory.getInstance(mService);
+
+		// Non existant class
+		Behavior behavior = bFac.createBehavior(new BehaviorInitializer("WorldDominationBehavior",
+				"worlddomination"), robot);
+		assertNull(behavior);
+
+		// Abstract class
+		behavior = bFac.createBehavior(new BehaviorInitializer(AbstractBehavior.class.getName(),
+				"abstract"), robot);
+		assertNull(behavior);
+
+		// Private constructor class
+		behavior = bFac.createBehavior(
+				new BehaviorInitializer(PrivateConstructorBehavior.class.getName(), "private"),
+				robot);
+		assertNull(behavior);
+
 	}
 
 	@Override
