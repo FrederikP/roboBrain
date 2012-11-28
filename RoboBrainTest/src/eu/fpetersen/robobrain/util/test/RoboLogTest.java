@@ -25,6 +25,7 @@ package eu.fpetersen.robobrain.util.test;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.TextView;
 import eu.fpetersen.robobrain.R;
+import eu.fpetersen.robobrain.test.util.Helper;
 import eu.fpetersen.robobrain.ui.Console;
 import eu.fpetersen.robobrain.util.RoboLog;
 
@@ -65,6 +66,8 @@ public class RoboLogTest extends ActivityInstrumentationTestCase2<Console> {
 		mLog.log(findThis, true);
 
 		getInstrumentation().waitForIdleSync();
+
+		Helper.sleepMillis(200);
 
 		String allText = consoleTextView.getText().toString();
 		assertTrue(allText.contains(findThis));
