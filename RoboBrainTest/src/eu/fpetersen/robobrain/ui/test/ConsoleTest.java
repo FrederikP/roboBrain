@@ -156,6 +156,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	protected void tearDown() throws Exception {
 		// ///CLOVER:FLUSH
 		consoleActivity.finish();
+		System.setProperty(consoleActivity.getString(R.string.envvar_testing), "");
 		super.tearDown();
 	}
 

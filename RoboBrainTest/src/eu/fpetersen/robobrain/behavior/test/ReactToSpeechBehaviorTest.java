@@ -103,6 +103,17 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 		assertEquals(MotorState.BACKWARD, robot.getMainMotor().getState());
 		mockedResults.clear();
 
+		mockedResults.add("bla bla");
+		mockedResults.add("bla bla stop");
+		reactBehavior.onReceive(mockedResults);
+		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
+		mockedResults.clear();
+
+		mockedResults.add("backward");
+		reactBehavior.onReceive(mockedResults);
+		assertEquals(MotorState.BACKWARD, robot.getMainMotor().getState());
+		mockedResults.clear();
+
 		robot.getFrontSensor().setValue(50);
 		robot.getBackSensor().setValue(0);
 		Helper.sleepMillis(100);
@@ -163,6 +174,7 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 		if (mService != null) {
 			mService.destroy();
 		}
+		System.setProperty(getContext().getString(R.string.envvar_testing), "");
 		// ///CLOVER:FLUSH
 		super.tearDown();
 	}

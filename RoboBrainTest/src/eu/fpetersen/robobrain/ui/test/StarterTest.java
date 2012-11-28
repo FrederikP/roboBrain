@@ -296,6 +296,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		getInstrumentation().waitForIdleSync();
 		// ///CLOVER:FLUSH
 		starterActivity.finish();
+		System.setProperty(starterActivity.getString(R.string.envvar_testing), "");
 		super.tearDown();
 	}
 }

@@ -240,6 +240,7 @@ public class DanceBehaviorTest extends AndroidTestCase {
 		if (mService != null) {
 			mService.destroy();
 		}
+		System.setProperty(getContext().getString(R.string.envvar_testing), "");
 		// ///CLOVER:FLUSH
 		super.tearDown();
 	}
