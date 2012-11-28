@@ -57,6 +57,35 @@ public class BehaviorMappingFactoryTest extends AndroidTestCase {
 		assertEquals(3, behaviorInitializers.size());
 	}
 
+	public void testCreatingBehaviorMappingFromNull() {
+		mService = new MockRobotService(getContext());
+		BehaviorMappingFactory bmFac = BehaviorMappingFactory.getInstance(mService);
+		assertNotNull(bmFac);
+		Map<String, List<BehaviorInitializer>> mapping = bmFac.createMappings(null);
+		assertNull(mapping);
+	}
+
+	public void testCreatingBehaviorMappingFromBrokenXml() {
+		mService = new MockRobotService(getContext());
+		InputStream mappingXml = getContext().getResources().openRawResource(
+				R.raw.behaviormapping_broken);
+		assertNotNull(mappingXml);
+		BehaviorMappingFactory bmFac = BehaviorMappingFactory.getInstance(mService);
+		assertNotNull(bmFac);
+		Map<String, List<BehaviorInitializer>> mapping = bmFac.createMappings(mappingXml);
+		assertNull(mapping);
+	}
+
+	public void testCreatingBehaviorMappingFromEmptyFile() {
+		mService = new MockRobotService(getContext());
+		InputStream mappingXml = getContext().getResources().openRawResource(R.raw.empty);
+		assertNotNull(mappingXml);
+		BehaviorMappingFactory bmFac = BehaviorMappingFactory.getInstance(mService);
+		assertNotNull(bmFac);
+		Map<String, List<BehaviorInitializer>> mapping = bmFac.createMappings(mappingXml);
+		assertNull(mapping);
+	}
+
 	@Override
 	protected void tearDown() throws Exception {
 		if (mService != null) {

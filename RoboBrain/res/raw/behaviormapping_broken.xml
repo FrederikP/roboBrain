@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<behaviormapping>
+    <weird />
+	<robot name="TESTBOT">
+		<behavior name="ReactToSpeechBehavior" speechName="Speech"/>
+		<weird />
+		<behavior name="ObstAvoidanceBehavior" speechName="Obstacle"/>
+		<behavior name="BackAndForthBehavior">
+		    <notsupposedtobehere />
+		</behavior>
+	</robot>
+</behaviormapping>

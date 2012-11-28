@@ -22,7 +22,6 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.behavior;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -62,17 +61,13 @@ public class BehaviorMappingFactory extends RoboBrainFactory {
 	 * behaviors from the file.
 	 * 
 	 * @param in
-	 *            The Input Stream to read the Mapping from, enter null for
-	 *            standard sd card file
+	 *            The Input Stream to read the Mapping from.
 	 * 
 	 * @return Mapping of robotname to behaviornames.
 	 */
 	public Map<String, List<BehaviorInitializer>> createMappings(InputStream in) {
 		ExternalStorageManager esManager = new ExternalStorageManager(getService());
 		try {
-			if (in == null) {
-				in = new FileInputStream(esManager.getBehaviorMappingFile("behaviormapping.xml"));
-			}
 			XmlPullParser parser = Xml.newPullParser();
 			parser.setInput(in, null);
 			parser.nextTag();
