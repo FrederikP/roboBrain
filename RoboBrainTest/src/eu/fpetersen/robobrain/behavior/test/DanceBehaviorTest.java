@@ -91,7 +91,7 @@ public class DanceBehaviorTest extends AndroidTestCase {
 
 		// Set some values, just to make sure there is gonna be no error
 		// Also wait for a while, just to see what happens
-		Helper.sleepMillis(3000);
+		Helper.sleepMillis(7000);
 		robot.getFrontSensor().setValue(10);
 		Helper.sleepMillis(100);
 		robot.getFrontSensor().setValue(10);
