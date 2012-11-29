@@ -23,8 +23,9 @@
 -->
 <behaviormapping>
 	<robot name="YARP">
-		<behavior name="ReactToSpeechBehavior" />
-		<behavior name="ObstAvoidanceBehavior" />
-		<behavior name="BackAndForthBehavior" />
+		<behavior name="ReactToSpeechBehavior" speechName="react"/>
+		<behavior name="ObstAvoidanceBehavior"  speechName="obstacle"/>
+		<behavior name="BackAndForthBehavior"  speechName="simple"/>
+		<behavior name="DanceBehavior"  speechName="dance"/>
 	</robot>
 </behaviormapping>

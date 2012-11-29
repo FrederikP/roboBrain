@@ -195,6 +195,13 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		speechResultManager.allocateNewResults(consoleActivity, mockedSpeechResults);
 
 		// Wait a while to make sure the behavior can be started
+		RobotService service;
+		waitedSecs = 0;
+		do {
+			service = starterActivity.getRobotService();
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		} while (service == null && waitedSecs < 10);
 		CommandCenter cc = starterActivity.getRobotService().getCCForAddress("TESTADDRESS");
 		assertNotNull(cc);
 		waitedSecs = 0;
