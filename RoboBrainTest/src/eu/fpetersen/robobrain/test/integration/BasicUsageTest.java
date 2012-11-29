@@ -350,7 +350,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		Log.d(TAG, "Got-to: 6");
 		getInstrumentation().waitForIdleSync();
-		Helper.sleepMillis(400);
+		Helper.sleepMillis(2000);
 
 		getInstrumentation().invokeMenuActionSync(aboutActivity, R.id.starter_menu_item, 0);
 
