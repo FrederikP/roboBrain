@@ -128,6 +128,13 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 		getInstrumentation().waitForIdleSync();
 		Helper.sleepMillis(200);
 
+		double waitedSecs = 0;
+		while (!consoleActivity.isScrolledDown() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			getInstrumentation().waitForIdleSync();
+			waitedSecs = waitedSecs + 0.1;
+		}
+
 		assertFalse(consoleActivity.isScrolledDown());
 
 		consoleActivity.appendText(TESTFILL);
