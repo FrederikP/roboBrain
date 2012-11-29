@@ -137,9 +137,11 @@ public class ReactToSpeechBehavior extends Behavior implements SpeechReceiver {
 
 		getRobot().getRobotService().getDistributingSpeechReceiver()
 				.addReceiver(ReactToSpeechBehavior.this);
-		if (System.getProperty((getRobot().getRobotService().getString(R.string.envvar_testing)))
-				.matches("true")
-				|| SpeechRecognizer.isRecognitionAvailable(getRobot().getRobotService())) {
+		String prop = System.getProperty((getRobot().getRobotService()
+				.getString(R.string.envvar_testing)));
+		boolean testing = (prop != null && prop.matches("true"));
+
+		if (testing || SpeechRecognizer.isRecognitionAvailable(getRobot().getRobotService())) {
 			super.startBehavior();
 		} else {
 			mLog.alertWarning("Cannot connect to speech Recognition Service.");
