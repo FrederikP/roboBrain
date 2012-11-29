@@ -236,7 +236,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 */
 	public void testDialogCreationWhenActivityFinished() {
 		starterActivity.finish();
-		Helper.sleepMillis(500);
+		Helper.sleepMillis(2500);
 		getInstrumentation().waitForIdleSync();
 		assertTrue(starterActivity.isFinishing());
 
