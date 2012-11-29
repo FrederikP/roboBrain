@@ -81,7 +81,11 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 		Thread behaviorThread = new Thread(behaviorTask);
 		behaviorThread.start();
 
-		Helper.sleepMillis(600);
+		double waitedSecs = 0;
+		while (!reactBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertTrue(reactBehavior.isTurnedOn());
 
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
@@ -95,7 +99,7 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(1);
-		Helper.sleepMillis(200);
+
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
 		mockedResults.add("backward");
@@ -116,7 +120,11 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 
 		robot.getFrontSensor().setValue(50);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (MotorState.STOPPED != robot.getMainMotor().getState() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
 		mockedResults.add("right");
@@ -163,7 +171,11 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 
 		// Turn off
 		reactBehavior.stopBehavior();
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (reactBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertFalse(reactBehavior.isTurnedOn());
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 

@@ -29,7 +29,6 @@ import java.util.Locale;
 import android.app.Activity;
 import android.app.Instrumentation.ActivityMonitor;
 import android.test.ActivityInstrumentationTestCase2;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -54,7 +53,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 	private Starter starterActivity;
 	private Activity consoleActivity;
-	private static final String TAG = "BasicUsageTest";
 
 	/**
 	 * Sets test up to use {@link Starter} activity
@@ -71,8 +69,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		getInstrumentation().waitForIdleSync();
 
-		Log.d(TAG, "Got-to: Startup");
-
 		super.setUp();
 	}
 
@@ -80,8 +76,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		starterActivity.removeAllOpenDialogs();
 		getInstrumentation().waitForIdleSync();
-
-		Log.d(TAG, "Got-to: 10");
 
 		// ----Open Console activity-----
 		ActivityMonitor amConsole = getInstrumentation().addMonitor(Console.class.getName(), null,
@@ -96,19 +90,13 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		ActivityMonitor amStarter = getInstrumentation().addMonitor(Starter.class.getName(), null,
 				false);
 
-		Log.d(TAG, "Got-to: 11");
-
 		getInstrumentation().invokeMenuActionSync(consoleActivity, R.id.starter_menu_item, 0);
-
-		Log.d(TAG, "Got-to: 12");
 
 		Activity starterActivity2 = getInstrumentation()
 				.waitForMonitorWithTimeout(amStarter, 10000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amStarter, 1));
 
 		assertEquals(starterActivity, starterActivity2);
-
-		Log.d(TAG, "Got-to: 13");
 
 		final TextView statusTV = (TextView) starterActivity.findViewById(R.id.status_textview);
 		final ToggleButton toggleButton = (ToggleButton) starterActivity
@@ -123,8 +111,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 				assertTrue(toggleButton.performClick());
 			}
 		});
-
-		Log.d(TAG, "Got-to: 14");
 
 		// Wait a while to make sure the real service can be started
 		double waitedSecs = 0;
@@ -156,8 +142,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		assertNotNull(behaviorList);
 
 		assertEquals(3, behaviorList.getChildCount());
-
-		Log.d(TAG, "Got-to: 15");
 
 		final Button behaviorButton = (Button) behaviorList.getChildAt(2);
 
@@ -194,8 +178,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 			}
 		});
 
-		Log.d(TAG, "Got-to: 16");
-
 		// Wait a while to make sure the behavior can be stopped
 		waitedSecs = 0;
 		while (behaviorList.getChildCount() != 3 && waitedSecs < 20) {
@@ -215,8 +197,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		mockedSpeechResults.add("bart robtacle behavior");
 		mockedSpeechResults.add("start obstacle behavior");
 		speechResultManager.allocateNewResults(consoleActivity, mockedSpeechResults);
-
-		Log.d(TAG, "Got-to: 17");
 
 		// Wait a while to make sure the behavior can be started
 		RobotService service;
@@ -241,7 +221,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		assertNotNull(runningBehavior);
 		assertTrue(runningBehavior.getSpeechName().toLowerCase(Locale.US).contains("obstacle"));
 
-		Log.d(TAG, "Got-to: 18");
 		waitedSecs = 0;
 		while (behaviorList.getChildCount() != 1 && waitedSecs < 20) {
 			Helper.sleepMillis(100);
@@ -271,8 +250,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 			waitedSecs = waitedSecs + 0.1;
 		}
 		getInstrumentation().waitForIdleSync();
-
-		Log.d(TAG, "Got-to: 19");
 
 		assertEquals(3, behaviorList.getChildCount());
 
@@ -304,8 +281,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		assertEquals(1, table.getChildCount());
 
-		Log.d(TAG, "Got-to: 20");
-
 		// Go to Console and check for entries
 
 		getInstrumentation().invokeMenuActionSync(starterActivity, R.id.console_menu_item, 0);
@@ -316,8 +291,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		Console console = (Console) consoleActivity;
 
-		Log.d(TAG, "Got-to: 21");
-
 		TextView consoleTextView = (TextView) console.findViewById(R.id.consoleTextView);
 
 		// Check if stuff was written to console
@@ -327,26 +300,16 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 	public void testSwitchingToAboutActivityAndBack() {
 
-		Log.d(TAG, "Got-to: 1");
-
 		starterActivity.removeAllOpenDialogs();
-
-		Log.d(TAG, "Got-to: 2");
 
 		// ----Open Console activity-----
 		ActivityMonitor amAbout = getInstrumentation().addMonitor(About.class.getName(), null,
 				false);
 
-		Log.d(TAG, "Got-to: 3");
-
 		getInstrumentation().invokeMenuActionSync(starterActivity, R.id.about_menu_item, 0);
-
-		Log.d(TAG, "Got-to: 4");
 
 		Activity aboutActivity = getInstrumentation().waitForMonitorWithTimeout(amAbout, 10000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amAbout, 1));
-
-		Log.d(TAG, "Got-to: 5");
 
 		getInstrumentation().waitForIdleSync();
 
@@ -354,7 +317,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		ActivityMonitor amStarter = getInstrumentation().addMonitor(Starter.class.getName(), null,
 				false);
 
-		Log.d(TAG, "Got-to: 6");
 		getInstrumentation().waitForIdleSync();
 		Helper.sleepMillis(2000);
 
@@ -364,19 +326,13 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 				.waitForMonitorWithTimeout(amStarter, 10000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amStarter, 1));
 
-		Log.d(TAG, "Got-to: 7");
-
 		assertEquals(starterActivity, starterActivity2);
 		getInstrumentation().waitForIdleSync();
 		Helper.sleepMillis(500);
 
-		Log.d(TAG, "Got-to: 8");
-
 		aboutActivity.finish();
 		getInstrumentation().waitForIdleSync();
 		Helper.sleepMillis(500);
-
-		Log.d(TAG, "Got-to: 9");
 	}
 
 	@Override
@@ -392,7 +348,6 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 			consoleActivity.finish();
 		System.setProperty(starterActivity.getString(R.string.envvar_testing), "");
 
-		Log.d(TAG, "Got-to: teardown");
 		super.tearDown();
 	}
 
