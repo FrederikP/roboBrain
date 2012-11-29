@@ -44,17 +44,14 @@ public class BehaviorTest extends AndroidTestCase {
 
 		final Map<String, Boolean> testMap = new HashMap<String, Boolean>();
 		testMap.put(started, false);
+
+		BehaviorInitializer initializer = new BehaviorInitializer("TestBehavior", "Test");
+		MockRobotFactory fact = new MockRobotFactory(mService);
+		Robot simpleRobot = fact.createSimpleRobot("TestBot");
+
 		final Behavior behavior = new Behavior() {
 
 			boolean calledOnce = false;
-
-			@Override
-			public Robot getRobot() {
-				MockRobotFactory factory = new MockRobotFactory(mService);
-				;
-				Robot robot = factory.createSimpleRobot("TestBot");
-				return robot;
-			}
 
 			@Override
 			protected void onStop() {
@@ -81,10 +78,6 @@ public class BehaviorTest extends AndroidTestCase {
 				// Nothing to setup for now
 			}
 		};
-
-		BehaviorInitializer initializer = new BehaviorInitializer("TestBehavior", "Test");
-		MockRobotFactory fact = new MockRobotFactory(mService);
-		Robot simpleRobot = fact.createSimpleRobot("TestBot");
 
 		initializer.initialize(behavior, simpleRobot);
 
