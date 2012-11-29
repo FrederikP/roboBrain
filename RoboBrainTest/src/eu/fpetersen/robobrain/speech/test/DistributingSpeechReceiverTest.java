@@ -76,6 +76,12 @@ public class DistributingSpeechReceiverTest extends AndroidTestCase {
 
 		sendMockResultsToDistReceiver();
 
+		double waitedSecs = 0;
+		while (successfulReceivers.size() != 10 && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
+
 		assertTrue(successfulReceivers.size() == 10);
 
 		successfulReceivers.clear();

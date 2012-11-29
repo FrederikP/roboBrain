@@ -243,8 +243,10 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		while (dialog.isShowing() && waitedSecs < 20) {
 			Helper.sleepMillis(100);
 			waitedSecs = waitedSecs + 0.1;
+			getInstrumentation().waitForIdleSync();
 		}
-
+		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(100);
 		assertFalse(dialog.isShowing());
 
 	}
