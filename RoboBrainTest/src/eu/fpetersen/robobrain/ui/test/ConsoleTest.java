@@ -161,9 +161,15 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 		cIntent.putExtra(RoboBrainIntent.EXTRA_OUTPUT, appendMe);
 		consoleActivity.sendBroadcast(cIntent);
 
-		getInstrumentation().waitForIdleSync();
-		Helper.sleepMillis(100);
+		double waitedSecs = 0;
 		String allText = consoleTextView.getText().toString();
+		while (!allText.contains(appendMe) && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			allText = consoleTextView.getText().toString();
+			getInstrumentation().waitForIdleSync();
+			waitedSecs = waitedSecs + 0.1;
+		}
+
 		assertTrue(allText.contains(appendMe));
 
 	}

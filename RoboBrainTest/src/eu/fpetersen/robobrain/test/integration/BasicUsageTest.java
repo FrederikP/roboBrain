@@ -242,6 +242,11 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		assertTrue(runningBehavior.getSpeechName().toLowerCase(Locale.US).contains("obstacle"));
 
 		Log.d(TAG, "Got-to: 18");
+		waitedSecs = 0;
+		while (behaviorList.getChildCount() != 1 && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 
 		assertEquals(1, behaviorList.getChildCount());
 
