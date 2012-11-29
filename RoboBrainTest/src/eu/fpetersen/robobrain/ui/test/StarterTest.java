@@ -246,7 +246,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 			getInstrumentation().waitForIdleSync();
 		}
 		getInstrumentation().waitForIdleSync();
-		Helper.sleepMillis(100);
+		Helper.sleepMillis(500);
 		assertFalse(dialog.isShowing());
 
 	}
