@@ -89,7 +89,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		getInstrumentation().invokeMenuActionSync(starterActivity, R.id.console_menu_item, 0);
 
-		consoleActivity = getInstrumentation().waitForMonitorWithTimeout(amConsole, 1000);
+		consoleActivity = getInstrumentation().waitForMonitorWithTimeout(amConsole, 10000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amConsole, 1));
 
 		// ----Go back to Starter activity-----
@@ -102,7 +102,8 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		Log.d(TAG, "Got-to: 12");
 
-		Activity starterActivity2 = getInstrumentation().waitForMonitorWithTimeout(amStarter, 1000);
+		Activity starterActivity2 = getInstrumentation()
+				.waitForMonitorWithTimeout(amStarter, 10000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amStarter, 1));
 
 		assertEquals(starterActivity, starterActivity2);
@@ -337,7 +338,7 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		Log.d(TAG, "Got-to: 4");
 
-		Activity aboutActivity = getInstrumentation().waitForMonitorWithTimeout(amAbout, 1000);
+		Activity aboutActivity = getInstrumentation().waitForMonitorWithTimeout(amAbout, 10000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amAbout, 1));
 
 		Log.d(TAG, "Got-to: 5");
@@ -354,7 +355,8 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		getInstrumentation().invokeMenuActionSync(aboutActivity, R.id.starter_menu_item, 0);
 
-		Activity starterActivity2 = getInstrumentation().waitForMonitorWithTimeout(amStarter, 1000);
+		Activity starterActivity2 = getInstrumentation()
+				.waitForMonitorWithTimeout(amStarter, 10000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amStarter, 1));
 
 		Log.d(TAG, "Got-to: 7");
