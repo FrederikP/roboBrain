@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<robot name="TESTBOT" address="TESTADDRESS">
+<robot address="TESTADDRESS">
     <weird />
 	<parts>
 		<part tye="Motor" id="main_motor">

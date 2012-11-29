@@ -118,10 +118,12 @@ public abstract class Behavior {
 	 * activity
 	 */
 	private void updateBehaviorStatusInUI() {
-		// Try updating UI here
-		Intent intent = new Intent(RoboBrainIntent.ACTION_BEHAVIORUPDATE);
-		intent.putExtra(RoboBrainIntent.EXTRA_ROBOTADDRESS, getRobot().getAddress());
-		getRobot().getRobotService().sendBroadcast(intent);
+		if (getRobot() != null && getRobot().getRobotService() != null) {
+			// Try updating UI here
+			Intent intent = new Intent(RoboBrainIntent.ACTION_BEHAVIORUPDATE);
+			intent.putExtra(RoboBrainIntent.EXTRA_ROBOTADDRESS, getRobot().getAddress());
+			getRobot().getRobotService().sendBroadcast(intent);
+		}
 	}
 
 	/**

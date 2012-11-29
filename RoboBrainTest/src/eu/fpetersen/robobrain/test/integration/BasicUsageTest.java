@@ -67,12 +67,15 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		System.setProperty(starterActivity.getString(R.string.envvar_testing), "true");
 
+		getInstrumentation().waitForIdleSync();
+
 		super.setUp();
 	}
 
 	public void testTurningOnAndOff() {
 
 		starterActivity.removeAllOpenDialogs();
+		getInstrumentation().waitForIdleSync();
 
 		// ----Open Console activity-----
 		ActivityMonitor amConsole = getInstrumentation().addMonitor(Console.class.getName(), null,
@@ -301,6 +304,8 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		Activity aboutActivity = getInstrumentation().waitForMonitorWithTimeout(amAbout, 1000);
 		assertEquals(true, getInstrumentation().checkMonitorHit(amAbout, 1));
 
+		getInstrumentation().waitForIdleSync();
+
 		// ----Go back to Starter activity-----
 		ActivityMonitor amStarter = getInstrumentation().addMonitor(Starter.class.getName(), null,
 				false);
@@ -311,13 +316,18 @@ public class BasicUsageTest extends ActivityInstrumentationTestCase2<Starter> {
 		assertEquals(true, getInstrumentation().checkMonitorHit(amStarter, 1));
 
 		assertEquals(starterActivity, starterActivity2);
+		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(500);
 
 		aboutActivity.finish();
+		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(500);
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 		// ///CLOVER:FLUSH
+		getInstrumentation().waitForIdleSync();
 		RobotService service = starterActivity.getRobotService();
 		if (service != null) {
 			service.stopSelf();

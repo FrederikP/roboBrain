@@ -33,6 +33,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.util.Xml;
+import eu.fpetersen.robobrain.robot.parts.RobotPart;
 import eu.fpetersen.robobrain.services.RobotService;
 import eu.fpetersen.robobrain.util.RoboBrainFactory;
 import eu.fpetersen.robobrain.util.XmlParserHelper;
@@ -190,7 +191,13 @@ public class RobotFactory extends RoboBrainFactory {
 			}
 		}
 		RobotPartInitializer initializer = new RobotPartInitializer(id, robot, flags);
-		robot.addPart(id, rbFac.createRobotPart(type, initializer));
+		RobotPart part = rbFac.createRobotPart(type, initializer);
+		if (part != null) {
+			robot.addPart(id, part);
+		} else {
+			throw new XmlPullParserException("Part with id " + id
+					+ " could not be added to robot. Canceling. Check robots xml.");
+		}
 
 		parser.require(XmlPullParser.END_TAG, NS, "part");
 

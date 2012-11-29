@@ -65,6 +65,9 @@ public class RobotPartFactory extends RoboBrainFactory {
 	 */
 	public RobotPart createRobotPart(String type, RobotPartInitializer initializer) {
 		String partClassName;
+		if (type == null) {
+			return null;
+		}
 		if (!type.contains(".")) {
 			String robotPartPackageName = RobotPart.class.getPackage().getName();
 			partClassName = robotPartPackageName + "." + type;
