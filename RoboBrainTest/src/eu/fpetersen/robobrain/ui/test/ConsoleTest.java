@@ -104,10 +104,13 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 	public void testTextScrolling() {
 		consoleActivity.appendText(TESTFILL);
 		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(200);
 		consoleActivity.appendText(TESTFILL);
 		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(200);
 		consoleActivity.appendText(TESTFILL);
 		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(200);
 
 		assertTrue(consoleActivity.isScrolledDown());
 
@@ -123,15 +126,19 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 		});
 
 		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(200);
 
 		assertFalse(consoleActivity.isScrolledDown());
 
 		consoleActivity.appendText(TESTFILL);
 		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(200);
 		consoleActivity.appendText(TESTFILL);
 		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(200);
 		consoleActivity.appendText(TESTFILL);
 		getInstrumentation().waitForIdleSync();
+		Helper.sleepMillis(200);
 
 		assertFalse(consoleActivity.isScrolledDown());
 	}
