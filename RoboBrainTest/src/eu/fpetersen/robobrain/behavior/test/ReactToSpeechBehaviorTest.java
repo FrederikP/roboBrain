@@ -100,6 +100,12 @@ public class ReactToSpeechBehaviorTest extends AndroidTestCase {
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(1);
 
+		waitedSecs = 0;
+		while (MotorState.STOPPED != robot.getMainMotor().getState() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
+
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
 		mockedResults.add("backward");

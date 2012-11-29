@@ -95,10 +95,10 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 			}
 		});
 		// Wait a while to make sure any real service can be started
-		int waitedSecs = 0;
+		double waitedSecs = 0;
 		while (!statusTV.getText().toString().matches("Started!") && waitedSecs < 20) {
-			Helper.sleepMillis(1000);
-			waitedSecs++;
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
 		}
 
 		// set mock service to running
@@ -112,11 +112,11 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		mRobotService.broadcastUIUpdateIntent(false);
 
 		TextView robotNameView = getRobotNameTextView();
-		int seconds = 0;
+		double seconds = 0;
 		while ((robotNameView == null || !robotNameView.getText().toString().matches("TestBot"))
 				&& seconds < 20) {
-			Helper.sleepMillis(1000);
-			seconds++;
+			Helper.sleepMillis(100);
+			seconds = seconds + 0.1;
 			robotNameView = getRobotNameTextView();
 		}
 
@@ -143,8 +143,8 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		// Wait a while to make sure any real service can be stopped
 		waitedSecs = 0;
 		while (!statusTV.getText().toString().matches("Stopped!") && waitedSecs < 5) {
-			Helper.sleepMillis(1000);
-			waitedSecs++;
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
 		}
 
 		// set mock service to not running
@@ -155,6 +155,13 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		mRobotService.broadcastUIUpdateIntent(true);
 
 		Helper.sleepMillis(3000);
+
+		waitedSecs = 0;
+		while (statusTV.getText() != "Stopped!" && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+			getInstrumentation().waitForIdleSync();
+		}
 
 		assertEquals("Stopped!", statusTV.getText());
 		assertFalse(mRobotService.isRunning());
@@ -229,6 +236,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 */
 	public void testDialogCreationWhenActivityFinished() {
 		starterActivity.finish();
+		Helper.sleepMillis(500);
 		getInstrumentation().waitForIdleSync();
 		assertTrue(starterActivity.isFinishing());
 
