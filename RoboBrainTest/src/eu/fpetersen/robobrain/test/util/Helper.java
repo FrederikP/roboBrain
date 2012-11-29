@@ -39,7 +39,12 @@ public class Helper {
 	 */
 	public static void sleepMillis(long millis) {
 		try {
-			Thread.sleep(millis);
+			int multiplier = 1;
+			if (System.getenv("buildonjenkins") != null
+					&& System.getenv("buildonjenkins").matches("true")) {
+				multiplier = 5;
+			}
+			Thread.sleep(millis * multiplier);
 		} catch (InterruptedException e) {
 			// Usually works. Is only used for tests so try again. And look at
 			// stacktrace.
