@@ -80,8 +80,18 @@ public class ObstAvoidanceBehaviorTest extends AndroidTestCase {
 		Thread behaviorThread = new Thread(behaviorTask);
 		behaviorThread.start();
 
-		Helper.sleepMillis(600);
+		double waitedSecs = 0;
+		while (!obstBehavior.isTurnedOn() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertTrue(obstBehavior.isTurnedOn());
+
+		waitedSecs = 0;
+		while (MotorState.FORWARD != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 
 		assertEquals(MotorState.FORWARD, robot.getMainMotor().getState());
 

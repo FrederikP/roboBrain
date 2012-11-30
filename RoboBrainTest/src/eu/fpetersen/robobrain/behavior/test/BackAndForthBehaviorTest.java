@@ -80,50 +80,98 @@ public class BackAndForthBehaviorTest extends AndroidTestCase {
 		Thread behaviorThread = new Thread(behaviorTask);
 		behaviorThread.start();
 
-		Helper.sleepMillis(600);
+		double waitedSecs = 0;
+		while (!bAndFBehavior.isTurnedOn() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertTrue(bAndFBehavior.isTurnedOn());
 
+		waitedSecs = 0;
+		while (MotorState.FORWARD != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
+
 		assertEquals(MotorState.FORWARD, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(1);
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (MotorState.BACKWARD != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertEquals(MotorState.BACKWARD, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(200);
 		robot.getBackSensor().setValue(1);
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (MotorState.BACKWARD != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertEquals(MotorState.BACKWARD, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(200);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (MotorState.FORWARD != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertEquals(MotorState.FORWARD, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (MotorState.STOPPED != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(1);
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (MotorState.BACKWARD != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertEquals(MotorState.BACKWARD, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (MotorState.STOPPED != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(50);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (MotorState.FORWARD != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertEquals(MotorState.FORWARD, robot.getMainMotor().getState());
 
 		// Turn off
 		bAndFBehavior.stopBehavior();
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (bAndFBehavior.isTurnedOn() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertFalse(bAndFBehavior.isTurnedOn());
+
+		waitedSecs = 0;
+		while (MotorState.STOPPED != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
 	}

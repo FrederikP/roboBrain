@@ -112,7 +112,9 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 			getInstrumentation().waitForIdleSync();
 			waitedSecs = waitedSecs + 0.1;
 		}
-		Helper.sleepMillis(1000);
+		Helper.sleepMillis(5000);
+		assertTrue(consoleActivity.isScrolledDown());
+
 		consoleActivity.appendText(TESTFILL);
 		waitedSecs = 0;
 		while (!consoleActivity.isScrolledDown() && waitedSecs < 10) {
@@ -121,6 +123,8 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 			waitedSecs = waitedSecs + 0.1;
 		}
 		Helper.sleepMillis(1000);
+		assertTrue(consoleActivity.isScrolledDown());
+
 		consoleActivity.appendText(TESTFILL);
 		waitedSecs = 0;
 		while (!consoleActivity.isScrolledDown() && waitedSecs < 10) {
