@@ -96,7 +96,7 @@ public class Console extends Activity {
 	private void scrollToBottom() {
 		mConsoleScroller.post(new Runnable() {
 			public void run() {
-				mConsoleScroller.smoothScrollTo(0, mConsoleTV.getBottom());
+				mConsoleScroller.fullScroll(ScrollView.FOCUS_DOWN);
 			}
 		});
 	}

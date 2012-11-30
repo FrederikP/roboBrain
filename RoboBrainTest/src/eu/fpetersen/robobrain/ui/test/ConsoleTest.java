@@ -139,6 +139,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 
 			public void run() {
 				textScroll.scrollTo(0, textScroll.getTop());
+				textScroll.fullScroll(ScrollView.FOCUS_UP);
 				interThreadHelperSet.add(1);
 
 			}
