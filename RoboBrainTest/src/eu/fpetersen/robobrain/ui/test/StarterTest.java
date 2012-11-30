@@ -114,7 +114,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		TextView robotNameView = getRobotNameTextView();
 		double seconds = 0;
 		while ((robotNameView == null || !robotNameView.getText().toString().matches("TestBot"))
-				&& seconds < 20) {
+				&& "Started!" == statusTV.getText() && seconds < 30) {
 			Helper.sleepMillis(100);
 			seconds = seconds + 0.1;
 			robotNameView = getRobotNameTextView();
@@ -236,7 +236,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 */
 	public void testDialogCreationWhenActivityFinished() {
 		starterActivity.finish();
-		Helper.sleepMillis(2500);
+		Helper.sleepMillis(5000);
 		getInstrumentation().waitForIdleSync();
 		assertTrue(starterActivity.isFinishing());
 
@@ -246,13 +246,6 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 
 		assertNotNull(dialog);
 
-		getInstrumentation().waitForIdleSync();
-		double waitedSecs = 0;
-		while (dialog.isShowing() && waitedSecs < 20) {
-			Helper.sleepMillis(100);
-			waitedSecs = waitedSecs + 0.1;
-			getInstrumentation().waitForIdleSync();
-		}
 		getInstrumentation().waitForIdleSync();
 		Helper.sleepMillis(500);
 		assertFalse(dialog.isShowing());

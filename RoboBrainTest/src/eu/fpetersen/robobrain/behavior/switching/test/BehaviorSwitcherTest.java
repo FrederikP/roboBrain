@@ -75,16 +75,26 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 		assertEquals(simpleBehavior, behavior);
 
 		mSwitcher.startBehavior(simpleBehavior.getId());
-		Helper.sleepMillis(200);
 
 		CommandCenter cc = mService.getCCForAddress(robot.getAddress());
 		assertNotNull(cc);
+
+		double waitedSecs = 0;
+		while (!simpleBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertTrue(simpleBehavior.isTurnedOn());
 
 		assertEquals(cc.getRunningBehavior(), simpleBehavior);
 
 		mSwitcher.stopBehavior(simpleBehavior.getId());
-		Helper.sleepMillis(200);
+
+		waitedSecs = 0;
+		while (simpleBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 
 		assertFalse(simpleBehavior.isTurnedOn());
 		assertNull(cc.getRunningBehavior());
@@ -119,10 +129,15 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 		assertEquals(simpleBehavior, behavior);
 
 		mSwitcher.startBehavior(simpleBehavior.getId());
-		Helper.sleepMillis(200);
 
 		CommandCenter cc = mService.getCCForAddress(robot.getAddress());
 		assertNotNull(cc);
+		double waitedSecs = 0;
+		while (!simpleBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
+
 		assertTrue(simpleBehavior.isTurnedOn());
 
 		assertEquals(cc.getRunningBehavior(), simpleBehavior);
@@ -133,7 +148,11 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 		assertEquals(obstBehavior, behavior);
 
 		mSwitcher.startBehavior(obstBehavior.getId());
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (!obstBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 
 		assertNotNull(cc);
 		assertTrue(obstBehavior.isTurnedOn());
@@ -143,7 +162,12 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 		// Stop that service
 
 		mSwitcher.stopBehavior(obstBehavior.getId());
-		Helper.sleepMillis(200);
+
+		waitedSecs = 0;
+		while (obstBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 
 		assertFalse(obstBehavior.isTurnedOn());
 		assertFalse(simpleBehavior.isTurnedOn());
@@ -170,16 +194,25 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 		assertEquals(simpleBehavior, behavior);
 
 		mSwitcher.startBehavior(simpleBehavior.getId());
-		Helper.sleepMillis(200);
 
 		CommandCenter cc = mService.getCCForAddress(robot.getAddress());
 		assertNotNull(cc);
+		double waitedSecs = 0;
+		while (!simpleBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
+
 		assertTrue(simpleBehavior.isTurnedOn());
 
 		assertEquals(cc.getRunningBehavior(), simpleBehavior);
 
 		mSwitcher.stopAllBehaviors();
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (simpleBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 
 		assertFalse(simpleBehavior.isTurnedOn());
 		assertNull(cc.getRunningBehavior());
@@ -221,10 +254,15 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 		mockedSpeechResults.add("start obstacle behavior");
 		SpeechResultManager.getInstance().allocateNewResults(getContext(), mockedSpeechResults);
 
-		Helper.sleepMillis(200);
-
 		CommandCenter cc = mService.getCCForAddress(robot.getAddress());
 		assertNotNull(cc);
+
+		double waitedSecs = 0;
+		while (!obstBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
+
 		assertTrue(obstBehavior.isTurnedOn());
 
 		assertEquals(cc.getRunningBehavior(), obstBehavior);
@@ -234,7 +272,11 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 		mockedSpeechResults.add("start notexistant behavior");
 		mockedSpeechResults.add("stop all behavior");
 		SpeechResultManager.getInstance().allocateNewResults(getContext(), mockedSpeechResults);
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (!obstBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 
 		assertFalse(obstBehavior.isTurnedOn());
 		assertNull(cc.getRunningBehavior());
@@ -258,7 +300,11 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 		mService.addCC(robot, noBehaviors);
 
 		mSwitcher.startBehavior(simpleBehavior.getId());
-		Helper.sleepMillis(200);
+		double waitedSecs = 0;
+		while (!simpleBehavior.isTurnedOn() && waitedSecs < 20) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertFalse(simpleBehavior.isTurnedOn());
 
 		mSwitcher.stopBehavior(simpleBehavior.getId());
