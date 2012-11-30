@@ -64,6 +64,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	@Override
 	protected void setUp() throws Exception {
 		starterActivity = getActivity();
+		Helper.sleepMillis(2000);
 		System.setProperty(starterActivity.getString(R.string.envvar_testing), "true");
 		super.setUp();
 	}
@@ -236,7 +237,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 */
 	public void testDialogCreationWhenActivityFinished() {
 		starterActivity.finish();
-		Helper.sleepMillis(5000);
+		Helper.sleepMillis(7000);
 		getInstrumentation().waitForIdleSync();
 		assertTrue(starterActivity.isFinishing());
 
