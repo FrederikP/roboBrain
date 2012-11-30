@@ -273,7 +273,7 @@ public class BehaviorSwitcherTest extends AndroidTestCase {
 		mockedSpeechResults.add("stop all behavior");
 		SpeechResultManager.getInstance().allocateNewResults(getContext(), mockedSpeechResults);
 		waitedSecs = 0;
-		while (!obstBehavior.isTurnedOn() && waitedSecs < 20) {
+		while (obstBehavior.isTurnedOn() && waitedSecs < 20) {
 			Helper.sleepMillis(100);
 			waitedSecs = waitedSecs + 0.1;
 		}
