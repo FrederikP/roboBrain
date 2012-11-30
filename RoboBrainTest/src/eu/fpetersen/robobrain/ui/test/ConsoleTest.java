@@ -112,6 +112,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 			getInstrumentation().waitForIdleSync();
 			waitedSecs = waitedSecs + 0.1;
 		}
+		Helper.sleepMillis(500);
 		consoleActivity.appendText(TESTFILL);
 		waitedSecs = 0;
 		while (!consoleActivity.isScrolledDown() && waitedSecs < 10) {
@@ -119,6 +120,7 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 			getInstrumentation().waitForIdleSync();
 			waitedSecs = waitedSecs + 0.1;
 		}
+		Helper.sleepMillis(500);
 		consoleActivity.appendText(TESTFILL);
 		waitedSecs = 0;
 		while (!consoleActivity.isScrolledDown() && waitedSecs < 10) {
@@ -126,6 +128,8 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 			getInstrumentation().waitForIdleSync();
 			waitedSecs = waitedSecs + 0.1;
 		}
+
+		Helper.sleepMillis(2000);
 
 		assertTrue(consoleActivity.isScrolledDown());
 		Helper.sleepMillis(1000);
@@ -158,13 +162,13 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 
 		consoleActivity.appendText(TESTFILL);
 		getInstrumentation().waitForIdleSync();
-		Helper.sleepMillis(200);
+		Helper.sleepMillis(500);
 		consoleActivity.appendText(TESTFILL);
 		getInstrumentation().waitForIdleSync();
-		Helper.sleepMillis(200);
+		Helper.sleepMillis(500);
 		consoleActivity.appendText(TESTFILL);
 		getInstrumentation().waitForIdleSync();
-		Helper.sleepMillis(200);
+		Helper.sleepMillis(500);
 
 		assertFalse(consoleActivity.isScrolledDown());
 	}
