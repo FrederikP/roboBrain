@@ -29,6 +29,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.ScrollView;
@@ -145,12 +146,15 @@ public class Console extends Activity {
 	 * @return True if completely scrolled down, false if not
 	 */
 	public boolean isScrolledDown() {
-		boolean scrollDownAfterAppend = true;
-		int scrollY = mConsoleScroller.getScrollY() + mConsoleScroller.getHeight() + 20;
-		int cBottom = mConsoleTV.getBottom();
-		if (scrollY + 20 < cBottom)
-			scrollDownAfterAppend = false;
-		return scrollDownAfterAppend;
+		int scrollY = mConsoleScroller.getScrollY();
+		int childHeight = mConsoleScroller.getChildAt(0).getMeasuredHeight();
+		int height = mConsoleScroller.getHeight();
+		Log.d("Console", "scrollY: " + scrollY + "; height: " + height + "; childHeight: "
+				+ childHeight);
+		if (childHeight <= scrollY + height) {
+			return true;
+		} else {
+			return false;
+		}
 	}
-
 }

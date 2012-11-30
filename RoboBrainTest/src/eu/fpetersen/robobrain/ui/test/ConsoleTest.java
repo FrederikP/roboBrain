@@ -22,6 +22,9 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.ui.test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import android.content.Intent;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.MoreAsserts;
@@ -125,27 +128,30 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 		}
 
 		assertTrue(consoleActivity.isScrolledDown());
+		Helper.sleepMillis(1000);
 
 		getInstrumentation().waitForIdleSync();
 
 		final ScrollView textScroll = (ScrollView) consoleActivity
 				.findViewById(R.id.consoleScroller);
-		consoleActivity.runOnUiThread(new Runnable() {
+		final Set<Integer> interThreadHelperSet = new HashSet<Integer>();
+		textScroll.post(new Runnable() {
 
 			public void run() {
-				textScroll.smoothScrollTo(0, textScroll.getTop());
+				textScroll.scrollTo(0, textScroll.getTop());
+				interThreadHelperSet.add(1);
+
 			}
 		});
 
-		getInstrumentation().waitForIdleSync();
-		Helper.sleepMillis(200);
-
 		waitedSecs = 0;
-		while (consoleActivity.isScrolledDown() && waitedSecs < 10) {
+		while (!interThreadHelperSet.contains(1) && waitedSecs < 20) {
 			Helper.sleepMillis(100);
 			getInstrumentation().waitForIdleSync();
 			waitedSecs = waitedSecs + 0.1;
 		}
+
+		Helper.sleepMillis(1000);
 
 		assertFalse(consoleActivity.isScrolledDown());
 
