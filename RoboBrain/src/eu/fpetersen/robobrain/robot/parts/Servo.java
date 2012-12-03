@@ -33,6 +33,8 @@ import java.util.List;
  */
 public class Servo extends RobotPart {
 
+	private int mAngle = 0;
+
 	/**
 	 * Set servo to specified angle
 	 * 
@@ -40,6 +42,7 @@ public class Servo extends RobotPart {
 	 *            Angle in degrees
 	 */
 	public void setToAngle(int angle) {
+		mAngle = angle;
 		getRobot().sendToArduino(getFlag("toAngle"), angle);
 	}
 
@@ -53,6 +56,13 @@ public class Servo extends RobotPart {
 	@Override
 	public void onReceive(String data) {
 		// Nothing to do.. for now.
+	}
+
+	/**
+	 * @return
+	 */
+	public int getAngle() {
+		return mAngle;
 	}
 
 }

@@ -97,16 +97,27 @@ public class ObstAvoidanceBehaviorTest extends AndroidTestCase {
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(1);
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (MotorState.BACKWARD != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(10);
+			waitedSecs = waitedSecs + 0.01;
+		}
 		assertEquals(MotorState.BACKWARD, robot.getMainMotor().getState());
 
-		robot.getFrontSensor().setValue(200);
-		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(300);
 		robot.getFrontSensor().setValue(60);
-		Helper.sleepMillis(300);
+		robot.getBackSensor().setValue(0);
+
+		Helper.sleepMillis(500);
+
 		robot.getFrontSensor().setValue(90);
-		Helper.sleepMillis(1000);
+
+		waitedSecs = 0;
+		while (robot.getHeadServo().getAngle() != 95 && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
+
+		Helper.sleepMillis(500);
 		assertEquals(MotorState.TURNING_LEFT, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(90);
@@ -117,15 +128,27 @@ public class ObstAvoidanceBehaviorTest extends AndroidTestCase {
 
 		robot.getFrontSensor().setValue(5);
 		robot.getBackSensor().setValue(1);
-		Helper.sleepMillis(200);
+
+		waitedSecs = 0;
+		while (MotorState.BACKWARD != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(10);
+			waitedSecs = waitedSecs + 0.01;
+		}
 		assertEquals(MotorState.BACKWARD, robot.getMainMotor().getState());
 
-		robot.getFrontSensor().setValue(200);
-		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(300);
 		robot.getFrontSensor().setValue(90);
-		Helper.sleepMillis(300);
+		robot.getBackSensor().setValue(0);
+
+		Helper.sleepMillis(500);
+
 		robot.getFrontSensor().setValue(60);
+
+		waitedSecs = 0;
+		while (robot.getHeadServo().getAngle() != 95 && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
+
 		Helper.sleepMillis(500);
 		assertEquals(MotorState.TURNING_RIGHT, robot.getMainMotor().getState());
 
