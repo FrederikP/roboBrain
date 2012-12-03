@@ -102,11 +102,11 @@ public class ObstAvoidanceBehaviorTest extends AndroidTestCase {
 
 		robot.getFrontSensor().setValue(200);
 		robot.getBackSensor().setValue(0);
-		Helper.sleepMillis(200);
+		Helper.sleepMillis(300);
 		robot.getFrontSensor().setValue(60);
-		Helper.sleepMillis(200);
+		Helper.sleepMillis(300);
 		robot.getFrontSensor().setValue(90);
-		Helper.sleepMillis(500);
+		Helper.sleepMillis(1000);
 		assertEquals(MotorState.TURNING_LEFT, robot.getMainMotor().getState());
 
 		robot.getFrontSensor().setValue(90);

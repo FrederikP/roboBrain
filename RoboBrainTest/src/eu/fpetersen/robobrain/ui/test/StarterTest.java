@@ -232,8 +232,8 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	}
 
 	/**
-	 * Test showing dialog, when activity finished This should lead to a warning
-	 * being logged, about that the alert can't be shown
+	 * Test showing dialog, when activity finishing. This should not lead to
+	 * errors being thrown.
 	 */
 	public void testDialogCreationWhenActivityFinished() {
 		starterActivity.finish();
@@ -247,10 +247,6 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		Dialog dialog = starterActivity.showAlertDialog("TESTDIALOG", "Test this, baby");
 
 		assertNotNull(dialog);
-
-		getInstrumentation().waitForIdleSync();
-		Helper.sleepMillis(2500);
-		assertFalse(dialog.isShowing());
 
 	}
 
