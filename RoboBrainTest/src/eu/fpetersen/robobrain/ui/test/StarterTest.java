@@ -237,7 +237,8 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 	 */
 	public void testDialogCreationWhenActivityFinished() {
 		starterActivity.finish();
-		Helper.sleepMillis(7000);
+
+		Helper.sleepMillis(10000);
 		getInstrumentation().waitForIdleSync();
 		assertTrue(starterActivity.isFinishing());
 
@@ -248,7 +249,7 @@ public class StarterTest extends ActivityInstrumentationTestCase2<Starter> {
 		assertNotNull(dialog);
 
 		getInstrumentation().waitForIdleSync();
-		Helper.sleepMillis(500);
+		Helper.sleepMillis(2500);
 		assertFalse(dialog.isShowing());
 
 	}
