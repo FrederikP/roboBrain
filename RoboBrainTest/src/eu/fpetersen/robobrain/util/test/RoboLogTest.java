@@ -67,9 +67,13 @@ public class RoboLogTest extends ActivityInstrumentationTestCase2<Console> {
 
 		getInstrumentation().waitForIdleSync();
 
-		Helper.sleepMillis(500);
-
+		double secsWaited = 0;
 		String allText = consoleTextView.getText().toString();
+		while (!allText.contains(findThis) && secsWaited < 10) {
+			Helper.sleepMillis(100);
+			secsWaited = secsWaited + 0.1;
+			allText = consoleTextView.getText().toString();
+		}
 		assertTrue(allText.contains(findThis));
 	}
 
