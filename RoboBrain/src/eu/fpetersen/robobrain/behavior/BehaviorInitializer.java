@@ -22,6 +22,8 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.behavior;
 
+import java.util.Locale;
+
 import eu.fpetersen.robobrain.robot.Robot;
 
 /**
@@ -40,7 +42,7 @@ public class BehaviorInitializer {
 	public BehaviorInitializer(String name, String speechName) {
 		super();
 		this.mName = name;
-		this.mSpeechName = speechName.toLowerCase();
+		this.mSpeechName = speechName.toLowerCase(Locale.getDefault());
 	}
 
 	public void initialize(Behavior b, Robot r) {

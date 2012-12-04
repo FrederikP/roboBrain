@@ -23,6 +23,7 @@
 package eu.fpetersen.robobrain.behavior.switching;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -46,14 +47,16 @@ public class SpeechControlledBehaviorSwitcher implements SpeechReceiver {
 
 	public void onReceive(List<String> results) {
 		for (String result : results) {
-			if (result.toLowerCase().contains("behavior")) {
+			if (result.toLowerCase(Locale.getDefault()).contains("behavior")) {
 				boolean found = false;
 				if (result.contains("start")) {
-					found = toggleBehaviorForWords(result.toLowerCase().replace("behavior", "")
-							.replace("start", ""), true);
+					found = toggleBehaviorForWords(
+							result.toLowerCase(Locale.getDefault()).replace("behavior", "")
+									.replace("start", ""), true);
 				} else if (result.contains("stop")) {
-					found = toggleBehaviorForWords(result.toLowerCase().replace("behavior", "")
-							.replace("stop", ""), false);
+					found = toggleBehaviorForWords(
+							result.toLowerCase(Locale.getDefault()).replace("behavior", "")
+									.replace("stop", ""), false);
 				}
 				if (found) {
 					break;
@@ -79,7 +82,7 @@ public class SpeechControlledBehaviorSwitcher implements SpeechReceiver {
 	private boolean toggleBehaviorForWords(String result, boolean start) {
 		Map<UUID, Behavior> allBehaviors = mSwitcher.getRobotService().getAllBehaviors();
 		for (Entry<UUID, Behavior> entry : allBehaviors.entrySet()) {
-			String speechName = entry.getValue().getSpeechName().toLowerCase();
+			String speechName = entry.getValue().getSpeechName().toLowerCase(Locale.getDefault());
 			if (speechName == null || speechName.matches("")) {
 				continue;
 			}

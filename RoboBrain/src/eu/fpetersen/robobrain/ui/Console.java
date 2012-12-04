@@ -22,6 +22,7 @@
  ******************************************************************************/
 package eu.fpetersen.robobrain.ui;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -85,9 +86,8 @@ public class Console extends Activity {
 	public String getFormattedCurrentTimestamp() {
 		Calendar cal = Calendar.getInstance();
 		Date timestamp = cal.getTime();
-		String pattern = getString(R.string.console_timestamp_format);
-		SimpleDateFormat format = new SimpleDateFormat(pattern);
-		return format.format(timestamp);
+		DateFormat format = SimpleDateFormat.getDateInstance();
+		return format.format(timestamp) + " -->";
 	}
 
 	/**

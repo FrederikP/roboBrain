@@ -18,40 +18,26 @@
       along with RoboBrain.  If not, see <http://www.gnu.org/licenses/>.
   
   Contributors:
-      Frederik Petersen - Project Owner, initial Implementation
--->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      Frederik Petersen - Project Owner, initial Implementation   
+      
+      -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LinearLayout1"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:baselineAligned="false"
-    android:orientation="vertical" >
+    android:id="@+id/consoleScroller"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true" >
 
-
-    <ScrollView
-        android:id="@+id/consoleScroller"
+    <TextView
+        android:id="@+id/consoleTextView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:fillViewport="true" >
+        android:layout_height="wrap_content"
+        android:background="#ff000000"
+        android:gravity="bottom"
+        android:scrollHorizontally="false"
+        android:scrollbars="none"
+        android:text="@string/initial_console_output"
+        android:textColor="#ffffffff" />
 
-
-
-
-
-
-
-        <TextView
-            android:id="@+id/consoleTextView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="#ff000000"
-            android:gravity="bottom"
-            android:scrollHorizontally="false"
-            android:scrollbars="none"
-            android:text="@string/initial_console_output"
-            android:textColor="#ffffffff" />
-
-    </ScrollView>
-
-</LinearLayout>
+</ScrollView>

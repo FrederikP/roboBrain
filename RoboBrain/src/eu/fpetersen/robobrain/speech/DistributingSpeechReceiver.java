@@ -25,6 +25,7 @@ package eu.fpetersen.robobrain.speech;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import android.content.BroadcastReceiver;
@@ -90,11 +91,11 @@ public class DistributingSpeechReceiver extends BroadcastReceiver {
 		boolean isBehaviorCommand = false;
 		for (String result : resultArray) {
 			if (isBehaviorCommand) {
-				if (result.toLowerCase().contains("behavior")) {
+				if (result.toLowerCase(Locale.getDefault()).contains("behavior")) {
 					results.add(result);
 				}
 			} else {
-				if (result.toLowerCase().contains("behavior")) {
+				if (result.toLowerCase(Locale.getDefault()).contains("behavior")) {
 					results.clear();
 					isBehaviorCommand = true;
 				}
