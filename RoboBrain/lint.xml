@@ -3,8 +3,8 @@
     <!-- Ignore the ObsoleteLayoutParam issue in the given files -->
     <issue id="UnusedResources">
         <ignore path="res/raw/behaviormapping_broken.xml" />
-        <ignore path="res/raw/empty.xml" />
-        <ignore path="res/raw/empty_sound.xml" />
+        <ignore path="res/raw/empty.txt" />
+        <ignore path="res/raw/empty_sound.mp3" />
         <ignore path="res/raw/test.xml" />
         <ignore path="res/raw/testbot_brokentags.xml" />
         <ignore path="res/raw/testbot_weirdtags.xml" />
