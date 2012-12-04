@@ -107,7 +107,11 @@ public class ObstAvoidanceBehaviorTest extends AndroidTestCase {
 		robot.getFrontSensor().setValue(60);
 		robot.getBackSensor().setValue(0);
 
-		Helper.sleepMillis(500);
+		waitedSecs = 0;
+		while (robot.getHeadServo().getAngle() != 140 && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 
 		robot.getFrontSensor().setValue(90);
 
@@ -139,7 +143,11 @@ public class ObstAvoidanceBehaviorTest extends AndroidTestCase {
 		robot.getFrontSensor().setValue(90);
 		robot.getBackSensor().setValue(0);
 
-		Helper.sleepMillis(500);
+		waitedSecs = 0;
+		while (robot.getHeadServo().getAngle() != 140 && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 
 		robot.getFrontSensor().setValue(60);
 
