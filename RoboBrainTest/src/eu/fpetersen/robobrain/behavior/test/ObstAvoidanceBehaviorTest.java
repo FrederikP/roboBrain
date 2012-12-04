@@ -155,12 +155,20 @@ public class ObstAvoidanceBehaviorTest extends AndroidTestCase {
 		robot.getFrontSensor().setValue(90);
 		robot.getBackSensor().setValue(1);
 		robot.getMainMotor().delayActionDone();
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (MotorState.FORWARD != robot.getMainMotor().getState() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertEquals(MotorState.FORWARD, robot.getMainMotor().getState());
 
 		// Turn off
 		obstBehavior.stopBehavior();
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (obstBehavior.isTurnedOn() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertFalse(obstBehavior.isTurnedOn());
 		assertEquals(MotorState.STOPPED, robot.getMainMotor().getState());
 
