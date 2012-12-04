@@ -165,7 +165,7 @@ public class ObstAvoidanceBehaviorTest extends AndroidTestCase {
 		// Turn off
 		obstBehavior.stopBehavior();
 		waitedSecs = 0;
-		while (obstBehavior.isTurnedOn() && waitedSecs < 10) {
+		while (MotorState.STOPPED != robot.getMainMotor().getState() && waitedSecs < 10) {
 			Helper.sleepMillis(100);
 			waitedSecs = waitedSecs + 0.1;
 		}
