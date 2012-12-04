@@ -50,14 +50,14 @@ public class SleepHelperTest extends AndroidTestCase {
 		Runnable sleepTask = new Runnable() {
 
 			public void run() {
-				sleepHelper.sleepMillis(2000);
+				sleepHelper.sleepMillis(10000);
 			}
 		};
 		final Thread sleepThread = new Thread(sleepTask);
 		sleepThread.start();
 
 		sleepThread.interrupt();
-		Helper.sleepMillis(1000);
+		Helper.sleepMillis(5000);
 		assertFalse(sleepThread.isAlive());
 
 	}
