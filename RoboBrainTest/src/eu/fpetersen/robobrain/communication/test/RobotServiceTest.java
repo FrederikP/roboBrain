@@ -105,13 +105,13 @@ public class RobotServiceTest extends ServiceTestCase<RobotService> {
 
 	public void testStoppingService() {
 		RobotService service = startService();
-		service.stopService(new Intent(getContext(), RobotService.class));
 		stopService(service);
 	}
 
 	private void stopService(RobotService service) {
+		service.stopService(new Intent(getContext(), RobotService.class));
 		double countSecs = 0;
-		while (service.isRunning() && countSecs < 10) {
+		while (service.isRunning() && countSecs < 20) {
 			Helper.sleepMillis(100);
 			countSecs = countSecs + 0.1;
 		}
