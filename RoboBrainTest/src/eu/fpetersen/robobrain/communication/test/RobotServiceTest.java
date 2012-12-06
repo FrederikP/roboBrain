@@ -106,6 +106,7 @@ public class RobotServiceTest extends ServiceTestCase<RobotService> {
 
 	public void testStoppingService() {
 		RobotService service = startService();
+		Helper.sleepMillis(3000);
 		stopService(service);
 	}
 
