@@ -140,7 +140,11 @@ public class DanceBehaviorTest extends AndroidTestCase {
 		Thread behaviorThread = new Thread(behaviorTask);
 		behaviorThread.start();
 
-		Helper.sleepMillis(200);
+		double waitedSecs = 0;
+		while (!danceB.isTurnedOn() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertTrue(danceB.isTurnedOn());
 
 		// Set some values, just to make sure there is gonna be no error
@@ -157,7 +161,11 @@ public class DanceBehaviorTest extends AndroidTestCase {
 
 		// Turn off
 		danceB.stopBehavior();
-		Helper.sleepMillis(200);
+		waitedSecs = 0;
+		while (danceB.isTurnedOn() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			waitedSecs = waitedSecs + 0.1;
+		}
 		assertFalse(danceB.isTurnedOn());
 
 		nonMusicFile.delete();
