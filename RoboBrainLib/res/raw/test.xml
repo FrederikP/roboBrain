@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="TESTBOT" address="TESTADDRESS">
+	<eins />
+	<zwei />
+	<drei />
+	<vier><fuenf/></vier>
+</robot>

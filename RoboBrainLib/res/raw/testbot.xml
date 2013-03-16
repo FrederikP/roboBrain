@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot name="TESTBOT" address="TESTADDRESS">
+	<parts>
+		<part type="Motor" id="main_motor">
+		    <flags>
+		    	<flag id="advance" flag="A"/>
+		    	<flag id="backoff" flag="B"/>
+		    	<flag id="left" flag="L"/>
+		    	<flag id="right" flag="R"/>
+		    	<flag id="stop" flag="S"/>
+		    </flags>
+		</part>
+		<part type="ProximitySensor" id="front_proxsensor" />
+		<part type="ProximitySensor" id="back_proxsensor" />
+		<part type="Servo" id="head_servo">
+		    <flags>
+		    	<flag id="toAngle" flag="C"/>
+		    </flags>
+		</part>
+		<part type="RgbLed" id="headcolor_rgbled">
+		    <flags>
+		    	<flag id="toColor" flag="D"/>
+		    </flags>
+		</part>	
+	</parts>
+</robot>

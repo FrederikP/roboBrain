@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<behaviormapping>
+	<robot name="TESTBOT">
+		<behavior name="ReactToSpeechBehavior" speechName="Speech"/>
+		<behavior name="ObstAvoidanceBehavior" speechName="Obstacle"/>
+		<behavior name="BackAndForthBehavior" speechName="Simple"/>
+	</robot>
+</behaviormapping>

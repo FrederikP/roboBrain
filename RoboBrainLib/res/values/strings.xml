@@ -1,0 +1,51 @@
+<!--
+  RoboBrain - Control your Arduino Robots per Android Device
+  Copyright (c) 2012 Frederik Petersen.
+  All rights reserved.
+  
+  This file is part of RoboBrain.
+  
+      RoboBrain is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+  
+      RoboBrain is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+      FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+  
+      You should have received a copy of the GNU General Public License
+      along with RoboBrain.  If not, see <http://www.gnu.org/licenses/>.
+  
+  Contributors:
+      Frederik Petersen - Project Owner, initial Implementation
+-->
+<resources>
+
+    <string name="app_name">roboBrain</string>
+    <string name="title_activity_console">roboBrain - Console</string>
+    <string name="title_activity_starter">roboBrain - Starter</string>
+    <string name="title_activity_about">roboBrain - About</string>
+    <string name="title_service">roboBrain - Service</string>
+    <string name="title_serviceSpeech">roboBrain - SpeechService</string>
+    <string name="initial_console_output">Bluetooth Traffic History:</string>
+    <string name="status_label">Service Status:</string>
+    <string name="service_switch">Toggle Service</string>
+    <string name="console_menu_item">Console</string>
+    <string name="starter_menu_item">Starter</string>
+    <string name="robot_name">Robot Name:</string>
+    <string name="avail_behaviors">Available Behaviors:</string>
+    <string name="sd_robobrain_root_dir">robobrain</string>
+    <string name="sd_robobrain_robots_xml_dir">robots</string>
+    <string name="sd_robobrain_music_dir">music</string>
+    <string name="ok">OK</string>
+    <string name="envvar_testing">robobrain_testing</string>
+    <string name="about_menu_item">About</string>
+    <string name="robobrain_version">roboBrain\nVersion:</string>
+    <string name="author_label">Author:</string>
+    <string name="author_text">Frederik Petersen</string>
+    <string name="website_label">Website:</string>
+    <string name="website_text">robobrain.fpetersen.eu</string>
+    <string name="mapping_file">behaviormapping.xml</string>
+
+</resources>
