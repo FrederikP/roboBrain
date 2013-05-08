@@ -64,7 +64,7 @@ public class RequirementsTest extends AndroidTestCase {
 		requirements.addPart("headcolor_rgbled", RgbLed.class.getName());
 
 		// Test positive:
-		assertTrue(requirements.fulfillsRequirements(mockRobot));
+		assertTrue(requirements.fulfillsRequirements(mockRobot, getContext()));
 
 	}
 
@@ -77,7 +77,7 @@ public class RequirementsTest extends AndroidTestCase {
 		requirements.addPart("main_motor", RgbLed.class.getName());
 
 		// Test negative
-		assertFalse(requirements.fulfillsRequirements(mockRobot));
+		assertFalse(requirements.fulfillsRequirements(mockRobot, getContext()));
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class RequirementsTest extends AndroidTestCase {
 		requirements.addPart("main_rocket", "eu.fpetersen.robobrain.robot.Rocket");
 
 		// Test negative
-		assertFalse(requirements.fulfillsRequirements(mockRobot));
+		assertFalse(requirements.fulfillsRequirements(mockRobot, getContext()));
 	}
 
 	@Override

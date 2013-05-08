@@ -30,7 +30,6 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.ScrollView;
@@ -149,8 +148,9 @@ public class Console extends Activity {
 		int scrollY = mConsoleScroller.getScrollY();
 		int childHeight = mConsoleScroller.getChildAt(0).getMeasuredHeight();
 		int height = mConsoleScroller.getHeight();
-		Log.d("Console", "scrollY: " + scrollY + "; height: " + height + "; childHeight: "
-				+ childHeight);
+		// Log.d("Console", "scrollY: " + scrollY + "; height: " + height +
+		// "; childHeight: "
+		// + childHeight);
 		if (childHeight <= scrollY + height) {
 			return true;
 		} else {
