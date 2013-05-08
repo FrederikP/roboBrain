@@ -39,19 +39,25 @@ import eu.fpetersen.robobrain.util.RoboLog;
  */
 public class Compass implements SensorEventListener {
 
-	private static int HISTORY_SIZE = 100;
+	private int historySize = 100;
 
 	private Sensor mMagnetometer;
 	private Sensor mAccelerometer;
 
 	private float[] mGravity;
 	private float[] mGeomagnetic;
-	private Deque<Float> azimutHistory = new ArrayDeque<Float>(HISTORY_SIZE + 1);
-	private Deque<Boolean> signHistory = new ArrayDeque<Boolean>(HISTORY_SIZE + 1);
+	private Deque<Float> azimutHistory;
+	private Deque<Boolean> signHistory;
 	int plus = 0;
 	int minus = 0;
 	private SensorManager mSensorManager;
 	private RoboLog mLog;
+
+	private boolean mCalibrating;
+
+	private long mCalibrationStarted;
+
+	private int mCalibrationCount = 0;
 
 	public void initialize(Context context) {
 		mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -60,9 +66,13 @@ public class Compass implements SensorEventListener {
 		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
 		mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_FASTEST);
 		mLog = new RoboLog("Compass", context);
+		mCalibrating = true;
 	}
 
 	public float getDegreeToNorth() {
+		if (azimutHistory == null || azimutHistory.size() < 1) {
+			return 0;
+		}
 		synchronized (azimutHistory) {
 			int addedValues = 0;
 			Iterator<Float> azimuts = azimutHistory.iterator();
@@ -102,28 +112,43 @@ public class Compass implements SensorEventListener {
 			if (success) {
 				float orientation[] = new float[3];
 				SensorManager.getOrientation(R, orientation);
-				if (orientation[0] >= 0) {
-					plus = plus + 1;
-					signHistory.addFirst(true);
-				} else {
-					signHistory.addFirst(false);
-					minus = minus + 1;
-				}
-				while (signHistory.size() > HISTORY_SIZE) {
-					boolean sign = signHistory.removeLast();
-					if (sign) {
-						plus = plus - 1;
+				if (mCalibrating) {
+					if (mCalibrationCount < 1) {
+						mCalibrationStarted = System.currentTimeMillis();
+						mCalibrationCount++;
+					} else if (System.currentTimeMillis() - mCalibrationStarted >= 1000) {
+						mLog.log("Sensor Time Calibration: " + mCalibrationCount + "ticks/s", true);
+						historySize = mCalibrationCount;
+						azimutHistory = new ArrayDeque<Float>(historySize + 1);
+						signHistory = new ArrayDeque<Boolean>(historySize + 1);
+						mCalibrating = false;
 					} else {
-						minus = minus - 1;
+						mCalibrationCount++;
 					}
+				} else {
+					if (orientation[0] >= 0) {
+						plus = plus + 1;
+						signHistory.addFirst(true);
+					} else {
+						signHistory.addFirst(false);
+						minus = minus + 1;
+					}
+					while (signHistory.size() > historySize) {
+						boolean sign = signHistory.removeLast();
+						if (sign) {
+							plus = plus - 1;
+						} else {
+							minus = minus - 1;
+						}
+					}
+					while (azimutHistory.size() > historySize) {
+						azimutHistory.removeLast();
+					}
+					azimutHistory.addFirst(orientation[0]); // orientation
+															// contains:
+					// azimut, pitch
+					// and roll
 				}
-				while (azimutHistory.size() > HISTORY_SIZE) {
-					azimutHistory.removeLast();
-				}
-				azimutHistory.addFirst(orientation[0]); // orientation
-														// contains:
-				// azimut, pitch
-				// and roll
 			}
 		}
 	}
