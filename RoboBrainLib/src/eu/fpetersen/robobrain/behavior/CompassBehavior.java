@@ -41,21 +41,21 @@ public class CompassBehavior extends Behavior {
 	protected void behaviorLoop() {
 		float currentDegToNorth = mCompass.getDegreeToNorth();
 		if (currentDegToNorth > 90) {
-			getRobot().getMainMotor().turnLeft(35);
+			getRobot().getMainMotor().turnLeft(90);
 		} else if (currentDegToNorth > 45) {
-			getRobot().getMainMotor().turnLeft(20);
+			getRobot().getMainMotor().turnLeft(45);
 		} else if (currentDegToNorth > 10) {
-			getRobot().getMainMotor().turnLeft(5);
+			getRobot().getMainMotor().turnLeft(10);
 		} else if (currentDegToNorth > -10) {
 			// Freuen
 		} else if (currentDegToNorth > -45) {
-			getRobot().getMainMotor().turnRight(5);
+			getRobot().getMainMotor().turnRight(10);
 		} else if (currentDegToNorth > -90) {
-			getRobot().getMainMotor().turnRight(20);
+			getRobot().getMainMotor().turnRight(45);
 		} else {
-			getRobot().getMainMotor().turnRight(35);
+			getRobot().getMainMotor().turnRight(90);
 		}
-		mSleepHelper.sleepMillis(1000);
+		mSleepHelper.sleepMillis(3000);
 	}
 
 	@Override
