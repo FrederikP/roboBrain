@@ -20,7 +20,7 @@
  * Contributors:
  *     Frederik Petersen - Project Owner, initial Implementation
  ******************************************************************************/
-package eu.fpetersen.eu.robobrain.androidsensors;
+package eu.fpetersen.robobrain.androidsensors;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -69,30 +69,29 @@ public class Compass implements SensorEventListener {
 		mCalibrating = true;
 	}
 
-	public float getDegreeToNorth() {
+	public synchronized float getDegreeToNorth() {
 		if (azimutHistory == null || azimutHistory.size() < 1) {
 			return 0;
 		}
-		synchronized (azimutHistory) {
-			int addedValues = 0;
-			Iterator<Float> azimuts = azimutHistory.iterator();
-			float sum = 0;
-			boolean sign = (plus >= minus);
-			while (azimuts.hasNext()) {
-				float value = azimuts.next();
-				if ((sign && value >= 0) || (!sign && value < 0)) {
-					sum = sum + value;
-					addedValues = addedValues + 1;
-				}
-
+		int addedValues = 0;
+		Iterator<Float> azimuts = azimutHistory.iterator();
+		float sum = 0;
+		boolean sign = (plus >= minus);
+		while (azimuts.hasNext()) {
+			float value = azimuts.next();
+			if ((sign && value >= 0) || (!sign && value < 0)) {
+				sum = sum + value;
+				addedValues = addedValues + 1;
 			}
-			// between 0 and 180
 
-			float deg = (sum / addedValues) * 360 / (2 * 3.14159f);
-			mLog.log("Deg: " + deg, true);
-			mLog.log("Added Values: " + addedValues, true);
-			return (sum / addedValues) * 360 / (2 * 3.14159f);
 		}
+		// between 0 and 180
+
+		float deg = (sum / addedValues) * 360 / (2 * 3.14159f);
+		mLog.log("Deg: " + deg, true);
+		mLog.log("Added Values: " + addedValues, true);
+		return (sum / addedValues) * 360 / (2 * 3.14159f);
+
 	}
 
 	/**
@@ -100,7 +99,7 @@ public class Compass implements SensorEventListener {
 	 * http://www.codingforandroid.com/2011/01/using-orientation-sensors
 	 * -simple.html by Fernando Greenyway
 	 */
-	public void onSensorChanged(SensorEvent event) {
+	public synchronized void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
 			mGravity = event.values;
 		if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)

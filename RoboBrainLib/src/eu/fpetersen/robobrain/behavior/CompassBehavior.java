@@ -23,7 +23,7 @@
 package eu.fpetersen.robobrain.behavior;
 
 import android.hardware.Sensor;
-import eu.fpetersen.eu.robobrain.androidsensors.Compass;
+import eu.fpetersen.robobrain.androidsensors.Compass;
 import eu.fpetersen.robobrain.requirements.Requirements;
 import eu.fpetersen.robobrain.robot.parts.Motor;
 import eu.fpetersen.robobrain.util.SleepHelper;
