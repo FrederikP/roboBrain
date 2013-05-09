@@ -51,52 +51,42 @@
         android:layout_height="wrap_content"
         android:text="@string/service_switch" />
 
-
-
-
-
-
-
-    <TableLayout
-        android:id="@+id/robot_behavior_table"
+    <ScrollView
+        android:id="@+id/behaviorScrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible" >
+        android:layout_height="wrap_content" >
 
-        <TableRow
-            android:id="@+id/tableRow1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
+        <TableLayout
+            android:id="@+id/robot_behavior_table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" >
 
-
-
-
-
-
-            <TextView
-                android:id="@+id/textView1"
+            <TableRow
+                android:id="@+id/tableRow1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="@string/robot_name"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="14sp" />
+                android:layout_height="wrap_content" >
 
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/robot_name"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14sp" />
 
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dip"
+                    android:text="@string/avail_behaviors"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="14sp" />
+            </TableRow>
+        </TableLayout>
 
-
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dip"
-                android:text="@string/avail_behaviors"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="14sp" />
-
-        </TableRow>
-
-    </TableLayout>
+    </ScrollView>
 
 </LinearLayout>
