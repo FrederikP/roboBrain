@@ -86,13 +86,35 @@ public class ConsoleTest extends ActivityInstrumentationTestCase2<Console> {
 		TextView consoleTextView = (TextView) consoleActivity.findViewById(R.id.consoleTextView);
 		String findThis = "INTHEMIDDLE";
 		consoleActivity.appendText(TESTFILL);
+		double waitedSecs = 0;
+		while (!consoleActivity.isScrolledDown() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			getInstrumentation().waitForIdleSync();
+			waitedSecs = waitedSecs + 0.1;
+		}
+		Helper.sleepMillis(3000);
 		getInstrumentation().waitForIdleSync();
 		consoleActivity.appendText(findThis);
+		waitedSecs = 0;
+		while (!consoleActivity.isScrolledDown() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			getInstrumentation().waitForIdleSync();
+			waitedSecs = waitedSecs + 0.1;
+		}
+		Helper.sleepMillis(3000);
 		getInstrumentation().waitForIdleSync();
 		consoleActivity.appendText(TESTFILL);
+		waitedSecs = 0;
+		while (!consoleActivity.isScrolledDown() && waitedSecs < 10) {
+			Helper.sleepMillis(100);
+			getInstrumentation().waitForIdleSync();
+			waitedSecs = waitedSecs + 0.1;
+		}
+		Helper.sleepMillis(3000);
+		getInstrumentation().waitForIdleSync();
 		String allText = consoleTextView.getText().toString();
 		assertTrue(allText.contains(findThis));
-
+		getInstrumentation().waitForIdleSync();
 		assertTrue(consoleActivity.isScrolledDown());
 	}
 

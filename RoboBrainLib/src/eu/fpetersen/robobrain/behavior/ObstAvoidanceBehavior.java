@@ -39,8 +39,6 @@ import eu.fpetersen.robobrain.util.SleepHelper;
  */
 public class ObstAvoidanceBehavior extends Behavior {
 
-	private static final String TAG = "ObstAvoidanceBehavior";
-
 	private static final int SPEED = 240;
 
 	private long mBackWardTime = 0;
