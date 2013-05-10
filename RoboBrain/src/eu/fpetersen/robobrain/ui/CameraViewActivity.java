@@ -181,7 +181,7 @@ public class CameraViewActivity extends Activity implements CvCameraViewListener
 	private boolean handleCentroid(Point centroid) {
 		Intent movement = new Intent();
 		int divider = 3;
-		if (centroid.y < mRgba.height() / divider) {
+		if (centroid.y < mRgba.height() / (double) divider) {
 			movement.setAction(FollowObjectIntent.ACTION_RIGHT);
 			sendBroadcast(movement);
 			return true;
