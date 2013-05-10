@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: D:\\dev\\android_dev\\robot_ws\\OpenCV Library - 2.4.5\\src\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
+ * Original file: D:\\dev\\android_dev\\robot_ws\\OpenCVLibrary-2.4.5\\src\\org\\opencv\\engine\\OpenCVEngineInterface.aidl
  */
 package org.opencv.engine;
 /**
