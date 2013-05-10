@@ -30,8 +30,10 @@ import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.imgproc.Moments;
 
 /**
  * @author Frederik Petersen
@@ -54,6 +56,8 @@ public class ColorBlobDetector {
 	Mat mMask = new Mat();
 	Mat mDilatedMask = new Mat();
 	Mat mHierarchy = new Mat();
+	private Point centroidOfMaxArea;
+	private double maxArea;
 
 	public void setColorRadius(Scalar radius) {
 		mColorRadius = radius;
@@ -110,13 +114,23 @@ public class ColorBlobDetector {
 				Imgproc.CHAIN_APPROX_SIMPLE);
 
 		// Find max contour area
-		double maxArea = 0;
+		maxArea = 0;
 		Iterator<MatOfPoint> each = contours.iterator();
+		Mat biggestContour = null;
 		while (each.hasNext()) {
 			MatOfPoint wrapper = each.next();
 			double area = Imgproc.contourArea(wrapper);
-			if (area > maxArea)
+			if (area > maxArea) {
 				maxArea = area;
+				biggestContour = wrapper.clone();
+			}
+		}
+		if (biggestContour != null) {
+			Core.multiply(biggestContour, new Scalar(4, 4), biggestContour);
+			Moments mo = Imgproc.moments(biggestContour);
+			centroidOfMaxArea = new Point(mo.get_m10() / mo.get_m00(), mo.get_m01() / mo.get_m00());
+		} else {
+			centroidOfMaxArea = null;
 		}
 
 		// Filter contours by area and resize to fit the original image size
@@ -133,5 +147,13 @@ public class ColorBlobDetector {
 
 	public List<MatOfPoint> getContours() {
 		return mContours;
+	}
+
+	public Point getCentroidOfMaxArea() {
+		return centroidOfMaxArea;
+	}
+
+	public Double getMaxArea() {
+		return maxArea;
 	}
 }

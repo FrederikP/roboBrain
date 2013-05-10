@@ -65,6 +65,7 @@ public class FollowObjectBehavior extends Behavior {
 		intentFilter.addAction(FollowObjectIntent.ACTION_FORWARD);
 		intentFilter.addAction(FollowObjectIntent.ACTION_LEFT);
 		intentFilter.addAction(FollowObjectIntent.ACTION_RIGHT);
+		intentFilter.addAction(FollowObjectIntent.ACTION_STOP);
 		intentFilter.addAction(FollowObjectIntent.ACTION_QUIT);
 		context.registerReceiver(receiver, intentFilter);
 	}

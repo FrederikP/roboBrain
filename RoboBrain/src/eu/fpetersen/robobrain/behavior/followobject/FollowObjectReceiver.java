@@ -43,6 +43,16 @@ public class FollowObjectReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		if (intent.getAction().equals(FollowObjectIntent.ACTION_QUIT)) {
 			behavior.stopBehavior();
+		} else if (intent.getAction().equals(FollowObjectIntent.ACTION_LEFT)) {
+			behavior.getRobot().getMainMotor().turnLeft(10);
+		} else if (intent.getAction().equals(FollowObjectIntent.ACTION_RIGHT)) {
+			behavior.getRobot().getMainMotor().turnRight(10);
+		} else if (intent.getAction().equals(FollowObjectIntent.ACTION_FORWARD)) {
+			behavior.getRobot().getMainMotor().advance(200);
+		} else if (intent.getAction().equals(FollowObjectIntent.ACTION_BACKWARD)) {
+			behavior.getRobot().getMainMotor().backOff(200);
+		} else if (intent.getAction().equals(FollowObjectIntent.ACTION_STOP)) {
+			behavior.getRobot().getMainMotor().stop(0);
 		}
 
 	}

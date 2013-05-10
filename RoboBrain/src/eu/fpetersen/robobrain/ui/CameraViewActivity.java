@@ -33,8 +33,8 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import android.app.Activity;
@@ -57,9 +57,7 @@ public class CameraViewActivity extends Activity implements CvCameraViewListener
 	private CameraBridgeViewBase mOpenCvCameraView;
 
 	private Mat mRgba;
-	private Scalar mBlobColorHsv;
 	private ColorBlobDetector mDetector;
-	private Size SPECTRUM_SIZE;
 	private Scalar CONTOUR_COLOR;
 
 	private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -78,6 +76,12 @@ public class CameraViewActivity extends Activity implements CvCameraViewListener
 			}
 		}
 	};
+
+	private long timeOfLastShout = 0;
+
+	private boolean goingForward = false;
+
+	private long timeOfLastShout2 = 0;
 
 	public CameraViewActivity() {
 		Log.i(TAG, "Instantiated new " + this.getClass());
@@ -123,12 +127,8 @@ public class CameraViewActivity extends Activity implements CvCameraViewListener
 	public void onCameraViewStarted(int width, int height) {
 		mRgba = new Mat(height, width, CvType.CV_8UC4);
 		mDetector = new ColorBlobDetector();
-		mBlobColorHsv = new Scalar(255);
-		mBlobColorHsv.val[0] = 1.546875;
-		mBlobColorHsv.val[1] = 229.53125;
-		mBlobColorHsv.val[2] = 254.6875;
-		SPECTRUM_SIZE = new Size(200, 64);
 		CONTOUR_COLOR = new Scalar(255, 0, 0, 255);
+		mDetector.setHsvColor(new Scalar(3.109375, 241, 186.640625));
 	}
 
 	public void onCameraViewStopped() {
@@ -141,7 +141,57 @@ public class CameraViewActivity extends Activity implements CvCameraViewListener
 		List<MatOfPoint> contours = mDetector.getContours();
 		Imgproc.drawContours(mRgba, contours, -1, CONTOUR_COLOR);
 
+		Point centroid = mDetector.getCentroidOfMaxArea();
+		boolean rightLeft = false;
+		if (centroid != null && System.currentTimeMillis() - timeOfLastShout > 500) {
+			rightLeft = handleCentroid(centroid);
+			timeOfLastShout = System.currentTimeMillis();
+		}
+
+		Double area = mDetector.getMaxArea();
+		if (!rightLeft && area > 0 && System.currentTimeMillis() - timeOfLastShout2 > 500) {
+			handleArea(area);
+			timeOfLastShout2 = System.currentTimeMillis();
+		}
+
 		return mRgba;
+	}
+
+	/**
+	 * @param area
+	 */
+	private void handleArea(Double area) {
+		Intent movement = new Intent();
+		int limit = 3000;
+		if (!goingForward && area <= limit && area > 0) {
+			movement.setAction(FollowObjectIntent.ACTION_FORWARD);
+			goingForward = true;
+			sendBroadcast(movement);
+		} else if (goingForward && area > limit) {
+			movement.setAction(FollowObjectIntent.ACTION_STOP);
+			goingForward = false;
+			sendBroadcast(movement);
+		}
+
+	}
+
+	/**
+	 * @param centroid
+	 */
+	private boolean handleCentroid(Point centroid) {
+		Intent movement = new Intent();
+		int divider = 3;
+		if (centroid.y < mRgba.height() / divider) {
+			movement.setAction(FollowObjectIntent.ACTION_RIGHT);
+			sendBroadcast(movement);
+			return true;
+		} else if (centroid.y > (divider - 1) * mRgba.height() / divider) {
+			movement.setAction(FollowObjectIntent.ACTION_LEFT);
+			sendBroadcast(movement);
+			return true;
+		}
+		return false;
+
 	}
 
 }

@@ -29,31 +29,15 @@ package eu.fpetersen.robobrain.behavior.followobject;
 public class FollowObjectIntent {
 
 	// -----ACTIONS-----//
-	/**
-	 * For outputting messages to the console activity
-	 */
-	public static final String ACTION_LEFT = "eu.fpetersen.robobrain.behavior.followobject.intent.action.OUTPUT";
+	public static final String ACTION_LEFT = "eu.fpetersen.robobrain.behavior.followobject.intent.action.LEFT";
 
-	/**
-	 * For turning behaviors on and off.
-	 */
-	public static final String ACTION_RIGHT = "eu.fpetersen.robobrain.behavior.followobject.intent.action.BEHAVIORTRIGGER";
+	public static final String ACTION_RIGHT = "eu.fpetersen.robobrain.behavior.followobject.intent.action.RIGHT";
 
-	/**
-	 * For turning off all Behaviors, for example when stopping RoboBrain
-	 * Service.
-	 */
-	public static final String ACTION_FORWARD = "eu.fpetersen.robobrain.behavior.followobject.intent.actions.STOPALLBEHAVIORS";
+	public static final String ACTION_FORWARD = "eu.fpetersen.robobrain.behavior.followobject.intent.actions.FORWARD";
 
-	/**
-	 * For turning off all Behaviors, for example when stopping RoboBrain
-	 * Service.
-	 */
-	public static final String ACTION_BACKWARD = "eu.fpetersen.robobrain.behavior.followobject.intent.actions.STOPALLBEHAVIORS";
+	public static final String ACTION_BACKWARD = "eu.fpetersen.robobrain.behavior.followobject.intent.actions.BACKWARD";
 
-	/**
-	 * For turning off all Behaviors, for example when stopping RoboBrain
-	 * Service.
-	 */
-	public static final String ACTION_QUIT = "eu.fpetersen.robobrain.behavior.followobject.intent.actions.STOPALLBEHAVIORS";
+	public static final String ACTION_STOP = "eu.fpetersen.robobrain.behavior.followobject.intent.actions.STOP";
+
+	public static final String ACTION_QUIT = "eu.fpetersen.robobrain.behavior.followobject.intent.actions.QUIT";
 }
