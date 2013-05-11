@@ -185,7 +185,7 @@ public class CameraViewActivity extends Activity implements CvCameraViewListener
 			movement.setAction(FollowObjectIntent.ACTION_RIGHT);
 			sendBroadcast(movement);
 			return true;
-		} else if (centroid.y > (divider - 1) * mRgba.height() / divider) {
+		} else if (centroid.y > (divider - 1) * mRgba.height() / (double) divider) {
 			movement.setAction(FollowObjectIntent.ACTION_LEFT);
 			sendBroadcast(movement);
 			return true;
