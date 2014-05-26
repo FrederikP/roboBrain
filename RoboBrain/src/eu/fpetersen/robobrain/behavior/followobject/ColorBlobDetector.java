@@ -39,7 +39,8 @@ import org.opencv.imgproc.Moments;
  * @author Frederik Petersen
  * 
  */
-public class ColorBlobDetector {
+public class ColorBlobDetector implements FollowObjectDetector {
+	private Scalar CONTOUR_COLOR;
 	// Lower and Upper bounds for range checking in HSV color space
 	private Scalar mLowerBound = new Scalar(0);
 	private Scalar mUpperBound = new Scalar(0);
@@ -58,6 +59,11 @@ public class ColorBlobDetector {
 	Mat mHierarchy = new Mat();
 	private Point centroidOfMaxArea;
 	private double maxArea;
+
+	public ColorBlobDetector(Scalar hsvColor) {
+		CONTOUR_COLOR = new Scalar(255, 0, 0, 255);
+		setHsvColor(hsvColor);
+	}
 
 	public void setColorRadius(Scalar radius) {
 		mColorRadius = radius;
@@ -143,17 +149,15 @@ public class ColorBlobDetector {
 				mContours.add(contour);
 			}
 		}
+
+		Imgproc.drawContours(rgbaImage, mContours, -1, CONTOUR_COLOR);
 	}
 
-	public List<MatOfPoint> getContours() {
-		return mContours;
-	}
-
-	public Point getCentroidOfMaxArea() {
+	public Point getObjectCentroid() {
 		return centroidOfMaxArea;
 	}
 
-	public Double getMaxArea() {
+	public Double getObjectSize() {
 		return maxArea;
 	}
 }

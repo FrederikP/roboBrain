@@ -43,6 +43,7 @@
          <activity
             android:name="eu.fpetersen.robobrain.ui.Starter"
             android:label="@string/title_activity_starter"
+            android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,16 +53,22 @@
         
          <activity
             android:name="eu.fpetersen.robobrain.ui.Console"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_console">
         </activity>
         
          <activity
             android:name="eu.fpetersen.robobrain.ui.About"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_about">
         </activity>
         
          <activity
             android:name="eu.fpetersen.robobrain.ui.CameraViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_cameraView">
         </activity>
         

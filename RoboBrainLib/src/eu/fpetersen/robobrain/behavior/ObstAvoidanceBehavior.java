@@ -111,7 +111,9 @@ public class ObstAvoidanceBehavior extends Behavior {
 	 */
 	private void goingForward() {
 		Robot robot = getRobot();
-		if (robot.getFrontSensor().getValue() < 30) {
+		int frontProxValue = robot.getFrontSensor().getValue();
+		if (frontProxValue < 30) {
+			mLog.log("Turned because front prox sensor returned: " + frontProxValue, true);
 			robot.getMainMotor().backOff(SPEED);
 			mBackWardTime = System.currentTimeMillis() + 1000;
 		}
